@@ -153,6 +153,27 @@ function promptForStudentDetails(rl, studentList = []) {
     });
 }
 
+// Delete students by ID
+function deleteStudentsById(rl) {
+    rl.question('Enter student IDs to delete (comma-separated): ', input => {
+        const idsToDelete = input.split(',').map(id => id.trim());
+        const invalidIds = idsToDelete.filter(id => !students.some(student => student.id === id));
+
+        if (invalidIds.length > 0) {
+            console.log(`The following IDs do not exist: ${invalidIds.join(', ')}`);
+            return showMenu(rl);
+        }
+
+        const initialLength = students.length;
+        students = students.filter(student => !idsToDelete.includes(student.id));
+
+        const deletedCount = initialLength - students.length;
+        console.log(`${deletedCount} student(s) deleted successfully.`);
+
+        showMenu(rl);
+    });
+}
+
 // Display the menu
 function showMenu(rl) {
     console.log('\n==============================================');
@@ -162,7 +183,8 @@ function showMenu(rl) {
     console.log('2. Add Student');
     console.log('3. Search Student By Name');
     console.log('4. Display Statistics');
-    console.log('5. Save & Exit');
+    console.log('5. Delete Students By ID');
+    console.log('6. Save & Exit');
     console.log('==============================================');
 
     rl.question('Select an option (1-5): ', option => {
@@ -183,6 +205,9 @@ function showMenu(rl) {
                 displayStatistics();
                 break;
             case 5:
+                deleteStudentsById(rl);
+                return;
+            case 6:
                 saveStudents();
                 console.log('Exiting...');
                 rl.close();
