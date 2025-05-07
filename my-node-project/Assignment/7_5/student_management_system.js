@@ -14,6 +14,7 @@
 
 const fs = require('fs');
 const readline = require('readline');
+const Table = require('cli-table3'); 
 
 const FILE_PATH = './students.json';
 let students = [];
@@ -49,17 +50,16 @@ function displayStudents() {
         return;
     }
 
-    console.log(' -------------------------------------------------');
-    console.log('| ID   | Name                | Age  | Grade       |');
-    console.log(' -------------------------------------------------');
-    students.forEach(({ id, name, age, grade }) => {
-        const formattedId = id.toString().padEnd(5);
-        const formattedName = name.length > 18 ? name.slice(0, 15) + '...' : name.padEnd(18);
-        const formattedAge = age.toString().padEnd(5);
-        const formattedGrade = grade.toFixed(2).padEnd(10);
-        console.log(`| ${formattedId} | ${formattedName} | ${formattedAge} | ${formattedGrade} |`);
+    const table = new Table({
+        head: ['ID', 'Name', 'Age', 'Grade'],
+        colWidths: [10, 20, 10, 10],
     });
-    console.log(' --------------------------------------------------');
+
+    students.forEach(({ id, name, age, grade }) => {
+        table.push([id, name, age, grade.toFixed(2)]);
+    });
+
+    console.log(table.toString());
 }
 
 // Add new students to the list
