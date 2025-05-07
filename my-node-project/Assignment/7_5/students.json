@@ -1,27 +1,9 @@
 [
   {
-    "id": "1",
-    "name": "John Doe",
-    "age": 20,
-    "grade": 8.5
-  },
-  {
     "id": "2",
-    "name": "Jane Smith",
+    "name": "Bùi Thành Đạt",
     "age": 22,
     "grade": 7
-  },
-  {
-    "id": "3",
-    "name": "Bùi Trọng Khoa ",
-    "age": 25,
-    "grade": 9
-  },
-  {
-    "id": "3",
-    "name": "Nguyễn Thị B ",
-    "age": 30,
-    "grade": 10
   },
   {
     "id": "4",
