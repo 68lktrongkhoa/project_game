@@ -157,6 +157,14 @@ function initializeMembers(doneCallback) {
                 ['3', () => {
                     rl.close();
                     editSampleMembers(doneCallback);
+                }],
+                ['4', () => {
+                    rl.question('Nhập danh sách ID (phân cách bằng dấu phẩy): ', answer => {
+                        const ids = answer.split(',').map(id => parseInt(id.trim()));
+                        canFormTeam(ids);
+                        rl.close();
+                        doneCallback();
+                    });
                 }]
             ]);
 
@@ -333,13 +341,22 @@ function askToContinue() {
         rl.question('\n🔄 Bạn có muốn tiếp tục tạo đội không? (có/không): ', answer => {
             const normalizedAnswer = answer.trim().toLowerCase();
 
-            if (normalizedAnswer === 'có' ) {
+            if (normalizedAnswer === 'có') {
                 console.log('\n🔁 Bắt đầu lại quá trình tạo đội...\n');
                 mustPlayTogether = [];
                 cannotPlayTogether = [];
+                members = {
+                    coreMember: null,
+                    coreTeam: [],
+                    reserveTeam: [],
+                    regularMembers: []
+                };
+
+                rl.close();
                 main();
-            } else if (normalizedAnswer === 'không' ) {
+            } else if (normalizedAnswer === 'không') {
                 console.log('\n👋 Chương trình kết thúc. Cảm ơn bạn đã sử dụng!');
+                rl.close();
                 process.exit(0);
             } else {
                 console.log('❌ Lựa chọn không hợp lệ. Vui lòng nhập "có" hoặc "không".');
@@ -349,6 +366,54 @@ function askToContinue() {
     }
 
     ask();
+}
+
+//Xuất hiện thêm ông hiệu trưởng. Ổng hỏi bạn 1-7-17 lập đội được không, dùng tool trả lời ổng đc hay không và vì sao
+
+function canFormTeam(ids) {
+    if (ids.length !== 3) {
+        console.log('❌ Nhóm phải có đúng 3 thành viên.');
+        return false;
+    }
+
+    const membersInTeam = ids.map(id => {
+        return (
+            members.coreMember?.id === id ? members.coreMember :
+            members.coreTeam.find(member => member.id === id) ||
+            members.reserveTeam.find(member => member.id === id) ||
+            members.regularMembers.find(member => member.id === id)
+        );
+    });
+
+    if (membersInTeam.includes(undefined)) {
+        console.log('❌ Một hoặc nhiều ID không tồn tại trong danh sách thành viên.');
+        return false;
+    }
+
+    if (violatesCannotPlay(membersInTeam)) {
+        console.log('❌ Nhóm vi phạm điều kiện KHÔNG được chơi cùng nhau.');
+        console.log('🔍 Điều kiện KHÔNG được chơi cùng nhau:');
+        cannotPlayTogether.forEach(([id1, id2]) => {
+            if (ids.includes(id1) && ids.includes(id2)) {
+                console.log(`- Thành viên ID ${id1} và ID ${id2} không được chơi cùng nhau.`);
+            }
+        });
+        return false;
+    }
+
+    if (!satisfiesMustPlay(membersInTeam)) {
+        console.log('❌ Nhóm không thỏa mãn điều kiện PHẢI chơi cùng nhau.');
+        console.log('🔍 Điều kiện PHẢI chơi cùng nhau:');
+        mustPlayTogether.forEach(([id1, id2]) => {
+            if ((ids.includes(id1) && !ids.includes(id2)) || (ids.includes(id2) && !ids.includes(id1))) {
+                console.log(`- Thành viên ID ${id1} và ID ${id2} phải chơi cùng nhau, nhưng không đủ cả hai.`);
+            }
+        });
+        return false;
+    }
+
+    console.log('✅ Nhóm có thể lập đội.');
+    return true;
 }
 
 function main() {
@@ -365,7 +430,46 @@ function main() {
                     () => {
                         const teams = generateTeams();
                         printTeams(teams);
-                        askToContinue();
+
+                        //Filter out the teams that have members in the reserve team
+                        const allTeamMembers = new Set(
+                            teams.flatMap(team => team.map(member => member.id))
+                        );
+                        const remainingMembers = [
+                            members.coreMember,
+                            ...members.coreTeam,
+                            ...members.reserveTeam,
+                            ...members.regularMembers
+                        ].filter(member => member && !allTeamMembers.has(member.id));
+
+                        if (remainingMembers.length > 0) {
+                            console.log('\n=== Các thành viên chưa được lập đội ===');
+                            remainingMembers.forEach(member => {
+                                console.log(`ID: ${member.id}, Name: ${member.name}`);
+                            });
+
+                            // The principal asked if you could team up with the rest of the members.
+                            const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+
+                            rl.question('Hiệu trưởng hỏi: Nhập danh sách ID để kiểm tra nhóm (phân cách bằng dấu phẩy): ', answer => {
+                                const ids = answer.split(',').map(id => parseInt(id.trim()));
+
+                                if (ids.some(isNaN)) {
+                                    console.log('❌ Danh sách ID không hợp lệ. Vui lòng nhập lại.');
+                                } else {
+                                    const result = canFormTeam(ids);
+                                    if (!result) {
+                                        console.log('❌ Nhóm không thể lập đội. Vi phạm điều kiện ràng buộc ');
+                                    }
+                                }
+
+                                rl.close();
+                                askToContinue();
+                            });
+                        } else {
+                            console.log('\n✅ Tất cả thành viên đã được lập đội.');
+                            askToContinue();
+                        }
                     }
                 );
             }
