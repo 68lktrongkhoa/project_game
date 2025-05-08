@@ -30,7 +30,7 @@ function displayMembers() {
         table.push([member.id, member.name, 'Regular Member']); 
     });
 
-    console.log('\n=== Danh sách thành viên ===');
+    console.log('\n=== MEMBER LIST ===');
     console.log(table.toString());
 }
 
@@ -44,8 +44,8 @@ function editSampleMembers(doneCallback) {
         4: 'Regular Member'
     };
 
-    console.log('\n=== Chỉnh sửa danh sách mẫu ===');
-    console.log('Nhập theo định dạng: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Gõ "done" để kết thúc chỉnh sửa.');
+    console.log('\n=== EDIT SAMPLE LIST ===');
+    console.log('Enter in the format: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Type "done" to finish editing.');
 
     function askForSampleEdit() {
         rl.question('> ', answer => {
@@ -56,7 +56,7 @@ function editSampleMembers(doneCallback) {
             }
             const parts = answer.split(',');
             if (parts.length !== 3) {
-                console.log('Định dạng không đúng. Vui lòng nhập lại.');
+                console.log('Invalid format. Please try again.');
                 askForSampleEdit();
                 return;
             }
@@ -65,7 +65,7 @@ function editSampleMembers(doneCallback) {
             const typeId = parseInt(parts[2].trim());
 
             if (isNaN(id) || isNaN(typeId) || ![1, 2, 3, 4].includes(typeId)) {
-                console.log('ID hoặc TypeID không hợp lệ. Vui lòng nhập lại.');
+                console.log('Invalid ID or TypeID. Please try again.');
                 askForSampleEdit();
                 return;
             }
@@ -95,7 +95,7 @@ function editSampleMembers(doneCallback) {
                 }
             }
 
-            console.log(`Đã cập nhật: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
+            console.log(`Updated: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
             askForSampleEdit();
         });
     }
@@ -105,23 +105,23 @@ function editSampleMembers(doneCallback) {
 function initializeMembers(doneCallback) {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-    console.log('\nChọn cách tạo danh sách thành viên?');
-    console.log('1. Nhập danh sách thành viên.');
-    console.log('2. Lấy danh sách mẫu.');
-    console.log('3. Chỉnh sửa danh sách mẫu.');
+    console.log('\nHow would you like to create the member list?');
+    console.log('1. Enter the member list.');
+    console.log('2. Use the sample list.');
+    console.log('3. Edit the sample list.');
 
     function askForInitializationChoice() {
-        rl.question('Chọn (1, 2 hoặc 3): ', answer => {
+        rl.question('Choose (1, 2, or 3): ', answer => {
             const trimmedAnswer = answer.trim();
             const choice = trimmedAnswer[0];
 
             if (!['1', '2', '3'].includes(choice)) {
                 if (trimmedAnswer === '') {
-                    console.log('❌ Bạn chưa nhập gì. Vui lòng nhập 1, 2 hoặc 3.');
+                    console.log('❌ You didn\'t enter anything. Please enter 1, 2, or 3.');
                 } else if (isNaN(choice)) {
-                    console.log(`❌ "${trimmedAnswer}" không phải là số. Vui lòng nhập 1, 2 hoặc 3.`);
+                    console.log(`❌ "${trimmedAnswer}" is not a number. Please enter 1, 2, or 3.`);
                 } else {
-                    console.log(`❌ "${trimmedAnswer}" không phải là lựa chọn hợp lệ. Vui lòng nhập 1, 2 hoặc 3.`);
+                    console.log(`❌ "${trimmedAnswer}" is not a valid choice. Please enter 1, 2, or 3.`);
                 }
                 rl.close();
                 initializeMembers(doneCallback);
@@ -156,7 +156,7 @@ function initializeMembers(doneCallback) {
                         }))
                     };
 
-                    console.log('\n✅ Danh sách mẫu đã được khởi tạo.');
+                    console.log('\n✅ Sample list has been initialized.');
                     rl.close();
                     doneCallback();
                 }],
@@ -165,7 +165,7 @@ function initializeMembers(doneCallback) {
                     editSampleMembers(doneCallback);
                 }],
                 ['4', () => {
-                    rl.question('Nhập danh sách ID (phân cách bằng dấu phẩy): ', answer => {
+                    rl.question('Enter a list of IDs (separated by commas): ', answer => {
                         const ids = answer.split(',').map(id => parseInt(id.trim()));
                         canFormTeam(ids);
                         rl.close();
@@ -190,8 +190,8 @@ function inputMembers(doneCallback) {
         4: 'Regular Member'
     };
 
-    console.log('\n=== Nhập danh sách thành viên ===');
-    console.log('Nhập theo định dạng: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Gõ "done" để kết thúc nhập.');
+    console.log('\n=== ENTER MEMBER LIST ===');
+    console.log('Enter in the format: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Type "done" to finish.');
 
     function askForMemberInput() {
         rl.question('> ', answer => {
@@ -202,7 +202,7 @@ function inputMembers(doneCallback) {
             }
             const parts = answer.split(',');
             if (parts.length !== 3) {
-                console.log('Định dạng không đúng. Vui lòng nhập lại.');
+                console.log('Invalid format. Please try again.');
                 askForMemberInput();
                 return;
             }
@@ -211,14 +211,14 @@ function inputMembers(doneCallback) {
             const typeId = parseInt(parts[2].trim());
 
             if (isNaN(id) || isNaN(typeId) || ![1, 2, 3, 4].includes(typeId)) {
-                console.log('ID hoặc TypeID không hợp lệ. Vui lòng nhập lại.');
+                console.log('Invalid ID or TypeID. Please try again.');
                 askForMemberInput();
                 return;
             }
 
             if (typeId === 1) {
                 if (members.coreMember) {
-                    console.log('Core Member đã được định nghĩa. Không thể thêm nữa.');
+                    console.log('Core Member is already defined. Cannot add another.');
                 } else {
                     members.coreMember = { id, name };
                 }
@@ -230,7 +230,7 @@ function inputMembers(doneCallback) {
                 members.regularMembers.push({ id, name });
             }
 
-            console.log(`Đã thêm: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
+            console.log(`Added: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
             askForMemberInput();
         });
     }
@@ -240,8 +240,8 @@ function inputMembers(doneCallback) {
 function inputPairs(promptText, pairsArray, doneCallback) {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
     console.log(`\n${promptText}`);
-    console.log('Nhập theo định dạng: ID1,ID2 (ví dụ: 1,6). Gõ "done" để kết thúc nhập.');
-    console.log('Lưu ý: ID phải là số nguyên và không được trùng nhau.');
+    console.log('Enter in the format: ID1,ID2 (e.g., 1,6). Type "done" to finish.');
+    console.log('Note: IDs must be integers and cannot be the same.');
     function isValidId(id) {
         if (members.coreMember && members.coreMember.id === id) return true;
         if (members.coreTeam.some(member => member.id === id)) return true;
@@ -259,24 +259,24 @@ function inputPairs(promptText, pairsArray, doneCallback) {
             }
             const parts = answer.split(',');
             if (parts.length !== 2) {
-                console.log('Định dạng không đúng. Vui lòng nhập lại.');
+                console.log('Invalid format. Please try again.');
                 askForPairInput();
                 return;
             }
             const id1 = parseInt(parts[0].trim());
             const id2 = parseInt(parts[1].trim());
             if (isNaN(id1) || isNaN(id2) || id1 === id2) {
-                console.log('ID không hợp lệ hoặc trùng nhau. Vui lòng nhập lại.');
+                console.log('Invalid or duplicate IDs. Please try again.');
                 askForPairInput();
                 return;
             }
             if (!isValidId(id1) || !isValidId(id2)) {
-                console.log('❌ Một hoặc cả hai ID không tồn tại trong danh sách thành viên. Vui lòng nhập lại.');
+                console.log('❌ One or both IDs do not exist in the member list. Please try again.');
                 askForPairInput();
                 return;
             }
             pairsArray.push([id1, id2]);
-            console.log(`Đã thêm cặp: [${id1}, ${id2}]`);
+            console.log(`Added pair: [${id1}, ${id2}]`);
             askForPairInput();
         });
     }
@@ -284,11 +284,11 @@ function inputPairs(promptText, pairsArray, doneCallback) {
 }
 
 function generateTeams() {
-    console.log('\n=== Sinh đội ===');
+    console.log('\n=== GENERATE TEAM ===');
     const teams = [];
 
     if (members.coreMember && members.coreTeam.length > 0 && members.reserveTeam.length > 0) {
-        console.log("Đang sinh đội từ Core Member, Core Team và Reserve Team...");
+        console.log("Generating teams from Core Member, Core Team, and Reserve Team...");
 
         members.coreTeam.forEach(core => {
             members.reserveTeam.forEach(reserve => {
@@ -302,12 +302,12 @@ function generateTeams() {
         });
 
         if (teams.length === 0) {
-            console.log('❌ Không thể tạo đội nào thỏa mãn các điều kiện đã cho.');
+            console.log('❌ Unable to create any teams that satisfy the given conditions.');
         } else {
-            console.log(`✅ Đã tạo được ${teams.length} đội thỏa mãn điều kiện.`);
+            console.log(`✅ Successfully created ${teams.length} teams that satisfy the conditions.`);
         }
     } else {
-        console.log('❌ Thiếu thành viên để tạo đội (Core Member, Core Team hoặc Reserve Team chưa đầy đủ).');
+        console.log('❌ Missing members to create teams (Core Member, Core Team, or Reserve Team is incomplete).');
     }
 
     return teams;
@@ -330,7 +330,7 @@ function satisfiesMustPlay(team) {
 
 function printTeams(teams) {
     if (!Array.isArray(teams) || teams.length === 0) {
-        console.log('\n❌ Không có đội nào được thành lập.');
+        console.log('\n❌ No teams were formed.');
         return;
     }
 
@@ -344,7 +344,7 @@ function printTeams(teams) {
         table.push([`Team ${index + 1}`, formattedMembers]);
     });
 
-    console.log('\n=== Danh sách đội ===');
+    console.log('\n=== TEAM LIST ===');
     console.log(table.toString());
 }
 
@@ -352,11 +352,11 @@ function askToContinue() {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
     function ask() {
-        rl.question('\n🔄 Bạn có muốn tiếp tục tạo đội không? (có/không): ', answer => {
+        rl.question('\n🔄 Do you want to continue creating teams? (yes/no): ', answer => {
             const normalizedAnswer = answer.trim().toLowerCase();
 
-            if (normalizedAnswer === 'có') {
-                console.log('\n🔁 Bắt đầu lại quá trình tạo đội...\n');
+            if (normalizedAnswer === 'yes') {
+                console.log('\n🔁 Restarting the team creation process...\n');
                 mustPlayTogether = [];
                 cannotPlayTogether = [];
                 members = {
@@ -368,12 +368,12 @@ function askToContinue() {
 
                 rl.close();
                 main();
-            } else if (normalizedAnswer === 'không') {
-                console.log('\n👋 Chương trình kết thúc. Cảm ơn bạn đã sử dụng!');
+            } else if (normalizedAnswer === 'no') {
+                console.log('\n👋 Program ended. Thank you for using it!');
                 rl.close();
                 process.exit(0);
             } else {
-                console.log('❌ Lựa chọn không hợp lệ. Vui lòng nhập "có" hoặc "không".');
+                console.log('❌ Invalid choice. Please enter "yes" or "no".');
                 ask();
             }
         });
@@ -386,7 +386,7 @@ function askToContinue() {
 
 function canFormTeam(ids) {
     if (ids.length !== 3) {
-        console.log('❌ Nhóm phải có đúng 3 thành viên.');
+        console.log('❌ The team must have exactly 3 members.');
         return false;
     }
 
@@ -400,33 +400,33 @@ function canFormTeam(ids) {
     });
 
     if (membersInTeam.includes(undefined)) {
-        console.log('❌ Một hoặc nhiều ID không tồn tại trong danh sách thành viên.');
+        console.log('❌ One or more IDs do not exist in the member list.');
         return false;
     }
 
     if (violatesCannotPlay(membersInTeam)) {
-        console.log('❌ Nhóm vi phạm điều kiện KHÔNG được chơi cùng nhau.');
-        console.log('🔍 Điều kiện KHÔNG được chơi cùng nhau:');
+        console.log('❌ The team violates the condition of NOT playing together.');
+        console.log('🔍 NOT playing together condition:');
         cannotPlayTogether.forEach(([id1, id2]) => {
             if (ids.includes(id1) && ids.includes(id2)) {
-                console.log(`- Thành viên ID ${id1} và ID ${id2} không được chơi cùng nhau.`);
+                console.log(`- Member ID ${id1} and ID ${id2} cannot play together.`);
             }
         });
         return false;
     }
 
     if (!satisfiesMustPlay(membersInTeam)) {
-        console.log('❌ Nhóm không thỏa mãn điều kiện PHẢI chơi cùng nhau.');
-        console.log('🔍 Điều kiện PHẢI chơi cùng nhau:');
+        console.log('❌ The team does not satisfy the MUST play together condition.');
+        console.log('🔍 MUST play together condition:');
         mustPlayTogether.forEach(([id1, id2]) => {
             if ((ids.includes(id1) && !ids.includes(id2)) || (ids.includes(id2) && !ids.includes(id1))) {
-                console.log(`- Thành viên ID ${id1} và ID ${id2} phải chơi cùng nhau, nhưng không đủ cả hai.`);
+                console.log(`- Member ID ${id1} and ID ${id2} must play together, but not both are present.`);
             }
         });
         return false;
     }
 
-    console.log('✅ Nhóm có thể lập đội.');
+    console.log('✅ The team can be formed.');
     return true;
 }
 
@@ -435,11 +435,11 @@ function main() {
         displayMembers();
 
         inputPairs(
-            'Nhập các cặp PHẢI chơi cùng nhau',
+            'Enter pairs that MUST play together',
             mustPlayTogether,
             () => {
                 inputPairs(
-                    'Nhập các cặp KHÔNG được chơi cùng nhau',
+                    'Enter pairs that CANNOT play together',
                     cannotPlayTogether,
                     () => {
                         const teams = generateTeams();
@@ -457,7 +457,7 @@ function main() {
                         ].filter(member => member && !allTeamMembers.has(member.id));
 
                         if (remainingMembers.length > 0) {
-                            console.log('\n=== Các thành viên chưa được lập đội ===');
+                            console.log('\n=== MEMBERS NOT ASSIGNED TO TEAMS ===');
                         
                             // Tạo bảng hiển thị các thành viên chưa được lập đội
                             const table = new Table({
@@ -484,15 +484,15 @@ function main() {
                             // The principal asked if you could team up with the rest of the members.
                             const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
                         
-                            rl.question('Hiệu trưởng hỏi: Nhập danh sách ID để kiểm tra nhóm (phân cách bằng dấu phẩy): ', answer => {
+                            rl.question('Principal asks: Enter a list of IDs to check the team (separated by commas): ', answer => {
                                 const ids = answer.split(',').map(id => parseInt(id.trim()));
                         
                                 if (ids.some(isNaN)) {
-                                    console.log('❌ Danh sách ID không hợp lệ. Vui lòng nhập lại.');
+                                    console.log('❌ Invalid ID list. Please try again.');
                                 } else {
                                     const result = canFormTeam(ids);
                                     if (!result) {
-                                        console.log('❌ Nhóm không thể lập đội. Vi phạm điều kiện ràng buộc.');
+                                        console.log('❌ The team cannot be formed. Violates constraints.');
                                     }
                                 }
                         
@@ -500,7 +500,7 @@ function main() {
                                 askToContinue();
                             });
                         } else {
-                            console.log('\n✅ Tất cả thành viên đã được lập đội.');
+                            console.log('\n✅ All members have been assigned to teams.');
                             askToContinue();
                         }
                     }
