@@ -327,7 +327,8 @@ function printTeams(teams) {
     });
 
     teams.forEach((team, index) => {
-        table.push([`Team ${index + 1}`, team.join(', ')]);
+        const formattedMembers = team.map(member => `${member.id} - ${member.name}`).join(', ');
+        table.push([`Team ${index + 1}`, formattedMembers]);
     });
 
     console.log('\n=== Danh sách đội ===');
@@ -444,25 +445,44 @@ function main() {
 
                         if (remainingMembers.length > 0) {
                             console.log('\n=== Các thành viên chưa được lập đội ===');
-                            remainingMembers.forEach(member => {
-                                console.log(`ID: ${member.id}, Name: ${member.name}`);
+                        
+                            // Tạo bảng hiển thị các thành viên chưa được lập đội
+                            const table = new Table({
+                                head: ['ID', 'Name', 'Type'],
+                                colWidths: [10, 30, 20],
                             });
-
+                        
+                            remainingMembers.forEach(member => {
+                                let type = 'Unknown';
+                                if (member === members.coreMember) {
+                                    type = 'Core Member';
+                                } else if (members.coreTeam.includes(member)) {
+                                    type = 'Core Team';
+                                } else if (members.reserveTeam.includes(member)) {
+                                    type = 'Reserve Team';
+                                } else if (members.regularMembers.includes(member)) {
+                                    type = 'Regular Member';
+                                }
+                                table.push([member.id, member.name, type]);
+                            });
+                        
+                            console.log(table.toString());
+                        
                             // The principal asked if you could team up with the rest of the members.
                             const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
+                        
                             rl.question('Hiệu trưởng hỏi: Nhập danh sách ID để kiểm tra nhóm (phân cách bằng dấu phẩy): ', answer => {
                                 const ids = answer.split(',').map(id => parseInt(id.trim()));
-
+                        
                                 if (ids.some(isNaN)) {
                                     console.log('❌ Danh sách ID không hợp lệ. Vui lòng nhập lại.');
                                 } else {
                                     const result = canFormTeam(ids);
                                     if (!result) {
-                                        console.log('❌ Nhóm không thể lập đội. Vi phạm điều kiện ràng buộc ');
+                                        console.log('❌ Nhóm không thể lập đội. Vi phạm điều kiện ràng buộc.');
                                     }
                                 }
-
+                        
                                 rl.close();
                                 askToContinue();
                             });
