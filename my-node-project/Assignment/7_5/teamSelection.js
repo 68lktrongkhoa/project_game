@@ -37,9 +37,15 @@ function displayMembers() {
 function editSampleMembers(doneCallback) {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
+    const typeMap = {
+        1: 'Core Member',
+        2: 'Core Team',
+        3: 'Reserve Team',
+        4: 'Regular Member'
+    };
+
     console.log('\n=== Chỉnh sửa danh sách mẫu ===');
-    console.log('Nhập theo định dạng: ID,Name,Type (Type: coreMember, coreTeam, reserveTeam, regularMembers). Gõ "done" để kết thúc chỉnh sửa.');
-    console.log('Lưu ý: Nếu ID đã tồn tại, thông tin sẽ được cập nhật. Nếu ID không tồn tại, thành viên mới sẽ được thêm.');
+    console.log('Nhập theo định dạng: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Gõ "done" để kết thúc chỉnh sửa.');
 
     function askForSampleEdit() {
         rl.question('> ', answer => {
@@ -56,31 +62,31 @@ function editSampleMembers(doneCallback) {
             }
             const id = parseInt(parts[0].trim());
             const name = parts[1].trim();
-            const type = parts[2].trim();
+            const typeId = parseInt(parts[2].trim());
 
-            if (isNaN(id) || !['coreMember', 'coreTeam', 'reserveTeam', 'regularMembers'].includes(type)) {
-                console.log('ID không hợp lệ hoặc Type không đúng. Vui lòng nhập lại.');
+            if (isNaN(id) || isNaN(typeId) || ![1, 2, 3, 4].includes(typeId)) {
+                console.log('ID hoặc TypeID không hợp lệ. Vui lòng nhập lại.');
                 askForSampleEdit();
                 return;
             }
 
-            if (type === 'coreMember') {
+            if (typeId === 1) {
                 members.coreMember = { id, name };
-            } else if (type === 'coreTeam') {
+            } else if (typeId === 2) {
                 const index = members.coreTeam.findIndex(member => member.id === id);
                 if (index !== -1) {
                     members.coreTeam[index] = { id, name };
                 } else {
                     members.coreTeam.push({ id, name });
                 }
-            } else if (type === 'reserveTeam') {
+            } else if (typeId === 3) {
                 const index = members.reserveTeam.findIndex(member => member.id === id);
                 if (index !== -1) {
                     members.reserveTeam[index] = { id, name };
                 } else {
                     members.reserveTeam.push({ id, name });
                 }
-            } else if (type === 'regularMembers') {
+            } else if (typeId === 4) {
                 const index = members.regularMembers.findIndex(member => member.id === id);
                 if (index !== -1) {
                     members.regularMembers[index] = { id, name };
@@ -89,7 +95,7 @@ function editSampleMembers(doneCallback) {
                 }
             }
 
-            console.log(`Đã cập nhật: { id: ${id}, name: "${name}", type: "${type}" }`);
+            console.log(`Đã cập nhật: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
             askForSampleEdit();
         });
     }
@@ -177,8 +183,15 @@ function initializeMembers(doneCallback) {
 function inputMembers(doneCallback) {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
+    const typeMap = {
+        1: 'Core Member',
+        2: 'Core Team',
+        3: 'Reserve Team',
+        4: 'Regular Member'
+    };
+
     console.log('\n=== Nhập danh sách thành viên ===');
-    console.log('Nhập theo định dạng: ID,Name,Type (Type: coreMember, coreTeam, reserveTeam, regularMembers). Gõ "done" để kết thúc nhập.');
+    console.log('Nhập theo định dạng: ID,Name,TypeID (TypeID: 1-Core Member, 2-Core Team, 3-Reserve Team, 4-Regular Members). Gõ "done" để kết thúc nhập.');
 
     function askForMemberInput() {
         rl.question('> ', answer => {
@@ -195,29 +208,29 @@ function inputMembers(doneCallback) {
             }
             const id = parseInt(parts[0].trim());
             const name = parts[1].trim();
-            const type = parts[2].trim();
+            const typeId = parseInt(parts[2].trim());
 
-            if (isNaN(id) || !['coreMember', 'coreTeam', 'reserveTeam', 'regularMembers'].includes(type)) {
-                console.log('ID không hợp lệ hoặc Type không đúng. Vui lòng nhập lại.');
+            if (isNaN(id) || isNaN(typeId) || ![1, 2, 3, 4].includes(typeId)) {
+                console.log('ID hoặc TypeID không hợp lệ. Vui lòng nhập lại.');
                 askForMemberInput();
                 return;
             }
 
-            if (type === 'coreMember') {
+            if (typeId === 1) {
                 if (members.coreMember) {
                     console.log('Core Member đã được định nghĩa. Không thể thêm nữa.');
                 } else {
                     members.coreMember = { id, name };
                 }
-            } else if (type === 'coreTeam') {
+            } else if (typeId === 2) {
                 members.coreTeam.push({ id, name });
-            } else if (type === 'reserveTeam') {
+            } else if (typeId === 3) {
                 members.reserveTeam.push({ id, name });
-            } else if (type === 'regularMembers') {
+            } else if (typeId === 4) {
                 members.regularMembers.push({ id, name });
             }
 
-            console.log(`Đã thêm: { id: ${id}, name: "${name}", type: "${type}" }`);
+            console.log(`Đã thêm: { id: ${id}, name: "${name}", type: "${typeMap[typeId]}" }`);
             askForMemberInput();
         });
     }
