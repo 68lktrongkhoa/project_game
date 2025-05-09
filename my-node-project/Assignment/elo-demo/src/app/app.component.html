@@ -1,0 +1,394 @@
+<div class="container py-4">
+  <header class="text-center mb-4"> 
+    <h1 class="display-4 fw-bold">ELO Ranking Demo</h1>
+    <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center mt-3">
+        <p class="lead text-muted mb-2 mb-sm-0 me-sm-3">Track player ratings, match history, and performance insights.</p>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" (click)="toggleChampionList()">
+              <i class="bi bi-shield-fill me-1"></i> {{ showChampionList ? 'Hide Champions' : 'View Champions' }}
+          </button>
+          <button class="btn btn-outline-success" (click)="toggleAggregateStatsChart()">
+            <i class="bi bi-graph-up-arrow me-1"></i> {{ showAggregateStatsChart ? 'Hide Aggregate Stats' : 'View Aggregate Stats' }}
+          </button>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="showChampionList" class="champion-section my-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-dark text-white py-3">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+              <h2 class="h5 mb-2 mb-md-0 fw-semibold"><i class="bi bi-person-bounding-box me-2"></i>Champion Roster</h2>
+              <div class="d-flex align-items-center">
+                  <select class="form-select form-select-sm d-inline-block w-auto me-2" [(ngModel)]="selectedChampionClassFilter" title="Filter by class">
+                      <option [ngValue]="null">All</option>
+                      <option *ngFor="let classType of championClasses" [value]="classType">{{ classType }}</option>
+                  </select>
+                  <button class="btn btn-light btn-sm" (click)="clearChampionFilter()" *ngIf="selectedChampionClassFilter" title="Clear filter">
+                      <i class="bi bi-x-lg"></i> <span class="d-none d-sm-inline">Clear</span>
+                  </button>
+              </div>
+          </div>
+      </div>
+      <div class="card-body champion-list-body" style="max-height: calc(100vh - 350px); overflow-y: auto;">
+          <div *ngIf="filterChampions().length > 0; else noChampionsResults"
+               class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+              <div *ngFor="let champion of filterChampions()" class="col d-flex">
+                  <div class="card h-100 champion-card flex-fill" (click)="selectChampion(champion)"
+                       [class.border-primary]="selectedChampion?.id === champion.id"
+                       [class.border-3]="selectedChampion?.id === champion.id"
+                       [attr.aria-pressed]="selectedChampion?.id === champion.id">
+                      <img [src]="getChampionImageUrl(champion)" class="card-img-top champion-image" [alt]="champion.name">
+                      <div class="card-body text-center p-2 d-flex flex-column">
+                          <h6 class="card-title fw-bold mb-1 champion-name">{{ champion.name }}</h6>
+                          <p class="card-text small text-muted mb-1 fst-italic champion-title flex-grow-1">"{{ champion.title }}"</p>
+                          <span class="badge small champion-class-badge" [ngClass]="{
+                            'bg-danger-subtle text-danger-emphasis': champion.championClass === ChampionClass.WARRIOR,
+                            'bg-primary-subtle text-primary-emphasis': champion.championClass === ChampionClass.MAGE,
+                            'bg-dark-subtle text-dark-emphasis': champion.championClass === ChampionClass.ASSASSIN,
+                            'bg-secondary-subtle text-secondary-emphasis': champion.championClass === ChampionClass.TANK,
+                            'bg-warning-subtle text-warning-emphasis': champion.championClass === ChampionClass.MARKSMAN,
+                            'bg-success-subtle text-success-emphasis': champion.championClass === ChampionClass.SUPPORT
+                          }">{{ champion.championClass }}</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <ng-template #noChampionsResults>
+              <div class="text-center text-muted py-5">
+                  <i class="bi bi-shield-slash-fill fs-1 d-block mb-2"></i>
+                  No champions found for "{{selectedChampionClassFilter || 'All Classes'}}".
+              </div>
+          </ng-template>
+      </div>
+      <div *ngIf="selectedChampion" class="card-footer selected-champion-footer bg-white p-3 border-top">
+          <div class="row align-items-center">
+              <div class="col-md-3 text-center mb-3 mb-md-0">
+                   <img [src]="getChampionImageUrl(selectedChampion)" class="img-fluid rounded shadow-sm mb-2" [alt]="selectedChampion.name" style="max-height: 200px; max-width: 120px; object-fit: contain;">
+              </div>
+              <div class="col-md-9">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <h4 class="fw-bold mb-1">{{selectedChampion.name}} <small class="text-muted fw-normal h6">- {{selectedChampion.title}}</small></h4>
+                    <button class="btn btn-sm btn-close" (click)="selectChampion(selectedChampion)" title="Close details"></button>
+                  </div>
+                  <span class="badge fs-6 mb-2 champion-class-badge-lg" [ngClass]="{
+                    'bg-danger text-white': selectedChampion.championClass === ChampionClass.WARRIOR,
+                    'bg-primary text-white': selectedChampion.championClass === ChampionClass.MAGE,
+                    'bg-dark text-white': selectedChampion.championClass === ChampionClass.ASSASSIN,
+                    'bg-secondary text-white': selectedChampion.championClass === ChampionClass.TANK,
+                    'bg-warning text-dark': selectedChampion.championClass === ChampionClass.MARKSMAN,
+                    'bg-success text-white': selectedChampion.championClass === ChampionClass.SUPPORT
+                  }">{{selectedChampion.championClass}}</span>
+                  <p class="small mt-2 mb-2 champion-description">{{selectedChampion.description}}</p>
+                  <p *ngIf="selectedChampion.description" class="small fst-italic text-muted mb-2"><strong>Role/Description:</strong> {{ selectedChampion.description }}</p>
+                  <h6 class="mt-3 mb-1">Abilities:</h6>
+                  <ul class="list-unstyled small champion-abilities-list">
+                      <li *ngFor="let ability of selectedChampion.abilities" class="mb-1 ability-item">
+                          <strong>{{ability.name}}:</strong> <span class="ability-description">{{ability.description}}</span>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="showAggregateStatsChart" class="aggregate-stats-section my-4">
+    <div class="card shadow-sm border-0">
+      <div class="card-header bg-success text-white py-3">
+          <div class="d-flex justify-content-between align-items-center">
+              <h2 class="h5 mb-0 fw-semibold"><i class="bi bi-bar-chart-steps me-2"></i>Aggregate Match Statistics</h2>
+              <button class="btn btn-sm btn-light" (click)="toggleAggregateStatsChart()" title="Close aggregate stats">
+                  <i class="bi bi-x-lg"></i>
+              </button>
+          </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="aggregateRadarChartData.datasets && aggregateRadarChartData.datasets.length > 0; else noAggregateData">
+          <p class="text-muted small text-center">Average base stats of top 5 most played champions across all matches.</p>
+          <div class="chart-container" style="position: relative; height:400px; width:100%; max-width: 700px; margin: auto;">
+              <canvas baseChart
+                      [data]="aggregateRadarChartData"
+                      [options]="aggregateRadarChartOptions"
+                      [type]="radarChartType">
+              </canvas>
+          </div>
+        </div>
+        <ng-template #noAggregateData>
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-clipboard-x-fill fs-1 d-block mb-2"></i>
+                No data available to display aggregate statistics. Play more matches!
+            </div>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ========================== MAIN CONTENT (Player/Match Info - only if not showing champions) ========================== -->
+  <ng-container *ngIf="!showChampionList">
+    <div class="row mt-4">
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <!-- Player Roster Card -->
+            <div class="card shadow-sm border-0 h-100">
+              <div class="card-header bg-dark text-white py-3">
+                <h2 class="h5 mb-0 fw-semibold"><i class="bi bi-people-fill me-2"></i>Player Roster</h2>
+              </div>
+              <div class="card-body d-flex flex-column">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="search-addon"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control" placeholder="Search players by name..." [(ngModel)]="searchTerm" aria-label="Search players" aria-describedby="search-addon" />
+                </div>
+                <div class="table-responsive flex-grow-1" style="overflow-y: auto; max-height: calc(100vh - 420px); min-height: 300px;">
+                  <table class="table table-striped table-hover table-bordered align-middle caption-top">
+                    <caption class="visually-hidden">List of all players and their ELO ratings.</caption>
+                    <thead class="thead-light sticky-top">
+                      <tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">ELO Rating</th><th scope="col">Action</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="!filterPlayers() || filterPlayers().length === 0"><td colspan="4" class="text-center text-muted py-4"><i class="bi bi-person-x-fill fs-3 d-block mb-2"></i>No players found.</td></tr>
+                      <tr *ngFor="let player of filterPlayers(); let i = index">
+                        <td class="fw-medium">{{ i + 1 }}</td>
+                        <td>{{ player.name }}</td>
+                        <td><span class="badge bg-primary rounded-pill">{{ player.rating }}</span></td>
+                        <td><button class="btn btn-outline-primary btn-sm" (click)="selectPlayer(player)" title="View stats for {{player.name}}"><i class="bi bi-eye-fill me-1"></i>Stats</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-6">
+            <!-- Top 3 Players Card -->
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-header bg-warning text-dark py-3">
+                <h2 class="h5 mb-0 fw-semibold"><i class="bi bi-trophy-fill me-2"></i>Top 3 Players</h2>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover table-bordered align-middle caption-top">
+                     <caption class="visually-hidden">Top 3 ranked players.</caption>
+                    <thead class="thead-light"><tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">ELO Rating</th><th scope="col">Action</th></tr></thead>
+                    <tbody>
+                      <tr *ngIf="!getTopPlayers() || getTopPlayers().length === 0"><td colspan="4" class="text-center text-muted py-3"><i class="bi bi-emoji-frown-fill fs-4 d-block mb-1"></i>Not enough players.</td></tr>
+                      <tr *ngFor="let player of getTopPlayers(); let i = index">
+                        <td class="fw-bold fs-5 text-center">
+                           <ng-container [ngSwitch]="i">
+                              <i *ngSwitchCase="0" class="bi bi-1-circle-fill text-warning" aria-label="Rank 1"></i><i *ngSwitchCase="1" class="bi bi-2-circle-fill text-secondary" aria-label="Rank 2"></i>
+                              <i *ngSwitchCase="2" class="bi bi-3-circle-fill" style="color: #cd7f32;" aria-label="Rank 3"></i><span *ngSwitchDefault>{{ i + 1 }}</span>
+                          </ng-container>
+                        </td>
+                        <td>{{ player.name }}</td>
+                        <td><span class="badge bg-success rounded-pill fs-6">{{ player.rating }}</span></td>
+                        <td><button class="btn btn-success btn-sm" (click)="selectPlayer(player)" title="View stats for {{player.name}}"><i class="bi bi-bar-chart-line-fill me-1"></i>Stats</button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Match History Card -->
+            <div class="card shadow-sm border-0">
+              <div class="card-header bg-info text-white py-3">
+                <h2 class="h5 mb-0 fw-semibold"><i class="bi bi-calendar-check-fill me-2"></i>Match History (Latest 100)</h2>
+              </div>
+              <div class="card-body d-flex flex-column">
+                <div class="table-responsive flex-grow-1" style="overflow-y: auto; max-height: calc(100vh - 600px); min-height: 200px;">
+                  <table class="table table-striped table-hover table-bordered table-sm align-middle caption-top">
+                    <caption class="visually-hidden">List of the latest 100 matches.</caption>
+                    <thead class="thead-light sticky-top"><tr><th scope="col">ID</th><th scope="col" title="Player 1">P1</th><th scope="col" title="Player 2">P2</th><th scope="col">Winner</th><th scope="col">Date</th><th scope="col">Action</th></tr></thead>
+                    <tbody>
+                      <tr *ngIf="!matches || matches.length === 0"><td colspan="6" class="text-center text-muted py-4"><i class="bi bi-table fs-3 d-block mb-2"></i>No matches recorded.</td></tr>
+                      <tr *ngFor="let match of matches">
+                        <td>{{ match.id }}</td>
+                        <td class="text-nowrap">
+                          <img [src]="getChampionImageUrl(match.player1Info.championUsed)" [alt]="match.player1Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24" height="24" onError="this.src='https://via.placeholder.com/24?text=P1'" [title]="match.player1Info.championUsed.name">
+                          <span [title]="match.player1Info.player.name + ' (ELO: ' + match.player1Info.player.rating + ')'">{{ match.player1Info.player.name | slice:0:7 }}{{ match.player1Info.player.name.length > 7 ? '..' : ''}}</span>
+                        </td>
+                        <td class="text-nowrap">
+                          <img [src]="getChampionImageUrl(match.player2Info.championUsed)" [alt]="match.player2Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24" height="24" onError="this.src='https://via.placeholder.com/24?text=P2'" [title]="match.player2Info.championUsed.name">
+                          <span [title]="match.player2Info.player.name + ' (ELO: ' + match.player2Info.player.rating + ')'">{{ match.player2Info.player.name | slice:0:7 }}{{ match.player2Info.player.name.length > 7 ? '..' : ''}}</span>
+                        </td>
+                        <td title="{{ getWinnerName(match) }}" class="fw-medium">{{ getWinnerName(match) | slice:0:7 }}{{ getWinnerName(match).length > 7 ? '..' : ''}}</td>
+                        <td>{{ match.date | date:'dd/MM/yy' }}</td>
+                        <td><button class="btn btn-outline-info btn-sm py-0 px-1" (click)="selectMatch(match)" title="View details for match {{match.id}}"><i class="bi bi-search"></i> <span class="d-none d-lg-inline">Details</span></button></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELECTED PLAYER DETAILS -->
+    <div *ngIf="selectedPlayer" class="selected-details-section card shadow-sm border-0 mt-4 mb-4">
+      <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+          <h2 class="h5 mb-0 fw-semibold text-truncate">
+              <i class="bi bi-bar-chart-line-fill me-2"></i>{{ selectedPlayer.name }} - Performance
+          </h2>
+          <button class="btn btn-warning btn-sm fw-semibold" (click)="initiateFindOpponent()" [disabled]="isFindingOpponent" title="Find a match for {{selectedPlayer.name}}">
+              <span *ngIf="isFindingOpponent" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isFindingOpponent" class="bi bi-swords me-1"></i>
+              {{ isFindingOpponent ? 'Searching...' : 'Find Match' }}
+          </button>
+      </div>
+      <div class="card-body"> <div class="row"> <div class="col-md-5 mb-3 mb-md-0"> <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-star-fill me-2 text-warning"></i>ELO Rating:</span><span class="badge bg-primary rounded-pill fs-6 p-2">{{ selectedPlayer.rating }}</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-joystick me-2 text-secondary"></i>Matches Played:</span><span class="badge bg-secondary rounded-pill p-2">{{ matchesPlayed }}</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-check-circle-fill me-2 text-success"></i>Wins:</span><span class="badge bg-success rounded-pill p-2">{{ wins }}</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-x-circle-fill me-2 text-danger"></i>Losses:</span><span class="badge bg-danger rounded-pill p-2">{{ matchesPlayed - wins }}</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-graph-up-arrow me-2 text-info"></i>Win Rate:</span><span class="badge bg-info rounded-pill p-2">{{ winRate | number:'1.0-2' }}%</span></li>
+          <li class="list-group-item d-flex justify-content-between align-items-center"><span><i class="bi bi-graph-down-arrow me-2 text-warning"></i>Loss Rate:</span><span class="badge bg-warning text-dark rounded-pill p-2">{{ loseRate | number:'1.0-2' }}%</span></li>
+      </ul></div><div class="col-md-7 d-flex align-items-center justify-content-center">
+      <div class="chart-container" style="max-width: 400px; width:100%; margin: auto;"><canvas baseChart [data]="playerRadarChartData" [options]="playerRadarChartOptions" [type]="radarChartType"></canvas></div></div></div></div>
+    </div>
+
+    <!-- HIỂN THỊ ĐỐI THỦ ĐƯỢC TÌM THẤY -->
+    <div *ngIf="potentialOpponent" class="selected-details-section card shadow-sm border-0 mt-4 mb-4">
+      <div class="card-header bg-success text-white py-3">
+          <h3 class="h5 mb-0 fw-semibold"><i class="bi bi-person-check-fill me-2"></i>Opponent Found!</h3>
+      </div>
+      <div class="card-body text-center">
+          <h4 class="text-truncate">{{ potentialOpponent.name }}</h4>
+          <p>ELO: <span class="badge bg-primary rounded-pill fs-6">{{ potentialOpponent.rating }}</span></p>
+          <p class="small">
+              <i class="bi bi-shield-fill-check me-1 text-success" title="Attack"></i> Atk: {{ potentialOpponent.attack }} |
+              <i class="bi bi-shield-shaded me-1 text-info" title="Defense"></i> Def: {{ potentialOpponent.defense }} |
+              <i class="bi bi-lightning-fill me-1 text-warning" title="Speed"></i> Spd: {{ potentialOpponent.speed }}
+          </p><hr><p>Ready to challenge?</p>
+          <button class="btn btn-primary me-2" (click)="startMatchWithOpponent()"><i class="bi bi-play-circle-fill me-1"></i>Start Match</button>
+          <button class="btn btn-secondary" (click)="cancelMatchmaking()"><i class="bi bi-x-lg me-1"></i>Find Another</button>
+      </div>
+    </div>
+
+    <!-- SELECTED MATCH DETAILS -->
+    <div *ngIf="selectedMatch" class="selected-details-section card shadow-sm border-0 mt-4">
+      <div class="card-header bg-light py-3 d-flex justify-content-between align-items-center">
+        <h3 class="h5 mb-0 fw-semibold text-truncate">
+            <i class="bi bi-clipboard-data-fill me-2"></i>Match Details: ID {{ selectedMatch.id }}
+        </h3>
+        <!-- Nút chuyển đổi loại biểu đồ -->
+        <div class="btn-group btn-group-sm" role="group" aria-label="Select chart type for match details">
+          <button type="button" class="btn"
+                  [ngClass]="selectedMatchChartType === 'radar' ? 'btn-primary' : 'btn-outline-primary'"
+                  (click)="setMatchChartType('radar')" title="Radar Chart">
+            <i class="bi bi-bullseye"></i> <span class="d-none d-md-inline">Radar</span>
+          </button>
+          <button type="button" class="btn"
+                  [ngClass]="selectedMatchChartType === 'line' ? 'btn-primary' : 'btn-outline-primary'"
+                  (click)="setMatchChartType('line')" title="Line Chart (Gold Over Time)"
+                  [disabled]="!selectedMatch.timelineData || selectedMatch.timelineData.length === 0">
+            <i class="bi bi-graph-up"></i> <span class="d-none d-md-inline">Line</span>
+          </button>
+          <button type="button" class="btn"
+                  [ngClass]="selectedMatchChartType === 'bar' ? 'btn-primary' : 'btn-outline-primary'"
+                  (click)="setMatchChartType('bar')" title="Bar Chart (Gold Over Time)"
+                  [disabled]="!selectedMatch.timelineData || selectedMatch.timelineData.length === 0">
+            <i class="bi bi-bar-chart-fill"></i> <span class="d-none d-md-inline">Bar</span>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6 mb-3 mb-lg-0">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="d-flex align-items-center mb-1">
+                    <i class="bi bi-person-fill fs-5 me-2 text-primary"></i>
+                    <div class="flex-grow-1">
+                        <strong>Player 1:</strong> {{ selectedMatch.player1Info.player.name }}
+                        <span class="small text-muted">({{ selectedMatch.player1Info.player.rating }})</span>
+                    </div>
+                </div>
+                <div class="ps-4">
+                    <small class="text-muted d-flex align-items-center">Played as:
+                      <img [src]="getChampionImageUrl(selectedMatch.player1Info.championUsed)" width="22" height="22" class="rounded-circle mx-1 shadow-sm" [alt]="selectedMatch.player1Info.championUsed.name">
+                      <strong>{{ selectedMatch.player1Info.championUsed.name }}</strong>
+                     
+                        <span *ngIf="selectedMatch.player1Info.championUsed" class="badge small ms-1 champion-class-badge-sm" [ngClass]="{
+                            'bg-danger-subtle text-danger-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.WARRIOR,
+                            'bg-primary-subtle text-primary-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.MAGE,
+                            'bg-dark-subtle text-dark-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.ASSASSIN,
+                            'bg-secondary-subtle text-secondary-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.TANK,
+                            'bg-warning-subtle text-warning-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.MARKSMAN,
+                            'bg-success-subtle text-success-emphasis': selectedMatch.player1Info.championUsed.championClass === ChampionClass.SUPPORT
+                        }">{{ selectedMatch.player1Info.championUsed.championClass }}</span>
+                    </small>
+                </div>
+              </li>
+              <li class="list-group-item">
+                <div class="d-flex align-items-center mb-1">
+                    <i class="bi bi-person-fill fs-5 me-2 text-danger"></i>
+                    <div class="flex-grow-1">
+                        <strong>Player 2:</strong> {{ selectedMatch.player2Info.player.name }}
+                        <span class="small text-muted">({{ selectedMatch.player2Info.player.rating }})</span>
+                    </div>
+                </div>
+                <div class="ps-4">
+                    <small class="text-muted d-flex align-items-center">Played as:
+                        <img [src]="getChampionImageUrl(selectedMatch.player2Info.championUsed)" width="22" height="22" class="rounded-circle mx-1 shadow-sm" [alt]="selectedMatch.player2Info.championUsed.name">
+                        <strong>{{ selectedMatch.player2Info.championUsed.name }}</strong>
+                         <span *ngIf="selectedMatch.player2Info.championUsed" class="badge small ms-1 champion-class-badge-sm" [ngClass]="{
+                            'bg-danger-subtle text-danger-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.WARRIOR,
+                            'bg-primary-subtle text-primary-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.MAGE,
+                            'bg-dark-subtle text-dark-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.ASSASSIN,
+                            'bg-secondary-subtle text-secondary-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.TANK,
+                            'bg-warning-subtle text-warning-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.MARKSMAN,
+                            'bg-success-subtle text-success-emphasis': selectedMatch.player2Info.championUsed.championClass === ChampionClass.SUPPORT
+                        }">{{ selectedMatch.player2Info.championUsed.championClass }}</span>
+                    </small>
+                </div>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-trophy-fill fs-5 me-2 text-success"></i>
+                <strong>Winner:</strong> <span class="ms-1">{{ getWinnerName(selectedMatch) }}</span>
+              </li>
+              <li class="list-group-item d-flex align-items-center">
+                <i class="bi bi-calendar-event-fill fs-5 me-2 text-info"></i>
+                <strong>Date:</strong> <span class="ms-1">{{ selectedMatch.date | date:'fullDate' }} at {{ selectedMatch.date | date:'shortTime' }}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="chart-container" style="position: relative; height:300px; width:100%; max-width: 450px;">
+              <!-- Sử dụng ngSwitch để hiển thị biểu đồ phù hợp -->
+              <ng-container [ngSwitch]="selectedMatchChartType">
+                <canvas *ngSwitchCase="'radar'"
+                        baseChart
+                        [data]="matchRadarChartData"
+                        [options]="matchRadarChartOptions"
+                        [type]="'radar'">
+                </canvas>
+                <canvas *ngSwitchCase="'line'"
+                        baseChart
+                        [data]="matchLineChartData"
+                        [options]="matchLineChartOptions"
+                        [type]="'line'"
+                        [hidden]="!selectedMatch.timelineData || selectedMatch.timelineData.length === 0">
+                </canvas>
+                <canvas *ngSwitchCase="'bar'"
+                        baseChart
+                        [data]="matchBarChartData"
+                        [options]="matchBarChartOptions"
+                        [type]="'bar'"
+                        [hidden]="!selectedMatch.timelineData || selectedMatch.timelineData.length === 0">
+                </canvas>
+                <div *ngIf=" (selectedMatchChartType === 'line' || selectedMatchChartType === 'bar') && (!selectedMatch.timelineData || selectedMatch.timelineData.length === 0)"
+                     class="text-center text-muted d-flex align-items-center justify-content-center h-100">
+                    <div>
+                        <i class="bi bi-graph-down fs-1 d-block mb-2"></i>
+                        Timeline data not available to display {{selectedMatchChartType}} chart for this match.
+                    </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container> <!-- End of ng-container *ngIf="!showChampionList" -->
+
+</div> <!-- End of container -->
