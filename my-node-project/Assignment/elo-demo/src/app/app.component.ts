@@ -25,6 +25,12 @@ export class AppComponent implements OnInit {
   showAggregateStatsChart: boolean = false;
   selectedPlayer: Player | null = null;
   selectedMatch: Match | null = null;
+  p1DamageDisplay: number = 0;
+  p2DamageDisplay: number = 0;
+  p1DamagePercentDisplay: number = 0;
+  p2DamagePercentDisplay: number = 0;
+  totalDamageDisplay: number = 0;
+  canDisplayDamageRatio: boolean = false;
   public ChampionClass = ChampionClass;
   aggregateRadarChartOptions!: ChartConfiguration['options'];
   
@@ -418,6 +424,7 @@ export class AppComponent implements OnInit {
     this.selectedChampion = null;
     this.selectedMatchChartType = 'radar';
     this.prepareAllMatchChartsData(match);
+    this.calculateDamageRatioForSelectedMatch();
   }
 
   prepareAllMatchChartsData(match: Match): void {
@@ -660,6 +667,7 @@ export class AppComponent implements OnInit {
       this.selectedMatch = null;
       this.potentialOpponent = null;
       this.selectedChampion = null;
+      this.canDisplayDamageRatio = false;
     }
   }
 
@@ -687,4 +695,36 @@ export class AppComponent implements OnInit {
       ? match.player1Info.player.name 
       : match.player2Info.player.name;
   }
+  calculateDamageRatioForSelectedMatch(): void {
+    this.canDisplayDamageRatio = false;
+    if (this.selectedMatch && this.selectedMatch.timelineData && this.selectedMatch.timelineData.length > 0 &&
+        this.selectedMatch.player1Info.championUsed && this.selectedMatch.player2Info.championUsed) {
+      const lastEvent = this.selectedMatch.timelineData[this.selectedMatch.timelineData.length - 1];
+      const p1ChampId = this.selectedMatch.player1Info.championUsed.id;
+      const p2ChampId = this.selectedMatch.player2Info.championUsed.id;
+
+      const p1Stats = lastEvent.participantStats.find(p => p.championId === p1ChampId);
+      const p2Stats = lastEvent.participantStats.find(p => p.championId === p2ChampId);
+
+      this.p1DamageDisplay = p1Stats?.damageDealtToChampions || 0;
+      this.p2DamageDisplay = p2Stats?.damageDealtToChampions || 0;
+      this.totalDamageDisplay = this.p1DamageDisplay + this.p2DamageDisplay;
+
+      if (this.totalDamageDisplay > 0) {
+        this.p1DamagePercentDisplay = (this.p1DamageDisplay / this.totalDamageDisplay) * 100;
+        this.p2DamagePercentDisplay = (this.p2DamageDisplay / this.totalDamageDisplay) * 100;
+      } else {
+        this.p1DamagePercentDisplay = 50; 
+        this.p2DamagePercentDisplay = 50; 
+      }
+      
+      // Điều chỉnh logic cho thanh progress bar
+      if (this.p1DamagePercentDisplay === 0 && this.p2DamagePercentDisplay === 100) this.p1DamagePercentDisplay = 0;
+      else if (this.p2DamagePercentDisplay === 0 && this.p1DamagePercentDisplay === 100) this.p2DamagePercentDisplay = 0;
+      // Không cần trường hợp cả hai 0% ở đây vì đã xử lý ở trên nếu totalDamageDisplay = 0
+
+      this.canDisplayDamageRatio = true;
+    }
+  }
+
 }
