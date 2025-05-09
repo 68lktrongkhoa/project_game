@@ -205,13 +205,13 @@
                         <td>{{ match.id }}</td>
                         <td class="text-nowrap">
                           <img [src]="getChampionImageUrl(match.player1Info.championUsed)" [alt]="match.player1Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24" height="24" onError="this.src='https://via.placeholder.com/24?text=P1'" [title]="match.player1Info.championUsed.name">
-                          <span [title]="match.player1Info.player.name + ' (ELO: ' + match.player1Info.player.rating + ')'">{{ match.player1Info.player.name | slice:0:7 }}{{ match.player1Info.player.name.length > 7 ? '..' : ''}}</span>
+                          <span [title]="match.player1Info.player.name + ' (ELO: ' + match.player1Info.player.rating + ')'">{{ match.player1Info.player.name | slice:0:30 }}{{ match.player1Info.player.name.length > 30 ? '..' : ''}}</span>
                         </td>
                         <td class="text-nowrap">
                           <img [src]="getChampionImageUrl(match.player2Info.championUsed)" [alt]="match.player2Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24" height="24" onError="this.src='https://via.placeholder.com/24?text=P2'" [title]="match.player2Info.championUsed.name">
-                          <span [title]="match.player2Info.player.name + ' (ELO: ' + match.player2Info.player.rating + ')'">{{ match.player2Info.player.name | slice:0:7 }}{{ match.player2Info.player.name.length > 7 ? '..' : ''}}</span>
+                          <span [title]="match.player2Info.player.name + ' (ELO: ' + match.player2Info.player.rating + ')'">{{ match.player2Info.player.name | slice:0:30 }}{{ match.player2Info.player.name.length > 30 ? '..' : ''}}</span>
                         </td>
-                        <td title="{{ getWinnerName(match) }}" class="fw-medium">{{ getWinnerName(match) | slice:0:7 }}{{ getWinnerName(match).length > 7 ? '..' : ''}}</td>
+                        <td title="{{ getWinnerName(match) }}" class="fw-medium">{{ getWinnerName(match) | slice:0:30 }}{{ getWinnerName(match).length > 30 ? '..' : ''}}</td>
                         <td>{{ match.date | date:'dd/MM/yy' }}</td>
                         <td><button class="btn btn-outline-info btn-sm py-0 px-1" (click)="selectMatch(match)" title="View details for match {{match.id}}"><i class="bi bi-search"></i> <span class="d-none d-lg-inline">Details</span></button></td>
                       </tr>
