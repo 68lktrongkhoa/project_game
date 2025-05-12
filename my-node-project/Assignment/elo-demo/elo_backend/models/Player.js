@@ -31,7 +31,6 @@ PlayerSchema.methods.updateVisualRankAndLP = function() {
     this.lp = rankInfo.lp;
 };
 
-// Gọi hàm này sau khi rating thay đổi
 PlayerSchema.pre('save', function(next) {
     if (this.isModified('rating') || this.isNew) {
         this.updateVisualRankAndLP();

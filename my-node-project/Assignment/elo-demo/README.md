@@ -64,8 +64,8 @@ Hệ thống bao gồm các chức năng cốt lõi sau:
 
 *   Khi backend khởi động và biến môi trường `SEED_DB=true`, hệ thống sẽ tự động điền dữ liệu mẫu vào database nếu database trống.
 *   **Champions:** Dữ liệu tướng được lấy từ `data/champion.data.js`.
-*   **Players:** Một số lượng người chơi mẫu (ví dụ: 20) sẽ được tạo với ELO ban đầu và tướng yêu thích ngẫu nhiên từ danh sách tướng đã seed.
-*   **Matches:** Một số lượng trận đấu mẫu (ví dụ: 50) sẽ được tạo giữa các người chơi đã seed, với kết quả ngẫu nhiên và ELO được cập nhật sau mỗi trận.
+*   **Players:** Một số lượng người chơi mẫu (ví dụ: 100) sẽ được tạo với ELO ban đầu và tướng yêu thích ngẫu nhiên từ danh sách tướng đã seed.
+*   **Matches:** Một số lượng trận đấu mẫu (ví dụ: 100) sẽ được tạo giữa các người chơi đã seed, với kết quả ngẫu nhiên và ELO được cập nhật sau mỗi trận.
 
 ### 2. Tính toán ELO (`eloCalculationService.js`)
 
