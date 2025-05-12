@@ -35,8 +35,8 @@ app.use(express.json()); // Middleware để parse JSON request bodies
 // Các dòng này (quanh dòng 30, 31 cũ của bạn) chỉ hoạt động đúng
 // nếu playerRoutes, championRoutes, matchRoutes là các router instance hợp lệ.
 app.use('/api/players', playerRoutes);
-// app.use('/api/champions', championRoutes);
-// app.use('/api/matches', matchRoutes);
+app.use('/api/champions', championRoutes);
+app.use('/api/matches', matchRoutes);
 
 // --- DATABASE CONNECTION & SERVER START ---
 connectDB().then(async () => {
