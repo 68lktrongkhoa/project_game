@@ -356,12 +356,12 @@
 
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Player } from '../model/player.model';
 import { KdaStats, Match } from '../../matchs/models/match.model';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 const AVAILABLE_TIERS_MAP: { [key: string]: string } = {
   'unranked': 'assets/icons/unranked.png',
