@@ -2,9 +2,9 @@
 
 ## Giới thiệu
 
-ELO Ranking Demo là một ứng dụng web mô phỏng hệ thống xếp hạng ELO, quản lý người chơi, lịch sử trận đấu, và hiển thị thông tin chi tiết về tướng (champions) cũng như các số liệu thống kê liên quan. Ứng dụng được xây dựng bằng Angular, sử dụng TypeScript cho logic, HTML cho cấu trúc và CSS (cùng với Bootstrap) cho giao diện người dùng.
+ELO Ranking Demo là một ứng dụng web mô phỏng hệ thống xếp hạng ELO, quản lý người chơi, lịch sử trận đấu, và hiển thị thông tin chi tiết về tướng (champions) cũng như các số liệu thống kê liên quan. Ứng dụng bao gồm một backend Node.js/Express để quản lý dữ liệu và logic, và một frontend Angular để hiển thị và tương tác người dùng.
 
-## Chức năng chính
+## Chức năng chính (Frontend)
 
 Hệ thống bao gồm các chức năng cốt lõi sau:
 
@@ -58,28 +58,19 @@ Hệ thống bao gồm các chức năng cốt lõi sau:
     *   Các bảng dữ liệu có thanh cuộn khi nội dung vượt quá chiều cao tối đa.
     *   Header và các nút điều hướng để chuyển đổi giữa các chế độ xem (Danh sách Tướng, Thống kê Tổng hợp).
 
-## Cách hoạt động & Tính toán
+## Cách hoạt động & Tính toán (Backend)
 
-### 1. Khởi tạo Dữ liệu (`EloService`)
+### 1. Khởi tạo Dữ liệu (Seed Data)
 
-*   **Người chơi:** Khi service khởi tạo, một danh sách người chơi (ví dụ: 20 người) được tạo ra với:
-    *   ID, Tên (`Player X`).
-    *   Điểm ELO ban đầu (ví dụ: 1200).
-    *   Các chỉ số cơ bản (Attack, Defense, Speed, Magic, Support) được gán ngẫu nhiên trong một khoảng nhất định.
-    *   Tướng yêu thích (Favorite Champion) được chọn ngẫu nhiên từ danh sách tướng.
-    *   `visualRank` (bao gồm `tier` và `division`) và `lp` (League Points) được gán ngẫu nhiên hoặc dựa trên ELO ban đầu thông qua hàm `getVisualRankFromElo`.
-*   **Trận đấu ban đầu:** Một số lượng trận đấu ngẫu nhiên (ví dụ: 100 trận) được tạo ra giữa các người chơi đã khởi tạo:
-    *   Hai người chơi được chọn ngẫu nhiên.
-    *   Mỗi người chơi chọn một tướng ngẫu nhiên.
-    *   Người chiến thắng được xác định ngẫu nhiên.
-    *   Điểm ELO của hai người chơi được cập nhật dựa trên kết quả trận đấu.
-    *   Thông tin trận đấu (người chơi, tướng, ELO trước/sau, người thắng, ngày) được lưu lại.
-    *   Sau khi tạo các trận đấu ban đầu, `visualRank` và `lp` của người chơi được cập nhật lại dựa trên điểm ELO cuối cùng của họ.
+*   Khi backend khởi động và biến môi trường `SEED_DB=true`, hệ thống sẽ tự động điền dữ liệu mẫu vào database nếu database trống.
+*   **Champions:** Dữ liệu tướng được lấy từ `data/champion.data.js`.
+*   **Players:** Một số lượng người chơi mẫu (ví dụ: 20) sẽ được tạo với ELO ban đầu và tướng yêu thích ngẫu nhiên từ danh sách tướng đã seed.
+*   **Matches:** Một số lượng trận đấu mẫu (ví dụ: 50) sẽ được tạo giữa các người chơi đã seed, với kết quả ngẫu nhiên và ELO được cập nhật sau mỗi trận.
 
-### 2. Tính toán ELO (`EloService.calculateNewElo` và `EloService.updateElo`)
+### 2. Tính toán ELO (`eloCalculationService.js`)
 
 *   Hệ thống sử dụng công thức tính ELO tiêu chuẩn.
-*   **Hằng số K (K-Factor):** Được đặt là `32` (một giá trị phổ biến).
+*   **Hằng số K (K-Factor):** Được đặt là `32`.
 *   **Công thức:**
     *   `Ea = 1 / (1 + 10^((Rb - Ra) / 400))` (Tỷ lệ thắng kỳ vọng của Người chơi A)
     *   `Eb = 1 / (1 + 10^((Ra - Rb) / 400))` (Tỷ lệ thắng kỳ vọng của Người chơi B)
@@ -90,44 +81,39 @@ Hệ thống bao gồm các chức năng cốt lõi sau:
         *   `NewRa = Ra + K * (0 - Ea)`
         *   `NewRb = Rb + K * (1 - Eb)`
 *   Điểm ELO mới được làm tròn thành số nguyên.
-*   Sau mỗi trận đấu (kể cả trận đấu được tạo khi "Start Match"), ELO của người chơi liên quan sẽ được cập nhật.
+*   ELO của người chơi được cập nhật trong database sau mỗi trận đấu.
 
-### 3. Xác định Rank Trực quan (`EloService.getVisualRankFromElo`)
+### 3. Xác định Rank Trực quan (Frontend Logic)
 
-*   Hàm này nhận đầu vào là điểm ELO của một người chơi.
-*   Dựa trên các ngưỡng ELO được định nghĩa trước cho từng Bậc Rank (Iron, Bronze, Silver, Gold, Platinum, Emerald, Diamond, Master, Grandmaster, Challenger) và các Bậc Đoàn (Division IV, III, II, I) trong mỗi rank đó.
-*   Trả về một object chứa `tier` (ví dụ: "Silver"), `division` (ví dụ: "III"), và `lp`.
-*   **Logic tính LP (ví dụ):**
-    *   Với các rank có division: LP được tính bằng `(elo - mốc_đầu_division) % 100` (giả sử mỗi division có 100 LP).
-    *   Với các rank không có division (Master, GM, Challenger): LP được tính bằng `elo - mốc_đầu_rank`.
-*   Hàm này được gọi để cập nhật `visualRank` và `lp` của người chơi sau khi ELO của họ thay đổi hoặc khi khởi tạo.
+*   Frontend (`EloService.getVisualRankFromElo`) nhận điểm ELO từ backend.
+*   Dựa trên các ngưỡng ELO được định nghĩa trước, frontend xác định Bậc Rank (Iron, Bronze, ...) và Bậc Đoàn (IV, III, ...), cùng với LP.
+*   Hàm này được gọi để cập nhật `visualRank` và `lp` của người chơi trên giao diện.
 
-### 4. Hiển thị Icon Rank (`YourComponent.getPlayerRankIcon`)
+### 4. Hiển thị Icon Rank (Frontend Logic)
 
-*   Hàm này nhận `tier` (ví dụ: "Silver") làm đầu vào.
-*   Chuyển `tier` thành chữ thường.
-*   Tra cứu trong một đối tượng `TIER_ICONS` (map giữa tên rank chữ thường và đường dẫn đến file icon tương ứng, ví dụ: `{'silver': 'assets/icons/silver.png'}`).
-*   Trả về đường dẫn đến file icon. Nếu không tìm thấy, trả về icon "unranked" mặc định.
-*   Các file icon được lưu trữ trong thư mục `src/assets/icons/` của dự án.
+*   Frontend (`YourComponent.getPlayerRankIcon`) dựa trên `tier` (ví dụ: "Silver") để hiển thị icon rank tương ứng từ `src/assets/icons/`.
 
-### 5. Lấy dữ liệu Tướng (`ChampionService`)
+### 5. Lấy dữ liệu Tướng (Frontend Logic)
 
-*   `ChampionService` chịu trách nhiệm cung cấp danh sách các tướng.
-*   Dữ liệu tướng (tên, danh hiệu, loại, mô tả, kỹ năng, đường dẫn ảnh) có thể được định nghĩa sẵn trong một file (ví dụ: `champion.data.ts`) hoặc lấy từ một API bên ngoài (trong tương lai).
-*   Hàm `getChampionImageUrl` tạo đường dẫn đến ảnh của tướng (ví dụ: dựa trên tên tướng).
+*   Frontend `ChampionService` có thể chứa dữ liệu tướng mẫu hoặc sẽ gọi API từ backend để lấy danh sách tướng.
 
-### 6. Biểu đồ (`ng2-charts` / `Chart.js`)
+### 6. Biểu đồ (`ng2-charts` / `Chart.js` - Frontend)
 
-*   Ứng dụng sử dụng thư viện `ng2-charts` (một wrapper của Chart.js cho Angular) để vẽ các biểu đồ.
-*   **Biểu đồ Radar:**
-    *   Được sử dụng để hiển thị các chỉ số cơ bản của người chơi (trong Chi tiết Người chơi) hoặc so sánh chỉ số của hai người chơi trong một trận đấu (trong Chi tiết Trận đấu).
-    *   Cũng được sử dụng cho Thống kê Tổng hợp.
-*   **Biểu đồ Đường/Cột (Tùy chọn):** Có thể được sử dụng trong Chi tiết Trận đấu để hiển thị dữ liệu theo thời gian (ví dụ: lượng vàng) nếu có `timelineData`.
-*   Dữ liệu và tùy chọn cho mỗi biểu đồ được định nghĩa trong các thuộc tính của component tương ứng (ví dụ: `playerRadarChartData`, `matchRadarChartOptions`).
+*   Frontend sử dụng `ng2-charts` để vẽ các biểu đồ radar, đường, cột dựa trên dữ liệu từ backend.
 
-## Cấu trúc Dự án (Đề xuất)
+## Cấu trúc Dự án
 
-Dự án được tổ chức theo cấu trúc feature-based để dễ quản lý và mở rộng:
+### Backend (`elo_backend/`)
+
+*   **`config/`**: Chứa file cấu hình kết nối database (`db.js`).
+*   **`data/`**: Chứa dữ liệu mẫu (ví dụ: `champion.data.js`).
+*   **`models/`**: Định nghĩa Mongoose Schemas cho Player, Champion, Match.
+*   **`routes/`**: Định nghĩa các API endpoints (ví dụ: `playerRoutes.js`).
+*   **`services/`**: Chứa logic nghiệp vụ (ví dụ: `eloCalculationService.js`).
+*   **`index.js`**: File khởi động chính của server backend.
+*   **`.env`**: File chứa các biến môi trường (PORT, MONGO_URI, SEED_DB).
+
+### Frontend (Đề xuất)
 
 *   **`src/app/core/`**: Services cốt lõi, guards, interceptors.
 *   **`src/app/features/`**: Chứa các module/thư mục con cho từng chức năng chính:
@@ -135,12 +121,22 @@ Dự án được tổ chức theo cấu trúc feature-based để dễ quản l
     *   `players/`
     *   `matches/`
     *   `ranking/`
-    *   Mỗi feature sẽ có các thư mục con cho `components`, `services`, `models`, `data`, và `routes`.
 *   **`src/app/shared/`**: Components, directives, pipes có thể tái sử dụng.
 *   **`src/app/layouts/`**: Components layout chung (header, footer).
 *   **`src/assets/`**: Chứa các file tĩnh như hình ảnh (bao gồm cả icons rank trong `src/assets/icons/`).
 
 ## Công nghệ sử dụng
+
+### Backend
+
+*   **Node.js:** Môi trường chạy JavaScript phía server.
+*   **Express.js:** Framework web cho Node.js.
+*   **MongoDB:** Cơ sở dữ liệu NoSQL.
+*   **Mongoose:** ODM (Object Data Modeling) cho MongoDB và Node.js.
+*   **dotenv:** Để quản lý biến môi trường.
+*   **cors:** Middleware cho Cross-Origin Resource Sharing.
+
+### Frontend
 
 *   **Angular (v16+):** Framework chính cho frontend.
 *   **TypeScript:** Ngôn ngữ lập trình chính.
@@ -150,13 +146,107 @@ Dự án được tổ chức theo cấu trúc feature-based để dễ quản l
 *   **ng2-charts (Chart.js):** Thư viện vẽ biểu đồ.
 *   **Angular CLI:** Công cụ dòng lệnh để quản lý dự án Angular.
 
+## Cài đặt và Chạy (Backend)
+
+### Yêu cầu
+
+*   **Node.js** (phiên bản 16.x trở lên được khuyến nghị).
+*   **MongoDB Server** (phiên bản 5.x trở lên được khuyến nghị).
+*   **MongoDB Shell (`mongosh`)** (để tương tác với database từ dòng lệnh).
+*   **(macOS) Homebrew** (để cài đặt `mongosh` dễ dàng).
+
+### Các bước cài đặt MongoDB trên macOS (Ví dụ cài đặt thủ công)
+
+1.  **Tải MongoDB Community Server:**
+    *   Truy cập [trang chủ MongoDB](https://www.mongodb.com/try/download/community) và tải file `.tgz` cho macOS (chọn đúng phiên bản cho chip Intel `x86_64` hoặc Apple Silicon `arm64`).
+2.  **Giải nén:**
+    ```bash
+    cd ~/Downloads # Hoặc thư mục bạn tải về
+    tar -zxvf mongodb-macos-ARCH-VERSION.tgz
+    ```
+    (Thay `mongodb-macos-ARCH-VERSION.tgz` bằng tên file thực tế).
+3.  **Di chuyển thư mục đã giải nén:**
+    ```bash
+    sudo mv mongodb-macos-ARCH-VERSION /usr/local/mongodb
+    ```
+    (Thay `mongodb-macos-ARCH-VERSION` bằng tên thư mục đã giải nén).
+4.  **Tạo thư mục lưu trữ dữ liệu:**
+    ```bash
+    mkdir -p ~/mongodb-data
+    ```
+5.  **Thêm MongoDB vào PATH (cho Zsh):**
+    Mở file `~/.zshrc` (ví dụ: `open ~/.zshrc`) và thêm dòng sau:
+    ```zsh
+    # ~/.zshrc
+    # ... (các cấu hình khác, đảm bảo compinit đã được gọi nếu cần)
+    export PATH="/usr/local/mongodb/bin:$PATH"
+    ```
+    Sau đó, chạy `source ~/.zshrc` trong Terminal.
+6.  **Cài đặt MongoDB Shell (`mongosh`):**
+    *   Cài đặt Homebrew (nếu chưa có):
+        ```bash
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        ```
+        Làm theo hướng dẫn "Next steps" của Homebrew để thêm nó vào PATH.
+    *   Cài đặt `mongosh`:
+        ```bash
+        brew install mongosh
+        ```
+
+### Chạy Backend
+
+1.  **Clone repository (nếu có) hoặc đảm bảo bạn có thư mục `elo_backend`.**
+2.  **Đi đến thư mục `elo_backend`:**
+    ```bash
+    cd path/to/elo_backend
+    ```
+3.  **Cài đặt dependencies:**
+    ```bash
+    npm install
+    ```
+4.  **Tạo file `.env`** trong thư mục `elo_backend` với nội dung:
+    ```env
+    PORT=5000
+    MONGO_URI=mongodb://localhost:27017/elo_app_db
+    SEED_DB=true # Đặt là 'true' để seed database khi khởi động lần đầu, sau đó có thể đặt 'false'
+    ```
+5.  **Khởi động MongoDB Server:**
+    Mở một cửa sổ Terminal mới và chạy:
+    ```bash
+    # Nếu /usr/local/mongodb/bin đã có trong PATH
+    mongod --dbpath ~/mongodb-data
+    # Hoặc chạy bằng đường dẫn tuyệt đối
+    # /usr/local/mongodb/bin/mongod --dbpath ~/mongodb-data
+    ```
+    Giữ cửa sổ Terminal này mở.
+6.  **Khởi động Backend Server:**
+    Trong cửa sổ Terminal của thư mục `elo_backend`, chạy:
+    ```bash
+    npm start
+    # Hoặc
+    # node index.js
+    ```
+    Bạn sẽ thấy log "MongoDB Connected..." và "Backend server running on port 5000". Nếu `SEED_DB=true`, bạn cũng sẽ thấy log về việc seed data.
+
+### Chạy Frontend (Angular)
+
+1.  **Đi đến thư mục frontend của bạn.**
+2.  **Cài đặt dependencies:**
+    ```bash
+    npm install
+    ```
+3.  **Chạy ứng dụng Angular:**
+    ```bash
+    ng serve -o
+    ```
+    Ứng dụng sẽ mở trong trình duyệt của bạn, thường ở `http://localhost:4200/`.
+
 ## Hướng phát triển tiềm năng
 
-*   Kết nối với backend thực sự để lưu trữ và truy xuất dữ liệu thay vì dữ liệu mock.
+*   Kết nối với backend thực sự để lưu trữ và truy xuất dữ liệu thay vì dữ liệu mock (đã thực hiện với backend Node.js).
 *   Triển khai hệ thống xác thực người dùng.
-*   Cho phép người dùng tự tạo trận đấu và nhập kết quả.
+*   Cho phép người dùng tự tạo trận đấu và nhập kết quả thông qua giao diện.
 *   Thêm các loại biểu đồ và thống kê chi tiết hơn.
 *   Cải thiện logic tìm kiếm đối thủ.
 *   Hỗ trợ đa ngôn ngữ.
 *   Tối ưu hóa hiệu năng.
-    
