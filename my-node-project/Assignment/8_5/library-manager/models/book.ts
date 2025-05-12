@@ -14,6 +14,6 @@ export interface Book {
   author: string;
   available: boolean; 
   genre?: Genre;
-  isbn?: string;
+  isbn?: string; //International Standard Book Number
   totalCopies?: number; 
 }
