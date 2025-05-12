@@ -7,8 +7,6 @@ import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http'; 
-
-// Đảm bảo đường dẫn import chính xác với cấu trúc dự án của bạn
 import { EloService } from './features/players/services/elo.service';
 import { Player } from './features/players/model/player.model';
 import { Match, GameTimelineEvent, MatchPlayerInfo, KdaStats } from './features/matchs/models/match.model';
@@ -23,12 +21,10 @@ import { ChampionService } from './features/champions/services/champion.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // Data collections
   players: Player[] = [];
   matches: Match[] = [];
   champions: Champion[] = [];
 
-  // UI State & Selection
   isLoadingPlayers = false;
   isLoadingMatches = false;
   isLoadingChampions = false;
@@ -43,25 +39,21 @@ export class AppComponent implements OnInit, OnDestroy {
   selectedChampion: Champion | null = null;
   showChampionList: boolean = false;
 
-  // Calculated Stats for Selected Player
   matchesPlayed: number = 0;
   wins: number = 0;
   winRate: number = 0;
   loseRate: number = 0;
 
-  // Find Opponent Logic
   isFindingOpponent: boolean = false;
   potentialOpponent: Player | null = null;
   readonly ELO_MATCH_RANGE: number = 75;
 
   private findOpponentSubscription: Subscription | undefined;
   private createMatchSubscription: Subscription | undefined;
-  // Champion Filtering
   public ChampionClass = ChampionClass;
   championClasses = Object.values(ChampionClass);
   selectedChampionClassFilter: ChampionClass | null = null;
 
-  // Chart Configurations
   public radarChartType: ChartType = 'radar';
   public lineChartType: ChartType = 'line';
   public barChartType: ChartType = 'bar';
@@ -81,7 +73,6 @@ export class AppComponent implements OnInit, OnDestroy {
   matchBarChartOptions!: ChartConfiguration['options'];
   public selectedMatchChartType: ChartType = 'radar';
 
-  // Damage Ratio for Selected Match
   p1DamageDisplay: number = 0;
   p2DamageDisplay: number = 0;
   p1DamagePercentDisplay: number = 0;
@@ -89,11 +80,10 @@ export class AppComponent implements OnInit, OnDestroy {
   totalDamageDisplay: number = 0;
   canDisplayDamageRatio: boolean = false;
 
-  // Subscriptions Management
   private subscriptions: Subscription[] = [];
 
   constructor(
-    public eloService: EloService, // Public for template access (getPlayerRankIcon)
+    public eloService: EloService,
     private championService: ChampionService
   ) {
     this.initializeChartOptions();
@@ -135,7 +125,7 @@ export class AppComponent implements OnInit, OnDestroy {
     };
 
     this.matchLineChartOptions = this.createLineBarOptions('Gold', 'Time (Minutes)', 'yGold', 'yDamage', 'Damage');
-    this.matchBarChartOptions = this.createLineBarOptions('Gold', 'Time (Minutes)', 'yGold'); // Bar chart might only show gold
+    this.matchBarChartOptions = this.createLineBarOptions('Gold', 'Time (Minutes)', 'yGold');
 
     this.aggregateRadarChartOptions = {
       responsive: true, maintainAspectRatio: false,
@@ -153,7 +143,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
     };
 
-    if (ySecondaryAxisID && ySecondaryAxisLabel && options?.scales) { // Kiểm tra options.scales tồn tại
+    if (ySecondaryAxisID && ySecondaryAxisLabel && options?.scales) {
         (options?.scales as Record<string, any>)[ySecondaryAxisID] = {
             type: 'linear', display: true, position: 'right',
             title: { display: true, text: ySecondaryAxisLabel },
@@ -357,20 +347,18 @@ export class AppComponent implements OnInit, OnDestroy {
     const p1Stats = p1.championUsed.baseStats;
     const p2Stats = p2.championUsed.baseStats;
 
-    const labels = ['HP', 'AD', 'Armor', 'MR', 'MS']; // Make sure these keys exist in your baseStats
+    const labels = ['HP', 'AD', 'Armor', 'MR', 'MS'];
     const normalize = (value: number = 0, min: number, max: number) => {
-      if (max === min) return 50; // Avoid division by zero, return a mid-value
+      if (max === min) return 50; 
       return Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
     };
 
-    // Define more realistic bounds based on typical LoL champion stats at a certain level (e.g., level 18)
-    // These are rough estimates, adjust as needed.
     const statsBounds = {
       health: { min: 1800, max: 4500 },
-      attackDamage: { min: 80, max: 150 }, // Base AD at lvl 18, not including items
+      attackDamage: { min: 80, max: 150 },
       armor: { min: 70, max: 130 },
       magicResist: { min: 35, max: 60 },
-      movementSpeed: { min: 325, max: 355 } // Most champs fall in this range
+      movementSpeed: { min: 325, max: 355 }
     };
 
     this.matchRadarChartData = {
@@ -584,11 +572,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.selectedChampionClassFilter = null;
   }
 
-  // --- UI Helper Methods ---
   getChampionImageUrl(champion?: Champion): string {
-    if (!champion) return 'https://via.placeholder.com/80x80.png?text=N/A';
-    // Giả sử backend trả về imageUrl đầy đủ hoặc bạn có logic để tạo nó
-    return champion.imageUrl || `https://ddragon.leagueoflegends.com/cdn/14.9.1/img/champion/${champion.name.replace(/[^a-zA-Z0-9]/g, '')}.png`; // Ví dụ URL từ Data Dragon
+    if (!champion) return 'assets/icons/placeholder-champion-24.png';
+    return champion.imageUrl || `https://ddragon.leagueoflegends.com/cdn/14.9.1/img/champion/${champion.name.replace(/[^a-zA-Z0-9]/g, '')}.png`;
   }
 
   getWinnerName(match: Match): string {
@@ -597,41 +583,32 @@ export class AppComponent implements OnInit, OnDestroy {
       ? match.player1Info.player.name
       : match.player2Info.player.name;
   }
-
-  // --- Mock Data Generation (Consider removing if backend provides real data) ---
-  // ... (Toàn bộ code từ đầu đến trước phần bị cắt của generateMockTimelineData)
-
-  // --- Mock Data Generation (Consider removing if backend provides real data) ---
   generateMockTimelineData(p1Champion: Champion, p2Champion: Champion): GameTimelineEvent[] {
-    if (!p1Champion?.id || !p2Champion?.id) return []; // Kiểm tra ID tồn tại
+    if (!p1Champion?.id || !p2Champion?.id) return [];
     const timeline: GameTimelineEvent[] = [];
     let p1Data = { gold: 500, cs: 0, kills: 0, deaths: 0, assists: 0, level: 1, damageDealtToChampions: 0, xp: 0 };
     let p2Data = { gold: 500, cs: 0, kills: 0, deaths: 0, assists: 0, level: 1, damageDealtToChampions: 0, xp: 0 };
 
-    for (let min = 1; min <= 30; min += 2) { // Shorter timeline for demo, increment by 2 minutes
-      // Gold and CS gain
-      p1Data.gold += Math.floor(Math.random() * 250) + 150; // Realistic gold per 2 min
+    for (let min = 1; min <= 30; min += 2) {
+      p1Data.gold += Math.floor(Math.random() * 250) + 150; 
       p2Data.gold += Math.floor(Math.random() * 250) + 150;
-      p1Data.cs += Math.floor(Math.random() * 10) + 6; // Realistic CS per 2 min
+      p1Data.cs += Math.floor(Math.random() * 10) + 6;
       p2Data.cs += Math.floor(Math.random() * 10) + 6;
-
-      // Leveling (simplified)
-      p1Data.level = Math.min(18, Math.floor(1 + min / 1.8)); // Faster leveling for demo
+      p1Data.level = Math.min(18, Math.floor(1 + min / 1.8));
       p2Data.level = Math.min(18, Math.floor(1 + min / 1.8));
-      p1Data.xp = p1Data.level * 1000; // Mock XP
+      p1Data.xp = p1Data.level * 1000;
       p2Data.xp = p2Data.level * 1000;
 
-      // Kills/Deaths/Assists (random events)
-      const p1KillChance = 0.10; // 10% chance of P1 getting a kill
-      const p2KillChance = 0.10; // 10% chance of P2 getting a kill
+      const p1KillChance = 0.10; 
+      const p2KillChance = 0.10;
       const p1AssistChance = 0.20;
       const p2AssistChance = 0.20;
 
       if (Math.random() < p1KillChance) {
         p1Data.kills++;
         p2Data.deaths++;
-        p1Data.gold += 300; // Kill gold
-        p1Data.damageDealtToChampions += Math.floor(Math.random() * 300) + 200; // Damage for kill
+        p1Data.gold += 300; 
+        p1Data.damageDealtToChampions += Math.floor(Math.random() * 300) + 200; 
       }
       if (Math.random() < p2KillChance) {
         p2Data.kills++;
@@ -639,10 +616,9 @@ export class AppComponent implements OnInit, OnDestroy {
         p2Data.gold += 300;
         p2Data.damageDealtToChampions += Math.floor(Math.random() * 300) + 200;
       }
-      if (Math.random() < p1AssistChance && p2Data.deaths > (timeline.find(t=>t.timestamp === min-2)?.participantStats[1].deaths || 0) ) p1Data.assists++; // Assist if P2 died
-      if (Math.random() < p2AssistChance && p1Data.deaths > (timeline.find(t=>t.timestamp === min-2)?.participantStats[0].deaths || 0) ) p2Data.assists++; // Assist if P1 died
+      if (Math.random() < p1AssistChance && p2Data.deaths > (timeline.find(t=>t.timestamp === min-2)?.participantStats[1].deaths || 0) ) p1Data.assists++;
+      if (Math.random() < p2AssistChance && p1Data.deaths > (timeline.find(t=>t.timestamp === min-2)?.participantStats[0].deaths || 0) ) p2Data.assists++;
 
-      // General damage dealt (even without kills)
       p1Data.damageDealtToChampions += Math.floor(Math.random() * 150) + 50;
       p2Data.damageDealtToChampions += Math.floor(Math.random() * 150) + 50;
 
@@ -651,7 +627,7 @@ export class AppComponent implements OnInit, OnDestroy {
         timestamp: min,
         participantStats: [
           {
-            championId: p1Champion.id, // Sử dụng id từ object Champion
+            championId: p1Champion.id,
             gold: p1Data.gold,
             cs: p1Data.cs,
             kills: p1Data.kills,
@@ -662,7 +638,7 @@ export class AppComponent implements OnInit, OnDestroy {
             damageDealtToChampions: p1Data.damageDealtToChampions
           },
           {
-            championId: p2Champion.id, // Sử dụng id từ object Champion
+            championId: p2Champion.id,
             gold: p2Data.gold,
             cs: p2Data.cs,
             kills: p2Data.kills,

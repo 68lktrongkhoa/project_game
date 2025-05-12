@@ -239,7 +239,6 @@
                 <caption class="visually-hidden">List of the latest 100 matches.</caption>
                 <thead class="thead-light sticky-top">
                   <tr>
-                    <th scope="col">ID</th>
                     <th scope="col" title="Player 1 (Rank at Match Time)">P1</th>
                     <th scope="col" title="Player 2 (Rank at Match Time)">P2</th>
                     <th scope="col">Winner</th>
@@ -253,11 +252,10 @@
                       matches recorded.</td>
                   </tr>
                   <tr *ngFor="let match of matches">
-                    <td>{{ match.id }}</td>
                     <td class="text-nowrap">
                       <img [src]="getChampionImageUrl(match.player1Info.championUsed)"
                         [alt]="match.player1Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24"
-                        height="24" onError="this.src='https://via.placeholder.com/24?text=P1'"
+                        height="24" onError="this.src='assets/icons/placeholder-champion-24.png'"
                         [title]="match.player1Info.championUsed.name">
                       <span
                         [title]="match.player1Info.player.name + ' (ELO: ' + match.player1Info.player.rating + ')'">{{
@@ -267,7 +265,7 @@
                     <td class="text-nowrap">
                       <img [src]="getChampionImageUrl(match.player2Info.championUsed)"
                         [alt]="match.player2Info.championUsed.name" class="rounded-circle me-1 shadow-sm" width="24"
-                        height="24" onError="this.src='https://via.placeholder.com/24?text=P2'"
+                        height="24" onError="this.src='assets/icons/placeholder-champion-24.png'"
                         [title]="match.player2Info.championUsed.name">
                       <span
                         [title]="match.player2Info.player.name + ' (ELO: ' + match.player2Info.player.rating + ')'">{{
