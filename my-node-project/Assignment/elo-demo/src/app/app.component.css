@@ -1,28 +1,157 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
 
-.chart-container {
-    width: 400px;
-    height: 400px; 
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.card {
+  border: none;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+.rank-icon {
+  vertical-align: middle;
+}
+
+.aggregate-chart-wrapper,
+.player-stats-chart-wrapper,
+.match-details-chart-wrapper {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aggregate-chart-wrapper {
+  height: 400px;
+  max-width: 700px;
+}
+
+.player-stats-chart-wrapper {
+  height: 300px;
+  max-width: 400px;
+}
+
+.match-details-chart-wrapper {
+  height: 300px;
+  max-width: 450px;
+}
+
+.aggregate-chart-wrapper canvas,
+.player-stats-chart-wrapper canvas,
+.match-details-chart-wrapper canvas {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+}
+
+.player-roster-table-container,
+.match-history-table-container,
+.champion-list-body-scrollable {
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+}
+
+.player-roster-table-container {
+  max-height: calc(100vh - 420px);
+  min-height: 300px;
+  flex-grow: 1;
+}
+
+.match-history-table-container {
+  max-height: calc(100vh - 600px);
+  min-height: 200px;
+  flex-grow: 1;
+}
+
+.champion-list-body-scrollable {
+  max-height: calc(100vh - 350px);
+}
+
+.player-roster-table-container .table,
+.match-history-table-container .table {
+  margin-bottom: 0;
+}
+
+.player-roster-table-container thead,
+.match-history-table-container thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.champion-card {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.champion-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.champion-card.border-primary {
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.5);
+}
+
+.champion-image {
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.champion-name {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.champion-title {
+  font-size: 0.75rem;
+}
+
+.champion-class-badge {
+  font-size: 0.7rem;
+  padding: 0.2em 0.4em;
+}
+
+.champion-class-badge-lg {
+  font-size: 0.9rem;
+}
+
+.selected-champion-footer .champion-description,
+.selected-champion-footer .ability-item {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.ability-item .ability-description {
+  color: #495057;
+}
+
+.selected-details-section .list-group-item {
+  background-color: transparent;
+  border-color: rgba(0,0,0,.075);
+  padding-left: 0;
+  padding-right: 0;
+}
+.selected-details-section .list-group-item i {
+  width: 20px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
   }
-  
-
-  canvas {
-    max-width: 100%;
-    max-height: 100%;
+  .lead {
+    font-size: 1rem;
   }
-
-
-.table-container {
-    max-height: 300px;
-    overflow-y: auto; 
-    border: 1px solid #ddd;
-  }
-  
-  .table {
-    margin-bottom: 0; 
-  } 
-
-  
+}
