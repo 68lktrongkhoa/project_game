@@ -1,7 +1,6 @@
-module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
+const LEAGUE_OF_LEGENDS_CHAMPIONS = [
 
   {
-    id: 1,
     name: 'Garen',
     title: 'Sức Mạnh Demacia',
     championClass: 'WARRIOR',
@@ -17,7 +16,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3500, attackDamage: 170, abilityPower: 0, armor: 100, magicResist: 50, movementSpeed: 380 }
   },
   {
-    id: 2,
     name: 'Darius',
     title: 'Tay Đồ Tể Noxus',
     championClass: 'WARRIOR',
@@ -33,7 +31,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3400, attackDamage: 175, abilityPower: 0, armor: 95, magicResist: 50, movementSpeed: 380 }
   },
   {
-    id: 3,
     name: 'Sett',
     title: 'Đại Ca',
     championClass: 'WARRIOR',
@@ -49,7 +46,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3600, attackDamage: 172, abilityPower: 0, armor: 98, magicResist: 52, movementSpeed: 375 }
   },
   {
-    id: 4,
     name: 'Irelia',
     title: 'Vũ Kiếm Sư',
     championClass: 'WARRIOR',
@@ -65,7 +61,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3350, attackDamage: 168, abilityPower: 0, armor: 92, magicResist: 48, movementSpeed: 385 }
   },
   {
-    id: 5,
     name: 'Jax',
     title: 'Bậc Thầy Vũ Khí',
     championClass: 'WARRIOR',
@@ -81,7 +76,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3450, attackDamage: 170, abilityPower: 0, armor: 96, magicResist: 50, movementSpeed: 380 }
   },
   {
-    id: 6,
     name: 'Camille',
     title: 'Bóng Thép',
     championClass: 'WARRIOR',
@@ -97,7 +91,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3300, attackDamage: 165, abilityPower: 0, armor: 90, magicResist: 48, movementSpeed: 385 }
   },
   {
-    id: 7,
     name: 'Fiora',
     title: 'Nữ Kiếm Sư',
     championClass: 'WARRIOR',
@@ -113,7 +106,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3250, attackDamage: 168, abilityPower: 0, armor: 88, magicResist: 47, movementSpeed: 380 }
   },
   {
-    id: 8,
     name: 'Renekton',
     title: 'Đồ Tể Sa Mạc',
     championClass: 'WARRIOR',
@@ -130,7 +122,7 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
   },
 
   {
-    id: 10,
+   
     name: 'Lux',
     title: 'Tiểu Thư Ánh Sáng',
     championClass: 'MAGE',
@@ -146,7 +138,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3100, mana: 450, attackDamage: 150, abilityPower: 0, armor: 85, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 11,
     name: 'Syndra',
     title: 'Nữ Chúa Bóng Tối',
     championClass: 'MAGE',
@@ -162,7 +153,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3050, mana: 460, attackDamage: 148, abilityPower: 0, armor: 82, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 12,
     name: 'Ahri',
     title: 'Hồ Ly Chín Đuôi',
     championClass: 'MAGE',
@@ -178,7 +168,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3150, mana: 440, attackDamage: 152, abilityPower: 0, armor: 84, magicResist: 50, movementSpeed: 365 }
   },
   {
-    id: 13,
     name: 'Veigar',
     title: 'Bậc Thầy Tiểu Quỷ',
     championClass: 'MAGE',
@@ -194,7 +183,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3000, mana: 480, attackDamage: 145, abilityPower: 0, armor: 80, magicResist: 50, movementSpeed: 350 }
   },
   {
-    id: 14,
     name: 'Annie',
     title: 'Đứa Trẻ Bóng Tối',
     championClass: 'MAGE',
@@ -210,7 +198,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3120, mana: 430, attackDamage: 148, abilityPower: 0, armor: 83, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 15,
     name: 'Orianna',
     title: 'Quý Cô Dây Cót',
     championClass: 'MAGE',
@@ -226,7 +213,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3080, mana: 460, attackDamage: 146, abilityPower: 0, armor: 81, magicResist: 50, movementSpeed: 350 }
   },
   {
-    id: 16,
     name: 'Viktor',
     title: 'Sứ Giả Máy Móc',
     championClass: 'MAGE',
@@ -242,7 +228,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3150, mana: 470, attackDamage: 150, abilityPower: 0, armor: 84, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 17,
     name: 'Xerath',
     title: 'Pháp Sư Thăng Hoa',
     championClass: 'MAGE',
@@ -259,7 +244,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
   },
 
   {
-    id: 20,
     name: 'Zed',
     title: 'Chúa Tể Bóng Tối',
     championClass: 'ASSASSIN',
@@ -275,7 +259,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3200, attackDamage: 165, abilityPower: 0, armor: 90, magicResist: 50, movementSpeed: 390 }
   },
   {
-    id: 21,
     name: 'Akali',
     title: 'Sát Thủ Đơn Độc',
     championClass: 'ASSASSIN',
@@ -291,7 +274,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3180, attackDamage: 162, abilityPower: 0, armor: 88, magicResist: 50, movementSpeed: 390 }
   },
   {
-    id: 22,
     name: 'Katarina',
     title: 'Ác Kiếm',
     championClass: 'ASSASSIN',
@@ -307,7 +289,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3220, attackDamage: 158, abilityPower: 0, armor: 86, magicResist: 50, movementSpeed: 385 }
   },
   {
-    id: 23,
     name: 'Talon',
     title: 'Sát Thủ Bóng Đêm',
     championClass: 'ASSASSIN',
@@ -323,7 +304,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3250, attackDamage: 168, abilityPower: 0, armor: 92, magicResist: 50, movementSpeed: 380 }
   },
   {
-    id: 24,
     name: 'Fizz',
     title: 'Chú Cá Tinh Nghịch',
     championClass: 'ASSASSIN',
@@ -339,7 +319,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3190, attackDamage: 160, abilityPower: 0, armor: 87, magicResist: 50, movementSpeed: 380 }
   },
   {
-    id: 25,
     name: 'Kha\'Zix',
     title: 'Sát Thủ Hư Không',
     championClass: 'ASSASSIN',
@@ -355,7 +334,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3230, attackDamage: 166, abilityPower: 0, armor: 91, magicResist: 50, movementSpeed: 385 }
   },
   {
-    id: 26,
     name: 'LeBlanc',
     title: 'Kẻ Lừa Đảo',
     championClass: 'ASSASSIN',
@@ -372,7 +350,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
   },
 
   {
-    id: 30,
     name: 'Malphite',
     title: 'Mảnh Vỡ Monolith',
     championClass: 'TANK',
@@ -388,7 +365,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3800, attackDamage: 160, abilityPower: 0, armor: 120, magicResist: 50, movementSpeed: 370 }
   },
   {
-    id: 31,
     name: 'Ornn',
     title: 'Ngọn Lửa Khởi Nguyên',
     championClass: 'TANK',
@@ -404,7 +380,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3850, mana: 340, attackDamage: 162, abilityPower: 0, armor: 125, magicResist: 55, movementSpeed: 365 }
   },
   {
-    id: 32,
     name: 'Nautilus',
     title: 'Khổng Lồ Biển Sâu',
     championClass: 'TANK',
@@ -420,7 +395,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3750, mana: 400, attackDamage: 165, abilityPower: 0, armor: 118, magicResist: 52, movementSpeed: 360 }
   },
   {
-    id: 33,
     name: 'Leona',
     title: 'Bình Minh Rực Rỡ',
     championClass: 'TANK',
@@ -436,7 +410,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3700, mana: 380, attackDamage: 158, abilityPower: 0, armor: 115, magicResist: 53, movementSpeed: 365 }
   },
   {
-    id: 34,
     name: 'Shen',
     title: 'Mắt Hoàng Hôn',
     championClass: 'TANK',
@@ -452,7 +425,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3780, attackDamage: 163, abilityPower: 0, armor: 119, magicResist: 54, movementSpeed: 370 }
   },
   {
-    id: 35,
     name: 'Sion',
     title: 'Chiến Binh Bất Tử',
     championClass: 'TANK',
@@ -468,7 +440,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3900, mana: 350, attackDamage: 168, abilityPower: 0, armor: 122, magicResist: 53, movementSpeed: 370 }
   },
   {
-    id: 36,
     name: 'Maokai',
     title: 'Ma Cây Vặn Vẹo',
     championClass: 'TANK',
@@ -485,7 +456,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
   },
 
   {
-    id: 40,
     name: 'Ashe',
     title: 'Cung Băng',
     championClass: 'MARKSMAN',
@@ -501,7 +471,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3150, mana: 380, attackDamage: 168, abilityPower: 0, armor: 88, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 41,
     name: 'Caitlyn',
     title: 'Cảnh Sát Trưởng Piltover',
     championClass: 'MARKSMAN',
@@ -517,7 +486,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3100, mana: 390, attackDamage: 170, abilityPower: 0, armor: 86, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 42,
     name: 'Jinx',
     title: 'Khẩu Pháo Nổi Loạn',
     championClass: 'MARKSMAN',
@@ -533,7 +501,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3180, mana: 360, attackDamage: 165, abilityPower: 0, armor: 85, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 43,
     name: 'Kai\'Sa',
     title: 'Ái Nữ Hư Không',
     championClass: 'MARKSMAN',
@@ -549,7 +516,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3200, mana: 370, attackDamage: 167, abilityPower: 0, armor: 87, magicResist: 50, movementSpeed: 370 }
   },
   {
-    id: 44,
     name: 'Ezreal',
     title: 'Nhà Thám Hiểm Bảnh Trai',
     championClass: 'MARKSMAN',
@@ -565,7 +531,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3120, mana: 400, attackDamage: 166, abilityPower: 0, armor: 84, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 45,
     name: 'Vayne',
     title: 'Thợ Săn Bóng Đêm',
     championClass: 'MARKSMAN',
@@ -581,7 +546,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3080, mana: 350, attackDamage: 164, abilityPower: 0, armor: 83, magicResist: 50, movementSpeed: 365 }
   },
   {
-    id: 46,
     name: 'Miss Fortune',
     title: 'Thợ Săn Tiền Thưởng',
     championClass: 'MARKSMAN',
@@ -597,7 +561,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3160, mana: 375, attackDamage: 169, abilityPower: 0, armor: 86, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 47,
     name: 'Lucian',
     title: 'Kẻ Thanh Trừng',
     championClass: 'MARKSMAN',
@@ -614,7 +577,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
   },
 
   {
-    id: 50,
     name: 'Soraka',
     title: 'Tinh Nữ',
     championClass: 'SUPPORT',
@@ -630,7 +592,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3200, mana: 480, attackDamage: 155, abilityPower: 0, armor: 90, magicResist: 50, movementSpeed: 350 }
   },
   {
-    id: 51,
     name: 'Thresh',
     title: 'Cai Ngục Xiềng Xích',
     championClass: 'SUPPORT',
@@ -646,7 +607,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3300, mana: 370, attackDamage: 158, abilityPower: 0, armor: 95, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 52,
     name: 'Lulu',
     title: 'Pháp Sư Tinh Linh',
     championClass: 'SUPPORT',
@@ -662,7 +622,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3150, mana: 450, attackDamage: 150, abilityPower: 0, armor: 88, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 53,
     name: 'Nami',
     title: 'Nàng Tiên Cá',
     championClass: 'SUPPORT',
@@ -678,7 +637,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3100, mana: 460, attackDamage: 152, abilityPower: 0, armor: 85, magicResist: 50, movementSpeed: 350 }
   },
   {
-    id: 54,
     name: 'Janna',
     title: 'Cơn Thịnh Nộ Của Bão Tố',
     championClass: 'SUPPORT',
@@ -694,7 +652,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3050, mana: 470, attackDamage: 148, abilityPower: 0, armor: 82, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 55,
     name: 'Blitzcrank',
     title: 'Người Máy Hơi Nước',
     championClass: 'SUPPORT',
@@ -710,7 +667,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3400, mana: 350, attackDamage: 165, abilityPower: 0, armor: 100, magicResist: 50, movementSpeed: 355 }
   },
   {
-    id: 56,
     name: 'Yuumi',
     title: 'Cô Mèo Ma Thuật',
     championClass: 'SUPPORT',
@@ -726,7 +682,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 2900, mana: 500, attackDamage: 145, abilityPower: 0, armor: 78, magicResist: 50, movementSpeed: 350 }
   },
   {
-    id: 57,
     name: 'Karma',
     title: 'Kẻ Được Khai Sáng',
     championClass: 'SUPPORT',
@@ -742,7 +697,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3180, mana: 460, attackDamage: 153, abilityPower: 0, armor: 86, magicResist: 50, movementSpeed: 360 }
   },
   {
-    id: 58,
     name: 'Wukong',
     title: 'Hầu Vương',
     championClass: 'WARRIOR',
@@ -758,7 +712,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3420, attackDamage: 170, abilityPower: 0, armor: 94, magicResist: 51, movementSpeed: 375 }
   },
   {
-    id: 59,
     name: 'Tryndamere',
     title: 'Bá Vương Man Di',
     championClass: 'WARRIOR',
@@ -774,7 +727,6 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3550, attackDamage: 178, abilityPower: 0, armor: 93, magicResist: 49, movementSpeed: 380 }
   },
   {
-    id: 60,
     name: 'Sylas',
     title: 'Kẻ Phá Xiềng',
     championClass: 'MAGE',
@@ -790,3 +742,7 @@ module.exports.LEAGUE_OF_LEGENDS_CHAMPIONS = [
     baseStats: { health: 3380, mana: 380, attackDamage: 164, abilityPower: 0, armor: 91, magicResist: 52, movementSpeed: 375 }
   }
 ];
+
+module.exports = {
+  LEAGUE_OF_LEGENDS_CHAMPIONS
+};
