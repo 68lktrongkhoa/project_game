@@ -3,21 +3,21 @@ const express = require('express');
 const router = express.Router();
 const Match = require('../models/Match');
 router.get('/', async (req, res) => {
-  try {
-    const matches = await Match.find()
-      .populate('player1Info.player', 'name rating') 
-      .populate('player1Info.championUsed', 'name icon')
-      .populate('player2Info.player', 'name rating')
-      .populate('player2Info.championUsed', 'name icon')
-      .populate('winnerId', 'name')
-      .sort({ date: -1 })
-      .limit(100); // Giới hạn số lượng trận đấu trả về (ví dụ)
-    res.json(matches);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error when getting matches');
-  }
-});
+    try {
+      const matches = await Match.find()
+        .populate('player1Info.player', 'name rating') 
+        .populate('player1Info.championUsed')       
+        .populate('player2Info.player', 'name rating') 
+        .populate('player2Info.championUsed')       
+        .populate('winnerId', 'name')  
+        .sort({ date: -1 })
+        .limit(100);
+      res.json(matches);
+    } catch (err) {
+      console.error('Error fetching matches:', err.message, err.stack);
+      res.status(500).send('Server Error when getting matches');
+    }
+  });
 router.post('/', async (req, res) => {
     // ... (logic tạo trận đấu của bạn ở đây, tương tự như trong EloService frontend cũ)
     // Ví dụ:

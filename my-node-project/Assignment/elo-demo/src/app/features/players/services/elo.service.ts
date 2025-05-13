@@ -380,19 +380,12 @@ const AVAILABLE_TIERS_MAP: { [key: string]: string } = {
 @Injectable({
   providedIn: 'root'
 })
-export class EloService { // Bạn có thể cân nhắc đổi tên thành PlayerService nếu nó quản lý nhiều hơn ELO
-  private apiUrl = 'http://localhost:5000/api'; // URL của backend Node.js (PORT 5000 theo .env)
+export class EloService { 
+  private apiUrl = 'http://localhost:5000/api';
 
   constructor(private http: HttpClient) {
     console.log('EloService (Frontend) initialized - Interacting with backend at:', this.apiUrl);
   }
-
-  /**
-   * Hàm này thuần túy cho UI, trả về đường dẫn icon dựa trên tier.
-   * Nó nên được giữ lại ở frontend.
-   * @param tier Tên của rank (ví dụ: 'Silver', 'Gold')
-   * @returns Đường dẫn đến file icon tương ứng.
-   */
   public getPlayerRankIcon(tier: string | undefined): string {
     if (!tier) {
         return 'assets/icons/unranked.png';
@@ -401,11 +394,6 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
     const iconPath = AVAILABLE_TIERS_MAP[lowerTier];
     return iconPath || 'assets/icons/unranked.png';
   }
-
-  /**
-   * Lấy danh sách tất cả người chơi từ backend.
-   * @returns Observable chứa mảng các Player.
-   */
   getPlayers(): Observable<Player[]> {
     return this.http.get<Player[]>(`${this.apiUrl}/players`)
       .pipe(
@@ -413,12 +401,6 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
         catchError(this.handleError)
       );
   }
-
-  /**
-   * Lấy thông tin chi tiết của một người chơi dựa trên ID.
-   * @param playerId ID của người chơi (thường là _id từ MongoDB, dạng string).
-   * @returns Observable chứa thông tin Player.
-   */
   getPlayerById(playerId: string): Observable<Player> {
     return this.http.get<Player>(`${this.apiUrl}/players/${playerId}`)
       .pipe(
@@ -426,13 +408,6 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
         catchError(this.handleError)
       );
   }
-
-  /**
-   * Tìm một đối thủ tiềm năng cho người chơi hiện tại.
-   * @param currentPlayerId ID của người chơi hiện tại.
-   * @param eloRange Khoảng ELO để tìm kiếm đối thủ.
-   * @returns Observable chứa thông tin Player của đối thủ hoặc null nếu không tìm thấy.
-   */
   findOpponent(currentPlayerId: string, eloRange: number): Observable<Player | null> {
     let params = new HttpParams()
       .set('currentPlayerId', currentPlayerId)
@@ -443,24 +418,12 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
         catchError(this.handleError)
       );
   }
-
-  /**
-   * Tạo một trận đấu mới. Logic tính toán ELO và cập nhật người chơi sẽ được xử lý ở backend.
-   * @param player1Id ID của người chơi 1.
-   * @param player2Id ID của người chơi 2.
-   * @param winnerId ID của người chiến thắng.
-   * @param p1ChampionId ID của tướng người chơi 1 đã sử dụng.
-   * @param p2ChampionId ID của tướng người chơi 2 đã sử dụng.
-   * @param kdaP1 (Tùy chọn) Thông số KDA của người chơi 1.
-   * @param kdaP2 (Tùy chọn) Thông số KDA của người chơi 2.
-   * @returns Observable chứa thông tin Match đã được tạo.
-   */
   createMatch(
     player1Id: string,
     player2Id: string,
     winnerId: string,
-    p1ChampionId: string, // Đây là _id của Champion từ DB
-    p2ChampionId: string, // Đây là _id của Champion từ DB
+    p1ChampionId: string, 
+    p2ChampionId: string,
     kdaP1?: KdaStats,
     kdaP2?: KdaStats
   ): Observable<Match> {
@@ -470,8 +433,8 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
       winnerId,
       champion1Id: p1ChampionId,
       champion2Id: p2ChampionId,
-      kdaP1, // Backend sẽ xử lý nếu là undefined
-      kdaP2  // Backend sẽ xử lý nếu là undefined
+      kdaP1,
+      kdaP2 
     };
     return this.http.post<Match>(`${this.apiUrl}/matches`, matchData)
       .pipe(
@@ -479,11 +442,6 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
         catchError(this.handleError)
       );
   }
-
-  /**
-   * Lấy lịch sử các trận đấu (ví dụ: 100 trận mới nhất).
-   * @returns Observable chứa mảng các Match.
-   */
   getMatches(): Observable<Match[]> {
     return this.http.get<Match[]>(`${this.apiUrl}/matches`)
       .pipe(
@@ -492,11 +450,6 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
       );
   }
 
-  /**
-   * Lấy lịch sử trận đấu của một người chơi cụ thể.
-   * @param playerId ID của người chơi.
-   * @returns Observable chứa mảng các Match liên quan đến người chơi đó.
-   */
   getPlayerMatchHistory(playerId: string): Observable<Match[]> {
     return this.http.get<Match[]>(`${this.apiUrl}/matches/player/${playerId}`)
       .pipe(
@@ -505,25 +458,16 @@ export class EloService { // Bạn có thể cân nhắc đổi tên thành Play
       );
   }
 
-  /**
-   * Hàm xử lý lỗi chung cho các HTTP request.
-   * @param error Đối tượng HttpErrorResponse.
-   * @returns Observable báo lỗi.
-   */
   private handleError(error: HttpErrorResponse) {
     console.error('API Error Details:', error);
     let errorMessage = 'An unknown error occurred with the API!';
 
     if (error.error instanceof ErrorEvent) {
-      // Lỗi phía client hoặc lỗi mạng.
       errorMessage = `Client-side/Network error: ${error.error.message}`;
     } else {
-      // Backend trả về một mã lỗi không thành công.
-      // Body của response có thể chứa manh mối về lỗi.
       errorMessage = `Backend returned code ${error.status}, ` +
                      `body was: ${JSON.stringify(error.error) || error.message}`;
     }
-    // Trả về một observable với một lỗi mà người dùng có thể xử lý.
     return throwError(() => new Error(errorMessage));
   }
 }

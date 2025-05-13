@@ -1,4 +1,3 @@
-// src/app/champion.model.ts
 
 export enum ChampionClass {
     WARRIOR = 'Warrior',
@@ -9,11 +8,11 @@ export enum ChampionClass {
     SUPPORT = 'Support'
   }
   
-  export interface ChampionAbility { // Kỹ năng của tướng (ví dụ)
+  export interface ChampionAbility {
     name: string;
     description: string;
     cooldown?: number;
-    damageType?: string; // Physical, Magical, True
+    damageType?: string; 
     iconUrl?: string;
   }
   

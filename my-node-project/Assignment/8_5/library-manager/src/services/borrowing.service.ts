@@ -1,0 +1,122 @@
+import { BorrowRecord, BorrowStatus } from '../models/borrowRecord';
+import { Repository } from '../repository/repository';
+import { BookService } from './book.service';
+import { UserService } from './user.service';
+import Table from 'cli-table3';
+
+export class BorrowingService {
+  constructor(
+    private borrowRecordRepository: Repository<BorrowRecord>,
+    private bookService: BookService, 
+    private userService: UserService  
+  ) {}
+
+  borrowBook(userId: number, bookId: number): BorrowRecord | null {
+    const user = this.userService.findUserById(userId);
+    const book = this.bookService.findBookById(bookId);
+
+    if (!user) {
+      console.error(`❌ Mượn thất bại: Không tìm thấy Người dùng ID ${userId}.`); 
+      return null;
+    }
+    if (!book) {
+      console.error(`❌ Mượn thất bại: Không tìm thấy Sách ID ${bookId}.`); 
+      return null;
+    }
+    if (!book.available) {
+      console.error(`❌ Mượn thất bại: Sách "${book.title}" không có sẵn.`);
+      return null;
+    }
+
+    const updatedBook = this.bookService.updateBookAvailability(bookId, false);
+    if (!updatedBook) {
+        console.error(`❌ Mượn thất bại: Không thể cập nhật trạng thái sách cho ID ${bookId}.`);
+        return null;
+    }
+    const borrowDate = new Date();
+    const dueDate = new Date(borrowDate);
+    dueDate.setDate(borrowDate.getDate() + 14);
+
+    const newRecordData: Omit<BorrowRecord, 'id'> = {
+      bookId,
+      userId,
+      borrowDate,
+      dueDate,
+      status: BorrowStatus.BORROWED
+    };
+
+    const savedRecord = this.borrowRecordRepository.add(newRecordData);
+    console.log(`✅ ${user.name} đã mượn sách "${book.title}". Hạn trả: ${dueDate.toLocaleDateString()}`); // Đã dịch
+    return savedRecord;
+  }
+
+  returnBook(borrowRecordId: number): BorrowRecord | null {
+    const record = this.borrowRecordRepository.findById(borrowRecordId);
+
+    if (!record) {
+      console.error(`❌ Trả sách thất bại: Không tìm thấy bản ghi mượn ID ${borrowRecordId}.`);
+      return null;
+    }
+    if (record.status === BorrowStatus.RETURNED) {
+      console.warn(`⚠️ Sách cho bản ghi ${borrowRecordId} đã được trả trước đó.`);
+      return record;
+    }
+
+    const book = this.bookService.findBookById(record.bookId);
+    if (book) {
+        this.bookService.updateBookAvailability(book.id, true);
+    } else {
+        console.warn(`⚠️ Không tìm thấy Sách ID ${record.bookId} liên kết với bản ghi ${borrowRecordId} để cập nhật trạng thái.`);
+    }
+
+    const updatedRecord = this.borrowRecordRepository.update(borrowRecordId, {
+      returnDate: new Date(),
+      status: BorrowStatus.RETURNED
+    });
+
+    if (!updatedRecord) {
+         console.error(`❌ Trả sách thất bại: Không thể cập nhật bản ghi mượn ID ${borrowRecordId}.`);
+         return null;
+    }
+
+    const user = this.userService.findUserById(record.userId);
+    console.log(`✅ ${user?.name || 'Người dùng'} đã trả sách "${book?.title || 'Sách ID ' + record.bookId}" (Bản ghi ID: ${borrowRecordId})`);
+    return updatedRecord;
+  }
+
+  getBorrowingHistory(status?: BorrowStatus): BorrowRecord[] {
+      let records = this.borrowRecordRepository.getAll();
+      if (status) {
+          records = records.filter(r => r.status === status);
+      }
+      return records.sort((a, b) => b.id - a.id);
+  }
+
+  displayBorrowingHistory(records: BorrowRecord[]): void {
+       if (!records || records.length === 0) {
+         console.log("  Không có bản ghi mượn nào để hiển thị."); 
+         return;
+       }
+
+       const table = new Table({
+        head: ['ID BG', 'Người mượn', 'Sách', 'Ngày mượn', 'Hạn trả', 'Trạng thái', 'Ngày trả'],
+        colWidths: [8, 20, 25, 15, 15, 12, 15],
+        wordWrap: true
+       });
+
+       records.forEach(record => {
+         const user = this.userService.findUserById(record.userId);
+         const book = this.bookService.findBookById(record.bookId);
+         table.push([
+           record.id,
+           user?.name || `User ID ${record.userId}`,
+           book?.title || `Book ID ${record.bookId}`,
+           record.borrowDate.toLocaleDateString(),
+           record.dueDate.toLocaleDateString(),
+           record.status,
+           record.returnDate ? record.returnDate.toLocaleDateString() : '—'
+         ]);
+       });
+       console.log(table.toString());
+  }
+}

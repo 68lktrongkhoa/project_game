@@ -181,7 +181,7 @@ export class AppComponent implements OnInit, OnDestroy {
         },
         error: (err) => this.errorMatches = err.message || 'Failed to load matches.'
       });
-    this.subscriptions.push(sub);
+    
   }
 
   loadChampions(): void {
@@ -338,7 +338,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   prepareMatchRadarData(match: Match): void {
+    console.log("Player 2 Champion baseStats:", match.player2Info.championUsed?.baseStats);
     if (!match?.player1Info?.championUsed?.baseStats || !match?.player2Info?.championUsed?.baseStats) {
+      console.log('No champion data available for radar chart.', match);
       this.matchRadarChartData = { labels: [], datasets: [] };
       return;
     }
@@ -388,6 +390,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       ]
     };
+    console.log("matchRadarChartData", this.matchRadarChartData);
   }
 
   setMatchChartType(type: ChartType): void {
@@ -500,6 +503,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   startMatchWithOpponent(): void {
+    console.log("Có vô đây không")
     if (!this.selectedPlayer?.id || !this.potentialOpponent?.id || this.champions.length === 0) {
       alert("Cannot start match. Player, opponent, or champion data missing.");
       return;
@@ -524,20 +528,20 @@ export class AppComponent implements OnInit, OnDestroy {
     }))
     .subscribe({
       next: (newMatch) => {
-        this.loadPlayers(); // Reload players to get updated ELOs
-        this.matches.unshift({ // Add new match to the top
+        this.loadPlayers(); 
+        this.matches.unshift({ 
             ...newMatch,
-            timelineData: this.generateMockTimelineData(p1Champion, p2Champion) // Add mock timeline if needed
+            timelineData: this.generateMockTimelineData(p1Champion, p2Champion) 
         });
-        this.matches = this.matches.slice(0, 100); // Keep latest 100
+        this.matches = this.matches.slice(0, 100); 
 
         const updatedPlayer = this.players.find(p => p.id === this.selectedPlayer!.id);
         if (updatedPlayer) {
-            this.selectPlayer(updatedPlayer); // Re-select to update stats and chart
+            this.selectPlayer(updatedPlayer);
         } else {
-            this.selectedPlayer = null; // Or handle if player not found after update
+            this.selectedPlayer = null; 
         }
-        this.selectMatch(newMatch); // Show details of the new match
+        this.selectMatch(newMatch); 
       },
       error: (err) => alert(err.message || 'Error: Could not start the match.')
     });
@@ -550,7 +554,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.findOpponentSubscription?.unsubscribe();
   }
 
-  // --- Champion List Methods ---
   toggleChampionList(): void {
     this.showChampionList = !this.showChampionList;
     if (this.showChampionList) {
@@ -561,6 +564,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   selectChampion(champion: Champion): void {
     this.selectedChampion = (this.selectedChampion?.id === champion.id) ? null : champion;
+    console.log( "Selected champion:", this.selectedChampion);
   }
 
   filterChampions(): Champion[] {

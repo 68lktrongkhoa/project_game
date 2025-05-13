@@ -20,7 +20,7 @@ const MatchSchema = new mongoose.Schema({
     player2Info: { type: MatchPlayerInfoSchema, required: true },
     winnerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Player', required: true },
     date: { type: Date, default: Date.now },
-    timelineData: [mongoose.Schema.Types.Mixed]
+    timelineData: [mongoose.Schema.Types.Mixed] // Lưu ý: Dùng Mixed có thể khó quản lý, cân nhắc định nghĩa schema cụ thể nếu có thể
 });
 
 module.exports = mongoose.model('Match', MatchSchema);
