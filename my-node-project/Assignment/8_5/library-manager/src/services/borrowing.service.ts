@@ -12,8 +12,8 @@ export class BorrowingService {
   ) {}
 
   borrowBook(userId: number, bookId: number): BorrowRecord | null {
-    const user = this.userService.findUserById(userId);
-    const book = this.bookService.findBookById(bookId);
+    const user = this.userService.getUserById(userId);
+    const book = this.bookService.getBookById(bookId);
 
     if (!user) {
       console.error(`❌ Mượn thất bại: Không tìm thấy Người dùng ID ${userId}.`); 
@@ -46,7 +46,7 @@ export class BorrowingService {
     };
 
     const savedRecord = this.borrowRecordRepository.add(newRecordData);
-    console.log(`✅ ${user.name} đã mượn sách "${book.title}". Hạn trả: ${dueDate.toLocaleDateString()}`); // Đã dịch
+    console.log(`✅ ${user.name} đã mượn sách "${book.title}". Hạn trả: ${dueDate.toLocaleDateString()}`);
     return savedRecord;
   }
 
@@ -62,7 +62,7 @@ export class BorrowingService {
       return record;
     }
 
-    const book = this.bookService.findBookById(record.bookId);
+    const book = this.bookService.getBookById(record.bookId);
     if (book) {
         this.bookService.updateBookAvailability(book.id, true);
     } else {
@@ -79,7 +79,7 @@ export class BorrowingService {
          return null;
     }
 
-    const user = this.userService.findUserById(record.userId);
+    const user = this.userService.getUserById(record.userId);
     console.log(`✅ ${user?.name || 'Người dùng'} đã trả sách "${book?.title || 'Sách ID ' + record.bookId}" (Bản ghi ID: ${borrowRecordId})`);
     return updatedRecord;
   }
@@ -105,8 +105,8 @@ export class BorrowingService {
        });
 
        records.forEach(record => {
-         const user = this.userService.findUserById(record.userId);
-         const book = this.bookService.findBookById(record.bookId);
+         const user = this.userService.getUserById(record.userId);
+         const book = this.bookService.getBookById(record.bookId);
          table.push([
            record.id,
            user?.name || `User ID ${record.userId}`,

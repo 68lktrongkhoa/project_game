@@ -12,7 +12,7 @@ export const GenreValues = {
   Romance: 'Romance',
   Poetry: 'Poetry',
   Code: 'Code', 
-} as const; 
+}; 
 export type BookGenre = typeof GenreValues[keyof typeof GenreValues];
 
 export interface Book {

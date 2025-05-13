@@ -13,7 +13,7 @@ export class BookService {
     return this.bookRepository.getAll();
   }
 
-  findBookById(id: number): Book | null {
+  getBookById(id: number): Book | null {
     return this.bookRepository.findById(id);
   }
 
@@ -28,19 +28,19 @@ export class BookService {
   }
 
   updateBookAvailability(bookId: number, isAvailable: boolean): Book | null {
-     const book = this.findBookById(bookId);
-     if (!book) {
-       console.error(`❌ Không thể cập nhật trạng thái: Không tìm thấy Sách ID ${bookId}.`);
-       return null;
-     }
-     return this.bookRepository.update(bookId, { available: isAvailable });
+    const book = this.getBookById(bookId);
+    if (!book) {
+      console.error(`❌ Không thể cập nhật trạng thái: Không tìm thấy Sách ID ${bookId}.`);
+      return null;
+    }
+    return this.bookRepository.update(bookId, { available: isAvailable });
   }
 
-   displayBooks(books: Book[]): void {
-     if (!books || books.length === 0) {
-         console.log("  Không có sách nào để hiển thị.");
-         return;
-     }
+  displayBooks(books: Book[]): void {
+    if (!books || books.length === 0) {
+      console.log("Không có sách nào để hiển thị.");
+      return;
+    }
     const table = new Table({
       head: ['ID', 'Tiêu đề', 'Tác giả', 'Thể loại', 'Có sẵn', 'ISBN', 'Số bản'],
       colWidths: [5, 30, 25, 15, 10, 20, 8],
