@@ -42,7 +42,7 @@ export class BookService {
       return;
     }
     const table = new Table({
-      head: ['ID', 'Tiêu đề', 'Tác giả', 'Thể loại', 'Có sẵn', 'ISBN', 'Số bản'],
+      head: ['ID', 'Tiêu đề', 'Tác giả', 'Thể loại', 'Có sẵn', 'Mã Sách', 'Số bản'],
       colWidths: [5, 30, 25, 15, 10, 20, 8],
       wordWrap: true
     });
