@@ -8,4 +8,4 @@
     { "title": "", "author": "", "available": false, "genre": "", "isbn": "", "totalCopies": 0 },
     { "title": "The Lord of the Rings", "author": "J.R.R. Tolkien", "available": true, "genre": "Fantasy", "isbn": "978-0544003415", "totalCopies": 2 },
     { "title": "The Hobbit", "author": "J.R.R. Tolkien", "available": true, "genre": "Fantasy", "isbn": "978-0547928227", "totalCopies": 3 }
-  ]
+]
