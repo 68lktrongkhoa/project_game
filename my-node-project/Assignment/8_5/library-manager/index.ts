@@ -22,7 +22,7 @@ const borrowingService = new BorrowingService(borrowRecordRepository, bookServic
 function loadInitialData() {
   try {
     console.log("--- Adding initial books from JSON ---");
-    const booksFilePath = path.join(__dirname, 'initial-books.json');
+    const booksFilePath = path.join(__dirname, 'src/data/booksdata.json');
     const booksRawData = fs.readFileSync(booksFilePath, 'utf-8');
     const booksData: Omit<Book, 'id'>[] = JSON.parse(booksRawData);
     booksData.forEach(bookData => {
@@ -30,7 +30,7 @@ function loadInitialData() {
     });
 
     console.log("\n--- Adding initial users from JSON ---");
-    const usersFilePath = path.join(__dirname, 'initial-users.json');
+    const usersFilePath = path.join(__dirname, 'src/data/usersdata.json');
     const usersRawData = fs.readFileSync(usersFilePath, 'utf-8');
     const usersData: Omit<User, 'id'>[] = JSON.parse(usersRawData);
     usersData.forEach(userData => userService.addUser(userData));
