@@ -1,4 +1,3 @@
-// src/commands/taskCommands.ts
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { createTask, getAllTasks, getTaskById, updateTask, deleteTask, CreateTaskInput } from '../services/taskService';
@@ -7,15 +6,9 @@ import { displayTasks, displayTaskDetails } from '../services/displayService';
 import { TaskStatus, TaskPriority, TaskType, Project, Task } from '../types';
 import { format, parseISO, isValid, parse } from 'date-fns';
 
-// Dynamic import ora
 let ora: any;
 async function loadOra() { if (!ora) ora = (await import('ora')).default; }
 
-/**
- * Parses various date input formats into an ISO string or returns undefined/error string.
- * @param input The date string from user input.
- * @returns ISO date string, undefined, or 'invalid_date'.
- */
 const parseDeadlineInput = (input: string): string | undefined => {
     if (!input || input.trim().toLowerCase() === 'none' || input.trim() === '') {
         return undefined;
@@ -28,22 +21,15 @@ const parseDeadlineInput = (input: string): string | undefined => {
             return parsedDate.toISOString();
         }
     }
-    // Try direct parsing as a last resort
     parsedDate = new Date(input);
     if (isValid(parsedDate)) {
         return parsedDate.toISOString();
     }
-    return 'invalid_date'; // Flag for invalid date
+    return 'invalid_date';
 };
 
-/**
- * Helper function for user to select a project for a task.
- * @param message The prompt message.
- * @returns Selected Project object or undefined.
- */
 async function selectProjectForTask(message: string): Promise<Project | undefined> {
-    // No spinner here, as it's usually part of a larger command's spinner context
-    const projects = getAllProjects(); // Assumed synchronous
+    const projects = getAllProjects(); 
     if (projects.length === 0) {
         console.log(chalk.yellow("ℹ️ No projects available. Please create a project first."));
         return undefined;
@@ -60,18 +46,12 @@ async function selectProjectForTask(message: string): Promise<Project | undefine
     return projects.find(p => p.id === projectId);
 }
 
-/**
- * Helper function for user to select a task.
- * @param message The prompt message.
- * @param projectId Optional project ID to filter tasks.
- * @returns Selected Task object or undefined.
- */
 async function selectTask(message: string, projectId?: string): Promise<Task | undefined> {
     await loadOra();
     const spinner = ora(chalk.blue('Fetching task list...')).start();
-    const tasks = getAllTasks(projectId); // Assumed synchronous
-    const allProjects = getAllProjects(); // For displaying project names
-    spinner.stop(); // Stop spinner before inquirer prompt
+    const tasks = getAllTasks(projectId);
+    const allProjects = getAllProjects();
+    spinner.stop();
 
     if (tasks.length === 0) {
         const projectContextMsg = projectId ? `in project "${getProjectById(projectId)?.name || projectId}"` : ``;
@@ -89,19 +69,15 @@ async function selectTask(message: string, projectId?: string): Promise<Task | u
                 const projName = proj ? ` (Project: ${chalk.cyan(proj.name)})` : ` (Project ID: ${t.projectId.substring(0,8)})`;
                 return { name: `${t.title} (${t.id.substring(0, 8)})${projName}`, value: t.id };
             }),
-            pageSize: 15, // More tasks might be listed
+            pageSize: 15,
         },
     ]);
     return tasks.find(t => t.id === taskId);
 }
 
-/**
- * Command to add a new task.
- * @param projectIdPrefix Optional prefix of the project ID to add the task to.
- */
 export const addTaskCommand = async (projectIdPrefix?: string) => {
     await loadOra();
-    let spinner: any; // Declare spinner for access in catch block
+    let spinner: any; 
     try {
         console.log(chalk.bold.cyan('\n✨ Creating a New Task ✨'));
         let selectedProject: Project | undefined;
@@ -118,17 +94,15 @@ export const addTaskCommand = async (projectIdPrefix?: string) => {
             initialSpinner.succeed(chalk.green(`Project "${selectedProject.name}" selected.`));
             console.log(chalk.blue(`Adding task to project: ${selectedProject.name} (${selectedProject.id.substring(0,8)})`));
         } else {
-            initialSpinner.stop(); // Stop before selectProjectForTask prompt
+            initialSpinner.stop();
             selectedProject = await selectProjectForTask('➕ Select project for the new task:');
         }
 
         if (!selectedProject) {
-            // selectProjectForTask already logs "No projects available"
             if (!projectIdPrefix) console.log(chalk.yellow("ℹ️ Task creation cancelled as no project was selected."));
             return;
         }
 
-        // Now prompt for task details
         const answers = await inquirer.prompt([
             {
                 type: 'input',
@@ -156,7 +130,7 @@ export const addTaskCommand = async (projectIdPrefix?: string) => {
         const deadlineISO = parseDeadlineInput(answers.deadline);
 
         const taskInput: CreateTaskInput = {
-            projectId: selectedProject.id, // Use full ID
+            projectId: selectedProject.id,
             title: answers.title,
             description: answers.description || undefined,
             type: answers.type,
@@ -166,11 +140,10 @@ export const addTaskCommand = async (projectIdPrefix?: string) => {
         };
 
         spinner = ora(chalk.blue('Saving task...')).start();
-        const task = createTask(taskInput); // Assumed synchronous
+        const task = createTask(taskInput);
         if (task) {
             spinner.succeed(chalk.green(`✅ Task "${task.title}" created successfully in project "${selectedProject.name}".`));
         } else {
-            // This case implies createTask itself returned null, e.g., if project ID became invalid somehow
             spinner.fail(chalk.red('❗ Failed to create task. Please check project validity.'));
         }
     } catch (error: any) {
@@ -183,17 +156,13 @@ export const addTaskCommand = async (projectIdPrefix?: string) => {
     }
 };
 
-/**
- * Command to list tasks.
- * @param projectIdPrefix Optional project ID/prefix to filter tasks.
- */
 export const listTasksCommand = async (projectIdPrefix?: string) => {
     await loadOra();
     const spinner = ora(chalk.blue('Loading tasks...')).start();
     try {
         let tasksToDisplay: Task[];
         let currentProject: Project | undefined;
-        const allProjectsData = getAllProjects(); // Get all projects for context
+        const allProjectsData = getAllProjects();
 
         if (projectIdPrefix) {
             currentProject = getProjectById(projectIdPrefix);
@@ -202,7 +171,7 @@ export const listTasksCommand = async (projectIdPrefix?: string) => {
                 return;
             }
             spinner.text = chalk.blue(`Loading tasks for project: ${currentProject.name}...`);
-            tasksToDisplay = getAllTasks(currentProject.id); // Filter by full project ID
+            tasksToDisplay = getAllTasks(currentProject.id); 
         } else {
             tasksToDisplay = getAllTasks();
         }
@@ -215,7 +184,7 @@ export const listTasksCommand = async (projectIdPrefix?: string) => {
             if (currentProject) {
                 console.log(chalk.blue(`\n--- 📝 Tasks for Project: ${chalk.cyan(currentProject.name)} ---`));
             }
-            displayTasks(tasksToDisplay, !projectIdPrefix, allProjectsData); // Assumed synchronous display
+            displayTasks(tasksToDisplay, !projectIdPrefix, allProjectsData);
         }
     } catch (error: any) {
         spinner.fail(chalk.red('❗ Failed to load tasks.'));
@@ -223,10 +192,6 @@ export const listTasksCommand = async (projectIdPrefix?: string) => {
     }
 };
 
-/**
- * Command to view details of a specific task.
- * @param taskIdPrefix Optional prefix of the task ID.
- */
 export const viewTaskCommand = async (taskIdPrefix?: string) => {
     await loadOra();
     let mainSpinner: any;
@@ -244,9 +209,9 @@ export const viewTaskCommand = async (taskIdPrefix?: string) => {
         }
 
         if (taskToView) {
-            const project = getProjectById(taskToView.projectId); // For context
+            const project = getProjectById(taskToView.projectId); 
             mainSpinner.succeed(chalk.green('Task details loaded!'));
-            displayTaskDetails(taskToView, project); // Assumed synchronous display
+            displayTaskDetails(taskToView, project);
         } else if (taskIdPrefix) {
             mainSpinner.fail(chalk.red(`❗ Task with ID or prefix "${taskIdPrefix}" not found.`));
         } else if (!taskToView && !mainSpinner.isSpinning) {
@@ -265,10 +230,6 @@ export const viewTaskCommand = async (taskIdPrefix?: string) => {
     }
 };
 
-/**
- * Command to update an existing task.
- * @param taskIdPrefix Optional prefix of the task ID.
- */
 export const updateTaskCommand = async (taskIdPrefix?: string) => {
     await loadOra();
     let mainSpinner: any;
@@ -296,13 +257,12 @@ export const updateTaskCommand = async (taskIdPrefix?: string) => {
             return;
         }
 
-        mainSpinner.stop(); // Stop before inquirer prompts for updates
+        mainSpinner.stop();
         const project = getProjectById(taskToUpdate.projectId);
         console.log(chalk.blue(`\n✏️ Updating task: ${taskToUpdate.title} (${taskToUpdate.id.substring(0,8)})`));
         if (project) console.log(chalk.blue(`   In project: ${project.name}`));
 
         const answers = await inquirer.prompt([
-            // ... (các câu hỏi inquirer, có thể thêm current value như projectCommands) ...
             { type: 'input', name: 'title', message: `New task title (current: ${taskToUpdate.title}):`, default: taskToUpdate.title },
             { type: 'input', name: 'description', message: `New task description (current: ${taskToUpdate.description || 'N/A'}, "clear" to remove):`, default: taskToUpdate.description || '' },
             { type: 'list', name: 'status', message: 'New task status:', choices: Object.values(TaskStatus), default: taskToUpdate.status },
@@ -314,12 +274,11 @@ export const updateTaskCommand = async (taskIdPrefix?: string) => {
                 name: 'deadline',
                 message: `New deadline (current: ${taskToUpdate.deadline ? format(parseISO(taskToUpdate.deadline), 'yyyy-MM-dd') : 'N/A'}, "clear" to remove):`,
                 default: taskToUpdate.deadline ? format(parseISO(taskToUpdate.deadline), 'yyyy-MM-dd') : '',
-                validate: (input: string) => { /* ... validation ... */ return true; }
+                validate: (input: string) => { return true; }
             },
         ]);
 
         const updates: Partial<Omit<Task, 'id' | 'projectId' | 'createdAt'>> = {};
-        // ... (logic xây dựng object `updates` không đổi nhiều) ...
         if (answers.title.trim() && answers.title.trim() !== taskToUpdate.title) updates.title = answers.title.trim();
 
         if (answers.description.toLowerCase() === 'clear') {
@@ -352,11 +311,11 @@ export const updateTaskCommand = async (taskIdPrefix?: string) => {
 
         if (Object.keys(updates).length > 0) {
             const spinnerUpdate = ora(chalk.blue('Saving task changes...')).start();
-            const updated = updateTask(taskToUpdate.id, updates); // Assumed synchronous
+            const updated = updateTask(taskToUpdate.id, updates);
             if (updated) {
                 spinnerUpdate.succeed(chalk.green(`✅ Task "${updated.title}" updated successfully.`));
                 const updatedProjectCtx = getProjectById(updated.projectId);
-                displayTaskDetails(updated, updatedProjectCtx); // Assumed synchronous
+                displayTaskDetails(updated, updatedProjectCtx);
             } else {
                 spinnerUpdate.fail(chalk.red('❗ Failed to update task. It might not exist or an issue occurred.'));
             }
@@ -374,10 +333,6 @@ export const updateTaskCommand = async (taskIdPrefix?: string) => {
     }
 };
 
-/**
- * Command to delete a task.
- * @param taskIdPrefix Optional prefix of the task ID.
- */
 export const deleteTaskCommand = async (taskIdPrefix?: string) => {
     await loadOra();
     let mainSpinner: any;
@@ -405,7 +360,7 @@ export const deleteTaskCommand = async (taskIdPrefix?: string) => {
             return;
         }
 
-        mainSpinner.stop(); // Stop before confirmation prompt
+        mainSpinner.stop(); 
         console.log(chalk.yellowBright(`\n⚠️ Deleting Task: ${taskToDelete.title} (${taskToDelete.id.substring(0,8)})`));
         const { confirm } = await inquirer.prompt([
             { type: 'confirm', name: 'confirm', message: `Are you sure you want to PERMANENTLY delete task "${chalk.cyan(taskToDelete.title)}"? This action cannot be undone.`, default: false }
@@ -413,7 +368,7 @@ export const deleteTaskCommand = async (taskIdPrefix?: string) => {
 
         if (confirm) {
             const spinnerDelete = ora(chalk.blue(`Deleting task "${taskToDelete.title}"...`)).start();
-            const success = deleteTask(taskToDelete.id); // Assumed synchronous
+            const success = deleteTask(taskToDelete.id);
             if (success) {
                 spinnerDelete.succeed(chalk.green(`✅ Task "${taskToDelete.title}" deleted successfully.`));
             } else {
