@@ -100,10 +100,8 @@ export const displayProjectDetails = (project: Project, tasks: Task[]): void => 
 };
 
 export const displayTasks = async (tasks: Task[], showProjectName: boolean = true, allProjects: Project[] = []): Promise<void> => {
-  await loadOra()
-  const spinner = ora(chalk.blue('Loading tasks...')).start();
   if (tasks.length === 0) {
-    spinner.info(chalk.yellow("ℹ️ No tasks found for the current filter."));
+    console.log(chalk.yellow("ℹ️ No tasks found for the current filter."));
     return;
   }
 
@@ -147,11 +145,12 @@ export const displayTasks = async (tasks: Task[], showProjectName: boolean = tru
     table.push(row);
   });
 
-  spinner.succeed(chalk.green('Task table ready!'));
   
-  if (showProjectName && tasks.length > 0) console.log(chalk.bold.magentaBright("\n--- All Tasks ---"));
-  console.log(table.toString());
-  console.log("");
+  if (showProjectName && tasks.length > 0) {
+    console.log(chalk.bold.magentaBright("\n--- All Tasks ---"));
+    console.log(table.toString());
+    console.log("");
+  }
 };
 
 export const displayTaskDetails = (task: Task, project?: Project): void => {

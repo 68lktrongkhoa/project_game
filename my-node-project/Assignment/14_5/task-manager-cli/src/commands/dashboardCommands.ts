@@ -1,18 +1,19 @@
+import chalk from 'chalk';
 import { getAllProjects } from '../services/projectService';
 import { getAllTasks } from '../services/taskService';
 import { displayDashboard } from '../services/displayService';
-import { TaskStatus } from '../types';
-import chalk from 'chalk';
-
+import { TaskStatus, Project, Task }
+from '../types'; 
 let ora: any;
 async function loadOra() { if (!ora) ora = (await import('ora')).default; }
 
 export const showDashboardCommand = async () => {
     await loadOra();
-    const spinner = ora(chalk.blue('Loading dashboard data...')).start();
+    const spinner = ora(chalk.blue('📊 Loading dashboard data...')).start();
+
     try {
-        const projects = getAllProjects();
-        const tasks = getAllTasks();
+        const projects: Project[] = getAllProjects();
+        const tasks: Task[] = getAllTasks();
 
         const projectStats = {
             totalProjects: projects.length,
@@ -24,11 +25,15 @@ export const showDashboardCommand = async () => {
         const recentTasks = [...tasks]
             .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
             .slice(0, 5);
+        spinner.succeed(chalk.green('📊 Dashboard data loaded successfully!'));
         displayDashboard(projectStats, recentTasks, projects);
-        spinner.succeed(chalk.green('Dashboard data loaded!'));
-    } catch (error) {
-        spinner.fail(chalk.red('❗ Failed to load dashboard data.'));
-        console.error(error);
-    }
 
+    } catch (error: any) { 
+        if (spinner && spinner.isSpinning) { 
+            spinner.fail(chalk.red('❗ Failed to load dashboard data.'));
+        } else {
+            console.error(chalk.red('❗ Failed to load dashboard data.'));
+        }
+        console.error(chalk.red(error.message || 'An unknown error occurred while loading dashboard.'));
+    }
 };
