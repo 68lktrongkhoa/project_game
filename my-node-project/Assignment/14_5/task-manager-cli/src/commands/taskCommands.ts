@@ -6,6 +6,9 @@ import { displayTasks, displayTaskDetails } from '../services/displayService';
 import { TaskStatus, TaskPriority, TaskType, Project, Task } from '../types'; // Import Project và Task types
 import { format, parseISO, isValid, parse } from 'date-fns';
 
+let ora: any;
+async function loadOra() { if (!ora) ora = (await import('ora')).default; }
+
 const parseDeadlineInput = (input: string): string | undefined => {
     if (!input || input.trim().toLowerCase() === 'none' || input.trim() === '') {
         return undefined;
@@ -42,13 +45,16 @@ async function selectProjectForTask(message: string): Promise<Project | undefine
 }
 
 async function selectTask(message: string, projectId?: string): Promise<Task | undefined> {
-    const tasks = getAllTasks(projectId); // Lấy task theo project nếu có
+    await loadOra();
+    const spinner = ora(chalk.blue('Fetching task list...')).start();
+    const tasks = getAllTasks(projectId);
+    spinner.stop();
     if (tasks.length === 0) {
         const projectMsg = projectId ? `in the current project context ` : ``;
         console.log(chalk.yellow(`No tasks available ${projectMsg}. Create one first!`));
         return undefined;
     }
-    const allProjects = getAllProjects(); // Cần để hiển thị tên project cho task
+    const allProjects = getAllProjects(); 
     const { taskId } = await inquirer.prompt([
         {
             type: 'list',
@@ -62,10 +68,12 @@ async function selectTask(message: string, projectId?: string): Promise<Task | u
         },
     ]);
     return tasks.find(t => t.id === taskId);
+    
 }
 
 
 export const addTaskCommand = async (projectIdPrefix?: string) => {
+  await loadOra();
   let selectedProject: Project | undefined;
 
   if (projectIdPrefix) {
@@ -127,12 +135,13 @@ export const addTaskCommand = async (projectIdPrefix?: string) => {
     assignee: answers.assignee,
     deadline: deadlineISO === 'invalid_date' ? undefined : deadlineISO,
   };
+  const spinner = ora(chalk.blue('Saving task...')).start();
 
   const task = createTask(taskInput);
   if (task) {
-    console.log(chalk.green(`Task "${task.title}" created with ID ${chalk.yellow(task.id.substring(0,8))} in project "${selectedProject.name}".`));
+    spinner.succeed(chalk.green(`✅ Task "${task.title}" created successfully in project "${selectedProject.name}".`));
   } else {
-    console.log(chalk.red('Failed to create task.'));
+    spinner.fail(chalk.red('❗ Failed to create task.'));
   }
 };
 
@@ -151,9 +160,9 @@ export const listTasksCommand = async (projectIdPrefix?: string) => {
     console.log(chalk.blue(`\n--- Tasks for Project: ${chalk.cyan(currentProject.name)} ---`));
   } else {
     tasksToDisplay = getAllTasks();
-    // Thông báo "All Tasks" sẽ được displayTasks xử lý nếu cần
   }
   displayTasks(tasksToDisplay, !projectIdPrefix, allProjects);
+  
 };
 
 export const viewTaskCommand = async (taskIdPrefix?: string) => {

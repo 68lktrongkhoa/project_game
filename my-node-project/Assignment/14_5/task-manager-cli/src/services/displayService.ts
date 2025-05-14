@@ -1,122 +1,183 @@
-import chalk from 'chalk'; 
-import { Project, Task, TaskStatus, ProjectStatus, TaskPriority } from '../types';
+import chalk from 'chalk';
+import { Project, Task, TaskStatus, ProjectStatus, TaskPriority, TaskType } from '../types'; 
 import { format, parseISO } from 'date-fns';
+import Table from 'cli-table3';
+
+let ora: any;
+async function loadOra() { if (!ora) ora = (await import('ora')).default; }
 
 const formatDate = (dateString?: string) => {
-  if (!dateString) return 'N/A';
+  if (!dateString) return chalk.gray('N/A');
   try {
     return format(parseISO(dateString), 'yyyy-MM-dd HH:mm');
   } catch (e) {
     try {
       return format(new Date(dateString), 'yyyy-MM-dd HH:mm');
     } catch (error) {
-      console.warn(`Could not parse date: ${dateString}`);
-      return dateString;
+      return chalk.gray(dateString);
     }
   }
 };
+
+const formatStatus = (status: TaskStatus | ProjectStatus): string => {
+    switch (status) {
+        case TaskStatus.Open: return chalk.yellow.bold(status);
+        case TaskStatus.InProgress: return chalk.blue.bold(status);
+        case TaskStatus.Resolved: return chalk.green.bold(status);
+        case TaskStatus.Closed: return chalk.gray.bold(status);
+        case ProjectStatus.Active: return chalk.greenBright.bold(status);
+        case ProjectStatus.Completed: return chalk.blueBright.bold(status);
+        case ProjectStatus.Archived: return chalk.gray.bold(status);
+        default: return chalk.white(status);
+    }
+};
+
+const formatPriority = (priority: TaskPriority): string => {
+    switch (priority) {
+        case TaskPriority.Low: return chalk.green(priority);
+        case TaskPriority.Medium: return chalk.yellow(priority);
+        case TaskPriority.High: return chalk.red(priority);
+        default: return chalk.white(priority);
+    }
+};
+
 
 export const displayProjects = (projects: Project[]): void => {
   if (projects.length === 0) {
     console.log(chalk.yellow("No projects found."));
     return;
   }
-  console.log(chalk.bold.blue("\n--- Projects ---"));
-  projects.forEach(p => {
-    console.log(
-      `${chalk.green(p.id.substring(0, 8))} - ${chalk.cyan(p.name)} (${chalk.magenta(p.status)}) - Created: ${formatDate(p.createdAt)}`
-    );
-    if (p.description) console.log(`  ${chalk.gray(p.description)}`);
+
+  const table = new Table({
+    head: [
+        chalk.cyan('ID (Prefix)'),
+        chalk.cyan('Name'),
+        chalk.cyan('Status'),
+        chalk.cyan('Description'),
+        chalk.cyan('Created At')
+    ],
+    colWidths: [10, 25, 12, 35, 18],
+    wordWrap: true,
+    style: { head: ['blue'], border: ['grey'] }
   });
+
+  projects.forEach(p => {
+    table.push([
+      p.id.substring(0, 8),
+      chalk.whiteBright(p.name),
+      formatStatus(p.status),
+      p.description || chalk.gray('N/A'),
+      formatDate(p.createdAt)
+    ]);
+  });
+
+  console.log(chalk.bold.blue("\n--- Projects ---"));
+  console.log(table.toString());
   console.log("");
 };
 
 export const displayProjectDetails = (project: Project, tasks: Task[]): void => {
-  console.log(chalk.bold.blue(`\n--- Project: ${project.name} ---`));
-  console.log(`${chalk.green('ID:')} ${project.id}`);
-  console.log(`${chalk.green('Status:')} ${chalk.magenta(project.status)}`);
-  console.log(`${chalk.green('Created:')} ${formatDate(project.createdAt)}`);
-  console.log(`${chalk.green('Updated:')} ${formatDate(project.updatedAt)}`);
-  if (project.description) console.log(`${chalk.green('Description:')} ${project.description}`);
+  console.log(chalk.bold.blue(`\n--- Project Details: ${chalk.cyanBright(project.name)} ---`));
+  
+  const detailsTable = new Table({style: {compact : true, 'padding-left' : 1}});
+  detailsTable.push(
+      { [chalk.green('ID')]: project.id },
+      { [chalk.green('Name')]: chalk.whiteBright(project.name) },
+      { [chalk.green('Status')]: formatStatus(project.status) },
+      { [chalk.green('Description')]: project.description || chalk.gray('N/A') },
+      { [chalk.green('Created At')]: formatDate(project.createdAt) },
+      { [chalk.green('Updated At')]: formatDate(project.updatedAt) }
+  );
+  console.log(detailsTable.toString());
 
   console.log(chalk.bold.magentaBright("\n  Tasks in this project:"));
   if (tasks.length === 0) {
     console.log(chalk.yellow("  No tasks in this project."));
   } else {
-    displayTasks(tasks, false); // Don't show project name again
+    displayTasks(tasks, false, [project]);
   }
   console.log("");
 };
 
-export const displayTasks = (tasks: Task[], showProjectName: boolean = true, projects: Project[] = []): void => {
+export const displayTasks = async (tasks: Task[], showProjectName: boolean = true, allProjects: Project[] = []): Promise<void> => {
+  await loadOra()
+  const spinner = ora(chalk.blue('Loading tasks...')).start();
   if (tasks.length === 0) {
-    console.log(chalk.yellow("No tasks found."));
+    spinner.info(chalk.yellow("ℹ️ No tasks found for the current filter."));
     return;
   }
-  if (showProjectName && tasks.length > 0) console.log(chalk.bold.magentaBright("\n--- Tasks ---"));
-  
-  tasks.forEach(t => {
-    let projectInfo = '';
-    if (showProjectName) {
-        const project = projects.find(p => p.id === t.projectId);
-        projectInfo = project ? ` (Project: ${chalk.cyan(project.name)})` : ` (Project ID: ${chalk.gray(t.projectId.substring(0,8))})`;
-    }
 
-    let statusColor = chalk.white;
-    switch (t.status) {
-        case TaskStatus.Open: statusColor = chalk.yellow; break;
-        case TaskStatus.InProgress: statusColor = chalk.blue; break;
-        case TaskStatus.Resolved: statusColor = chalk.green; break;
-        case TaskStatus.Closed: statusColor = chalk.gray; break;
-    }
+  const headColumns = [
+    chalk.magenta('ID (Prefix)'),
+    chalk.magenta('Title'),
+    chalk.magenta('Status'),
+    chalk.magenta('Priority'),
+    chalk.magenta('Type'),
+    chalk.magenta('Deadline'),
+  ];
+  const colWidthsValues = [10, 30, 14, 10, 15, 18];
 
-    let priorityColor = chalk.white;
-     switch (t.priority) {
-        case TaskPriority.Low: priorityColor = chalk.greenBright; break;
-        case TaskPriority.Medium: priorityColor = chalk.yellowBright; break;
-        case TaskPriority.High: priorityColor = chalk.redBright; break;
-    }
+  if (showProjectName) {
+    headColumns.splice(2, 0, chalk.magenta('Project'));
+    colWidthsValues.splice(2, 0, 20); 
+  }
 
-    console.log(
-      `${chalk.green(t.id.substring(0,8))} - ${chalk.whiteBright(t.title)} [${chalk.blueBright(t.type)}] - ${statusColor.bold(t.status)} - Priority: ${priorityColor(t.priority)}${projectInfo}`
-    );
-    if (t.description) console.log(`  ${chalk.gray(t.description)}`);
-    if (t.assignee) console.log(`  Assigned to: ${chalk.magenta(t.assignee)}`);
-    if (t.deadline) console.log(`  Deadline: ${chalk.red(formatDate(t.deadline))}`);
+  const table = new Table({
+    head: headColumns,
+    colWidths: colWidthsValues,
+    wordWrap: true,
+    style: { head: ['magenta'], border: ['grey'] }
   });
+
+  tasks.forEach(t => {
+    const row = [
+      t.id.substring(0, 8),
+      chalk.whiteBright(t.title),
+      formatStatus(t.status),
+      formatPriority(t.priority),
+      chalk.blueBright(t.type),
+      formatDate(t.deadline),
+    ];
+
+    if (showProjectName) {
+      const project = allProjects.find(p => p.id === t.projectId);
+      row.splice(2, 0, project ? chalk.cyan(project.name) : chalk.gray(t.projectId.substring(0,8)));
+    }
+    
+    table.push(row);
+  });
+
+  spinner.succeed(chalk.green('Task table ready!'));
+  
+  if (showProjectName && tasks.length > 0) console.log(chalk.bold.magentaBright("\n--- All Tasks ---"));
+  console.log(table.toString());
   console.log("");
 };
 
 export const displayTaskDetails = (task: Task, project?: Project): void => {
-    console.log(chalk.bold.magentaBright(`\n--- Task: ${task.title} ---`));
-    console.log(`${chalk.green('ID:')} ${task.id}`);
-    if (project) console.log(`${chalk.green('Project:')} ${chalk.cyan(project.name)} (${project.id.substring(0,8)})`);
-    else console.log(`${chalk.green('Project ID:')} ${task.projectId}`);
+    console.log(chalk.bold.magentaBright(`\n--- Task Details: ${chalk.whiteBright(task.title)} ---`));
     
-    let statusColor = chalk.white;
-    switch (task.status) {
-        case TaskStatus.Open: statusColor = chalk.yellow; break;
-        case TaskStatus.InProgress: statusColor = chalk.blue; break;
-        case TaskStatus.Resolved: statusColor = chalk.green; break;
-        case TaskStatus.Closed: statusColor = chalk.gray; break;
+    const detailsTable = new Table({style: {compact : true, 'padding-left' : 1}});
+    detailsTable.push(
+        { [chalk.green('ID')]: task.id },
+        { [chalk.green('Title')]: chalk.whiteBright(task.title) }
+    );
+    if (project) {
+        detailsTable.push({ [chalk.green('Project')]: `${chalk.cyan(project.name)} (${project.id.substring(0,8)})` });
+    } else {
+        detailsTable.push({ [chalk.green('Project ID')]: task.projectId });
     }
-    console.log(`${chalk.green('Status:')} ${statusColor.bold(task.status)}`);
-
-    console.log(`${chalk.green('Type:')} ${chalk.blueBright(task.type)}`);
-
-    let priorityColor = chalk.white;
-     switch (task.priority) {
-        case TaskPriority.Low: priorityColor = chalk.greenBright; break;
-        case TaskPriority.Medium: priorityColor = chalk.yellowBright; break;
-        case TaskPriority.High: priorityColor = chalk.redBright; break;
-    }
-    console.log(`${chalk.green('Priority:')} ${priorityColor(task.priority)}`);
-
-    if (task.description) console.log(`${chalk.green('Description:')} ${task.description}`);
-    if (task.assignee) console.log(`${chalk.green('Assignee:')} ${chalk.magenta(task.assignee)}`);
-    if (task.deadline) console.log(`${chalk.green('Deadline:')} ${chalk.red(formatDate(task.deadline))}`);
-    console.log(`${chalk.green('Created:')} ${formatDate(task.createdAt)}`);
-    console.log(`${chalk.green('Updated:')} ${formatDate(task.updatedAt)}`);
+    detailsTable.push(
+        { [chalk.green('Status')]: formatStatus(task.status) },
+        { [chalk.green('Priority')]: formatPriority(task.priority) },
+        { [chalk.green('Type')]: chalk.blueBright(task.type) },
+        { [chalk.green('Description')]: task.description || chalk.gray('N/A') },
+        { [chalk.green('Assignee')]: task.assignee || chalk.gray('N/A') },
+        { [chalk.green('Deadline')]: formatDate(task.deadline) },
+        { [chalk.green('Created At')]: formatDate(task.createdAt) },
+        { [chalk.green('Updated At')]: formatDate(task.updatedAt) }
+    );
+    console.log(detailsTable.toString());
     console.log("");
 };
 
@@ -125,37 +186,39 @@ export const displayDashboard = (
     recentTasks: Task[],
     allProjects: Project[]
 ) => {
-    console.log(chalk.bold.cyanBright("\n--- DASHBOARD ---"));
+    console.log(chalk.bold.cyanBright("\n✨✨✨ TASK MANAGER DASHBOARD ✨✨✨"));
 
-    console.log(chalk.bold.blue("\nProject Statistics:"));
-    console.log(`  Total Projects: ${chalk.yellow(projectStats.totalProjects)}`);
-    
-    console.log(chalk.bold.magentaBright("\nTask Statistics (across all projects):"));
-    console.log(`  Open: ${chalk.yellow(projectStats.open)}`);
-    console.log(`  In Progress: ${chalk.blue(projectStats.inProgress)}`);
-    console.log(`  Done (Resolved/Closed): ${chalk.green(projectStats.done)}`);
+    const statsTable = new Table({
+        head: [chalk.blue('📊 Metric'), chalk.blue('Count')], 
+        colWidths: [30, 10],
+        style: { head: ['blue'], border: ['grey'] }
+    });
+    statsTable.push(
+        ['Total Projects', chalk.yellow(projectStats.totalProjects)],
+        ['Tasks - Open', chalk.yellow(projectStats.open)],
+        ['Tasks - In Progress', chalk.blue(projectStats.inProgress)],
+        ['Tasks - Done (Resolved/Closed)', chalk.green(projectStats.done)]
+    );
+    console.log(chalk.bold.blue("\n📈 Project & Task Statistics:")); 
+    console.log(statsTable.toString());
 
-
-    console.log(chalk.bold.blue("\nActive Projects (first 5 or less):"));
+    // Active Projects (simplified list)
+    console.log(chalk.bold.blue("\n🚀 Active Projects (first 5):"));
     const activeProjects = allProjects.filter(p => p.status === ProjectStatus.Active).slice(0, 5);
     if (activeProjects.length > 0) {
-        activeProjects.forEach(p => console.log(`  - ${chalk.cyan(p.name)} (${p.id.substring(0,8)})`));
+        activeProjects.forEach(p => console.log(`  ${chalk.greenBright('🟢')} ${chalk.cyan(p.name)} (${p.id.substring(0,8)})`)); 
     } else {
         console.log(chalk.gray("  No active projects."));
     }
+    console.log("");
 
-
-    console.log(chalk.bold.magentaBright("\nRecent Tasks (last 5 created/updated):"));
+    console.log(chalk.bold.magentaBright("⏳ Recent Tasks (last 5 created/updated):"));
     if (recentTasks.length > 0) {
-        displayTasks(recentTasks, true, allProjects); // Truyền allProjects vào đây
+        displayTasks(recentTasks, true, allProjects);
     } else {
         console.log(chalk.gray("  No recent tasks."));
     }
 
-    console.log(chalk.bold.gray("\nShortcuts:"));
-    console.log(chalk.gray("  Use 'npm start -- help' or 'node dist/index.js help' to see all commands."));
-    console.log(chalk.gray("  Examples:"));
-    console.log(chalk.gray("    npm start -- project create"));
-    console.log(chalk.gray("    npm start -- task add"));
+    console.log(chalk.bold.gray("\n💡 Tip: Navigate using the Main Menu options."));
     console.log("");
 };

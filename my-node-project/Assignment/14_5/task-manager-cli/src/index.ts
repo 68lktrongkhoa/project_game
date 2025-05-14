@@ -1,4 +1,7 @@
-import { Command } from 'commander';
+#!/usr/bin/env ts-node
+// src/index.ts
+import inquirer from 'inquirer';
+import chalk from 'chalk';
 import {
   addProjectCommand,
   listProjectsCommand,
@@ -12,107 +15,184 @@ import {
   viewTaskCommand,
   updateTaskCommand,
   deleteTaskCommand
-} from './commands/taskCommands'; 
+} from './commands/taskCommands';
 import { showDashboardCommand } from './commands/dashboardCommands';
-import chalk from 'chalk';
-
-const program = new Command();
-
-program
-  .name('task-manager')
-  .description(chalk.blueBright('A simple CLI Task Management Application'))
-  .version('0.1.1', '-v, --version', 'Output the current version');
-
-program
-    .command('dashboard', { isDefault: true })
-    .alias('home')
-    .alias('d')
-    .description('Show the dashboard overview')
-    .action(showDashboardCommand);
-
-// --- Project Commands ---
-const project = program.command('project')
-    .alias('p')
-    .description('Manage projects');
-
-project
-  .command('create')
-  .alias('add')
-  .alias('c')
-  .description('Create a new project')
-  .action(addProjectCommand);
-
-project
-  .command('list')
-  .alias('ls')
-  .alias('l')
-  .description('List all projects')
-  .action(listProjectsCommand);
-
-project
-  .command('view [projectIdPrefix]')
-  .alias('v')
-  .description('View details of a project (use full ID or prefix)')
-  .action(viewProjectCommand);
-
-project
-  .command('update [projectIdPrefix]')
-  .alias('u')
-  .description('Update an existing project (use full ID or prefix)')
-  .action(updateProjectCommand);
-
-project
-  .command('delete [projectIdPrefix]')
-  .alias('rm')
-  .alias('del')
-  .description('Delete a project and its tasks (use full ID or prefix)')
-  .action(deleteProjectCommand);
+import { getAllProjects } from './services/projectService';
 
 
-// --- Task Commands ---
-const task = program.command('task')
-    .alias('t')
-    .description('Manage tasks');
+enum MainMenuChoice {
+  Dashboard = "📊 Show Dashboard",
+  ManageProjects = "📁 Manage Projects",
+  ManageTasks = "📝 Manage Tasks",
+  Exit = "🚪 Exit"
+}
 
-task
-  .command('create [projectIdPrefix]')
-  .alias('add')
-  .alias('c')
-  .description('Create a new task (optionally specify project ID/prefix)')
-  .action(addTaskCommand);
+enum ProjectMenuChoice {
+  CreateProject = "➕ Create New Project",
+  ListProjects = "📋 List All Projects",
+  ViewProject = "👁️ View Project Details",
+  UpdateProject = "✏️ Update Project",
+  DeleteProject = "❌ Delete Project",
+  Back = "↩️ Back to Main Menu"
+}
 
-task
-  .command('list [projectIdPrefix]')
-  .alias('ls')
-  .alias('l')
-  .description('List tasks (optionally filter by project ID/prefix)')
-  .action(listTasksCommand);
+enum TaskMenuChoice {
+  CreateTask = "➕ Create New Task",
+  ListTasksAll = "📋 List All Tasks",
+  ListTasksByProject = "📑 List Tasks by Project",
+  ViewTask = "👁️ View Task Details",
+  UpdateTask = "✏️ Update Task",
+  DeleteTask = "❌ Delete Task",
+  Back = "↩️ Back to Main Menu"
+}
 
-task
-  .command('view [taskIdPrefix]')
-  .alias('v')
-  .description('View details of a specific task (use full ID or prefix)')
-  .action(viewTaskCommand);
+async function pressEnterToContinue() {
+    await inquirer.prompt({
+        type: 'input',
+        name: 'continue',
+        message: chalk.dim('Press Enter to return to the menu...'),
+        default:''
+    });
+}
 
-task
-  .command('update [taskIdPrefix]')
-  .alias('u')
-  .description('Update an existing task (use full ID or prefix)')
-  .action(updateTaskCommand);
+async function projectMenuFlow() {
+  let running = true;
+  while (running) {
+    console.clear();
+    const { choice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'choice',
+        message: chalk.blueBright('--- 📁 Project Management ---'), 
+        choices: Object.values(ProjectMenuChoice),
+      },
+    ]);
 
-task
-  .command('delete [taskIdPrefix]')
-  .alias('rm')
-  .alias('del')
-  .description('Delete a task (use full ID or prefix)')
-  .action(deleteTaskCommand);
-
-program.parseAsync(process.argv).catch(err => {
-    if (err.code === 'commander.unknownCommand' || err.code === 'commander.unknownOption') {
-       return
-    } else {
-      console.error(chalk.redBright("\nAn unexpected error occurred:"));
-      console.error(err.message)
+    console.clear();
+    switch (choice) {
+      case ProjectMenuChoice.CreateProject:
+        await addProjectCommand();
+        break;
+      case ProjectMenuChoice.ListProjects:
+        await listProjectsCommand(); 
+        break;
+      case ProjectMenuChoice.ViewProject:
+        await viewProjectCommand();
+        break;
+      case ProjectMenuChoice.UpdateProject:
+        await updateProjectCommand();
+        break;
+      case ProjectMenuChoice.DeleteProject:
+        await deleteProjectCommand();
+        break;
+      case ProjectMenuChoice.Back:
+        running = false;
+        break;
     }
-    process.exit(1);
+    if (running) {
+        await pressEnterToContinue();
+    }
+  }
+}
+
+async function taskMenuFlow() {
+  let running = true;
+  while (running) {
+    console.clear();
+    const { choice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'choice',
+        message: chalk.blueBright('--- 📝 Task Management ---'), 
+        choices: Object.values(TaskMenuChoice),
+      },
+    ]);
+
+    console.clear(); 
+    switch (choice) {
+      case TaskMenuChoice.CreateTask:
+        await addTaskCommand();
+        break;
+      case TaskMenuChoice.ListTasksAll:
+        await listTasksCommand(); 
+        break;
+      case TaskMenuChoice.ListTasksByProject:
+        const projects = getAllProjects();
+        if (projects.length === 0) {
+            console.log(chalk.yellow("ℹ️ No projects available. Create a project first."));
+            break;
+        }
+        const { projectId } = await inquirer.prompt([{
+            type: 'list',
+            name: 'projectId',
+            message: 'Select a project to list its tasks:',
+            choices: projects.map(p => ({ name: `${p.name} (${p.id.substring(0,8)})`, value: p.id }))
+        }]);
+        await listTasksCommand(projectId); 
+        break;
+      case TaskMenuChoice.ViewTask:
+        await viewTaskCommand();
+        break;
+      case TaskMenuChoice.UpdateTask:
+        await updateTaskCommand();
+        break;
+      case TaskMenuChoice.DeleteTask:
+        await deleteTaskCommand();
+        break;
+      case TaskMenuChoice.Back:
+        running = false;
+        break;
+    }
+     if (running) {
+        await pressEnterToContinue();
+    }
+  }
+}
+
+async function mainMenuFlow() {
+  console.clear();
+  console.log(chalk.bold.cyanBright("\n🎉 Welcome to the Advanced Task Manager CLI! 🎉"));
+  let running = true;
+  while (running) {
+    console.clear();
+    console.log(chalk.bold.yellow("\n--- 🌟 Main Menu 🌟 ---"));
+    const { choice } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'choice',
+        message: 'What would you like to do?',
+        choices: Object.values(MainMenuChoice),
+        pageSize: 10
+      },
+    ]);
+
+    console.clear(); 
+    switch (choice) {
+      case MainMenuChoice.Dashboard:
+        await showDashboardCommand();
+        await pressEnterToContinue();
+        break;
+      case MainMenuChoice.ManageProjects:
+        await projectMenuFlow();
+        break;
+      case MainMenuChoice.ManageTasks:
+        await taskMenuFlow();
+        break;
+      case MainMenuChoice.Exit:
+        running = false;
+        console.log(chalk.bold.cyanBright("\n👋 Exiting Task Manager. Goodbye & Have a great day! 👋"));
+        break;
+    }
+  }
+}
+
+mainMenuFlow().catch(err => {
+  console.clear();
+  console.error(chalk.redBright("\n❗❗❗ An Unexpected Error Occurred ❗❗❗"));
+  console.error(chalk.red(err.message || 'Unknown error.'));
+  if (err.stack) {
+    console.error(chalk.gray(err.stack)); 
+  }
+  console.log(chalk.yellow("\nPlease try restarting the application. If the problem persists, check the logs or report the issue."));
+  process.exit(1);
 });

@@ -1,4 +1,34 @@
 {
-  "projects": [],
-  "tasks": []
+  "projects": [
+    {
+      "id": "b1996919-d50f-4527-98a6-0151b15da9c9",
+      "name": "build task-managerment-cli",
+      "description": "build task-managerment-cli",
+      "status": "Active",
+      "createdAt": "2025-05-14T09:06:14.865Z",
+      "updatedAt": "2025-05-14T09:16:15.897Z"
+    },
+    {
+      "id": "de64c457-5778-4bf7-bf6c-88e433b44452",
+      "name": "1234567",
+      "description": "12345678",
+      "status": "Active",
+      "createdAt": "2025-05-14T10:10:28.496Z",
+      "updatedAt": "2025-05-14T10:10:28.496Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "35fcd6d5-3715-4f1f-b13d-2986c5e730eb",
+      "projectId": "b1996919-d50f-4527-98a6-0151b15da9c9",
+      "title": "Fix bug",
+      "description": "Fix bug decorator",
+      "priority": "Medium",
+      "assignee": "Nguyễn Hoang Minh Tri",
+      "type": "Bug",
+      "status": "Resolved",
+      "createdAt": "2025-05-14T09:10:48.870Z",
+      "updatedAt": "2025-05-14T09:20:32.076Z"
+    }
+  ]
 }
