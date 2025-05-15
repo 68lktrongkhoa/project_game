@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { mainMenuFlow } from './flows/menuFlows';
 import { ERROR_STYLE, INFO_STYLE, DIM_STYLE } from './constants/uiTexts';
 
-async function bootstrap(): Promise<void> {
+async function main(): Promise<void> {
     try {
         await mainMenuFlow();
         process.exit(0);
@@ -24,4 +24,4 @@ async function bootstrap(): Promise<void> {
     }
 }
 
-bootstrap();
+main();

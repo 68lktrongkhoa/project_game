@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { format, parseISO, isValid, parse } from 'date-fns';
+import { format, isValid, parse } from 'date-fns';
 
 import { TaskService, CreateTaskInput } from '../services/taskService';
 import { ProjectService } from '../services/projectService';

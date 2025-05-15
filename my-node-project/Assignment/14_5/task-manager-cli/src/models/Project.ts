@@ -15,7 +15,7 @@ export class Project {
     constructor(
         name: string,
         description: string = '',
-        id?: string, 
+        id?: string,
         status?: ProjectStatus,
         createdAt?: Date,
         updatedAt?: Date
