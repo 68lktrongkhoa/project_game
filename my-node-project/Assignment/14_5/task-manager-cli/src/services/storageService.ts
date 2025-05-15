@@ -1,47 +1,57 @@
-// src/services/storageService.ts
 import fs from 'fs';
 import path from 'path';
-import { AppData } from '../types';
+import { Project } from '../models/Project';
+import { Task } from '../models/Task';
+import { LogMethodCalls } from '../decorator/logging.decorator';
 
-// Tạo đường dẫn đến file db.json trong thư mục data/ ở gốc dự án
-const DATA_FILE_PATH = path.join(__dirname, '..', '..', 'data', 'db.json');
+export interface AppData {
+    projects: Project[];
+    tasks: Task[];
+}
 
+export class StorageService {
+    private readonly filePath: string;
+    private readonly defaultData: AppData = { projects: [], tasks: [] };
 
-const ensureDataFileExists = (): void => {
-  const dataDir = path.dirname(DATA_FILE_PATH);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-  if (!fs.existsSync(DATA_FILE_PATH)) {
-    const initialData: AppData = { projects: [], tasks: [] };
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(initialData, null, 2), 'utf-8');
-    console.log(`Initialized empty data file at: ${DATA_FILE_PATH}`);
-  }
-};
-
-export const loadData = (): AppData => {
-  ensureDataFileExists();
-  try {
-    const jsonData = fs.readFileSync(DATA_FILE_PATH, 'utf-8');
-    if (jsonData.trim() === '') {
-        const initialData: AppData = { projects: [], tasks: [] };
-        fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(initialData, null, 2), 'utf-8');
-        return initialData;
+    constructor(fileName: string = 'task-manager-data.json') {
+        this.filePath = path.join(process.cwd(), fileName);
+        this.ensureDataFileExists();
     }
-    return JSON.parse(jsonData) as AppData;
-  } catch (error) {
-    console.error("Error loading data, initializing with empty structure.", error);
-    const initialData: AppData = { projects: [], tasks: [] };
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(initialData, null, 2), 'utf-8');
-    return initialData;
-  }
-};
 
-export const saveData = (data: AppData): void => {
-  ensureDataFileExists();
-  try {
-    fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (error) {
-    console.error("Error saving data:", error);
-  }
-};
+    @LogMethodCalls
+    private ensureDataFileExists(): void {
+        try {
+            if (!fs.existsSync(this.filePath)) {
+                fs.writeFileSync(this.filePath, JSON.stringify(this.defaultData, null, 2), 'utf-8');
+                console.log(`Data file created at: ${this.filePath}`);
+            }
+        } catch (error) {
+            console.error('Error ensuring data file exists:', error);
+        }
+    }
+
+    @LogMethodCalls
+    public loadData(): AppData {
+        try {
+            const fileContent = fs.readFileSync(this.filePath, 'utf-8');
+            const plainData = JSON.parse(fileContent);
+            const projects = (plainData.projects || []).map((pObj: any) => Project.fromPlainObject(pObj));
+            const tasks = (plainData.tasks || []).map((tObj: any) => Task.fromPlainObject(tObj));
+
+            return { projects, tasks };
+
+        } catch (error: any) {
+            console.error(`Error loading data from ${this.filePath}:`, error.message);
+            return { ...this.defaultData };
+        }
+    }
+
+    @LogMethodCalls
+    public saveData(data: AppData): void {
+        try {
+            fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (error: any) {
+            console.error(`Error saving data to ${this.filePath}:`, error.message);
+        }
+    }
+}

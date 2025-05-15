@@ -1,19 +1,44 @@
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { createProject, getAllProjects, getProjectById, updateProject, deleteProject } from '../services/projectService';
-import { getAllTasks } from '../services/taskService';
-import { displayProjects, displayProjectDetails } from '../services/displayService';
-import { ProjectStatus, Project } from '../types';
+import { ProjectService } from '../services/projectService';
+import { TaskService } from '../services/taskService';
+import { DisplayService } from '../services/displayService';
 
-let ora: any;
-async function loadOra() { if (!ora) ora = (await import('ora')).default; }
+import { Project } from '../models/Project';
+import { Task } from '../models/Task';
 
-async function selectProject(message: string): Promise<Project | undefined> {
-    await loadOra();
-    const projects = getAllProjects();
+import { ProjectStatus } from '../types/enums/project.enums';
+
+let oraInstance: any;
+async function loadOra() {
+    if (!oraInstance) {
+        const oraModule = await import('ora');
+        oraInstance = oraModule.default;
+    }
+    return oraInstance;
+}
+
+interface BaseProjectCommandDeps {
+    projectService: ProjectService;
+    displayService: DisplayService;
+}
+
+interface ViewProjectCommandDeps extends BaseProjectCommandDeps {
+    taskService: TaskService;
+}
+
+interface DeleteProjectCommandDeps extends BaseProjectCommandDeps {
+    taskService: TaskService; 
+}
+async function selectProjectInteractive(
+    message: string,
+    projectService: ProjectService,
+    displayService: DisplayService
+): Promise<Project | undefined> {
+    const projects = projectService.getAllProjects();
 
     if (projects.length === 0) {
-        console.log(chalk.yellow("ℹ️ No projects available. Please create a project first."));
+        displayService.displayMessage("No projects available. Please create a project first.", "info");
         return undefined;
     }
 
@@ -26,12 +51,14 @@ async function selectProject(message: string): Promise<Project | undefined> {
             pageSize: 10,
         },
     ]);
-    return projects.find(p => p.id === projectId);
+    return projectService.getProjectById(projectId as string);
 }
 
-export const addProjectCommand = async () => {
-    await loadOra();
+export const addProjectCommand = async (deps: BaseProjectCommandDeps) => {
+    const { projectService, displayService } = deps;
+    const ora = await loadOra();
     let spinner: any;
+
     try {
         console.log(chalk.bold.cyan('\n✨ Creating a New Project ✨'));
         const answers = await inquirer.prompt([
@@ -50,104 +77,84 @@ export const addProjectCommand = async () => {
         ]);
 
         spinner = ora(chalk.blue('Saving project...')).start();
-        const project = createProject(answers.name, answers.description);
-        spinner.succeed(chalk.green(`✅ Project "${project.name}" created successfully with ID ${chalk.yellow(project.id.substring(0,8))}.`));
-
-    } catch (error: any) {
-        if (spinner && spinner.isSpinning) {
-            spinner.fail(chalk.red('❗ Error during project creation.'));
+        const project = projectService.createProject(answers.name, answers.description);
+        if (project) {
+            spinner.succeed(chalk.green(`✅ Project "${project.name}" created successfully with ID ${chalk.yellow(project.id.substring(0,8))}.`));
+            displayService.displayProjectDetails(project, []);
         } else {
-            console.error(chalk.red('❗ Error during project creation.'));
+            spinner.fail(chalk.red('❗ Failed to create project.'));
         }
-        console.error(chalk.red(error.message || 'An unknown error occurred during project creation.'));
+
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        if (spinner && spinner.isSpinning) {
+            spinner.fail(chalk.red(`❗ Error during project creation: ${message}`));
+        } else {
+            displayService.displayMessage(`❗ Error during project creation: ${message}`, 'error');
+        }
     }
 };
 
-export const listProjectsCommand = async () => {
-    await loadOra();
+export const listProjectsCommand = async (deps: BaseProjectCommandDeps) => {
+    const { projectService, displayService } = deps;
+    const ora = await loadOra();
     const spinner = ora(chalk.blue('Loading projects...')).start();
     try {
-        const projects = getAllProjects(); 
+        const projects = projectService.getAllProjects();
 
         if (projects.length === 0) {
           spinner.info(chalk.yellow("ℹ️ No projects found. You can create one from the menu."));
         } else {
           spinner.succeed(chalk.green("Projects loaded!"));
-          displayProjects(projects);
+          displayService.displayProjects(projects);
         }
-    } catch (error: any) {
-        spinner.fail(chalk.red('❗ Failed to load projects.'));
-        console.error(chalk.red(error.message || 'An unknown error occurred while loading projects.'));
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        spinner.fail(chalk.red(`❗ Failed to load projects: ${message}`));
     }
 };
 
-export const viewProjectCommand = async (projectIdPrefix?: string) => {
-    await loadOra();
+export const viewProjectCommand = async (deps: ViewProjectCommandDeps) => {
+    const { projectService, taskService, displayService } = deps;
+    const ora = await loadOra();
     let mainSpinner: any;
     try {
-        let projectToView: Project | undefined;
         mainSpinner = ora(chalk.blue('Processing project view...')).start();
-
-        if (projectIdPrefix) {
-            mainSpinner.text = chalk.blue(`Fetching project "${projectIdPrefix}"...`);
-            projectToView = getProjectById(projectIdPrefix); 
-        } else {
-            mainSpinner.stop(); 
-            projectToView = await selectProject('👁️ Select a project to view:');
-            if (projectToView) mainSpinner.start(chalk.blue('Loading project details...')); 
-        }
+        const projectToView = await selectProjectInteractive('👁️ Select a project to view:', projectService, displayService);
 
         if (projectToView) {
             mainSpinner.text = chalk.blue(`Loading tasks for project "${projectToView.name}"...`);
-            const tasks = getAllTasks(projectToView.id);
+            const tasks: Task[] = taskService.getAllTasks(projectToView.id);
             mainSpinner.succeed(chalk.green('Project and tasks loaded!'));
-            displayProjectDetails(projectToView, tasks); 
-        } else if (projectIdPrefix) {
-            mainSpinner.fail(chalk.red(`❗ Project with ID or prefix "${projectIdPrefix}" not found.`));
-        } else if (!projectToView && !mainSpinner.isSpinning) {
-        } else if (mainSpinner.isSpinning){ 
+            displayService.displayProjectDetails(projectToView, tasks); 
+        } else if (mainSpinner.isSpinning) {
             mainSpinner.info(chalk.yellow("View operation cancelled or no project found."));
         }
 
-
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
         if (mainSpinner && mainSpinner.isSpinning) {
-            mainSpinner.fail(chalk.red('❗ Error viewing project.'));
+            mainSpinner.fail(chalk.red(`❗ Error viewing project: ${message}`));
         } else {
-            console.error(chalk.red('❗ Error viewing project.'));
+            displayService.displayMessage(`❗ Error viewing project: ${message}`, 'error');
         }
-        console.error(chalk.red(error.message || 'An unknown error occurred while viewing the project.'));
     }
 };
 
-export const updateProjectCommand = async (projectIdPrefix?: string) => {
-    await loadOra();
-    let mainSpinner: any;
+export const updateProjectCommand = async (deps: BaseProjectCommandDeps) => {
+    const { projectService, displayService } = deps;
+    const ora = await loadOra();
+    let mainSpinner: any; 
     try {
-        let projectToUpdate: Project | undefined;
         mainSpinner = ora(chalk.blue('Preparing project update...')).start();
-
-        if (projectIdPrefix) {
-            mainSpinner.text = chalk.blue(`Fetching project "${projectIdPrefix}" for update...`);
-            projectToUpdate = getProjectById(projectIdPrefix);
-        } else {
-            mainSpinner.stop();
-            projectToUpdate = await selectProject('✏️ Select a project to update:');
-            if (projectToUpdate) mainSpinner.start(chalk.blue('Project selected. Proceeding with update...'));
-        }
+        const projectToUpdate = await selectProjectInteractive('✏️ Select a project to update:', projectService, displayService);
 
         if (!projectToUpdate) {
-            if (projectIdPrefix) {
-                mainSpinner.fail(chalk.red(`❗ Project with ID or prefix "${projectIdPrefix}" not found for update.`));
-            } else if (!mainSpinner.isSpinning) {
-                // selectProject already logged if no projects exist
-            } else {
-                 mainSpinner.info(chalk.yellow("Update operation cancelled or no project selected."));
-            }
+            if (mainSpinner.isSpinning) mainSpinner.info(chalk.yellow("Update operation cancelled or no project selected."));
             return;
         }
+        mainSpinner.stop();
 
-        mainSpinner.stop(); 
         console.log(chalk.blue(`\n✏️ Updating project: ${projectToUpdate.name} (${projectToUpdate.id.substring(0,8)})`));
         const answers = await inquirer.prompt([
             {
@@ -155,17 +162,12 @@ export const updateProjectCommand = async (projectIdPrefix?: string) => {
                 name: 'name',
                 message: `New project name (current: ${projectToUpdate.name}):`,
                 default: projectToUpdate.name,
-                validate: function (input: string) {
-                    if (input.trim().length === 0 && input !== projectToUpdate?.name) {
-                        return 'Project name cannot be empty if you intend to change it.';
-                    }
-                    return true;
-                }
+                validate: (input: string) => input.trim().length > 0 || 'Project name cannot be empty.'
             },
             {
                 type: 'input',
                 name: 'description',
-                message: `New project description (current: ${projectToUpdate.description || 'N/A'}, type "clear" to remove):`,
+                message: `New project description (current: ${projectToUpdate.description || 'N/A'}, enter to keep, type "clear" to remove):`,
                 default: projectToUpdate.description || ''
             },
             {
@@ -177,15 +179,15 @@ export const updateProjectCommand = async (projectIdPrefix?: string) => {
             },
         ]);
 
-        const updates: Partial<Omit<Project, 'id' | 'createdAt'>> = {};
-        if (answers.name.trim() && answers.name.trim() !== projectToUpdate.name) {
+        const updates: Partial<Pick<Project, 'name' | 'description' | 'status'>> = {};
+        if (answers.name.trim() !== projectToUpdate.name) {
             updates.name = answers.name.trim();
         }
 
         if (answers.description.toLowerCase() === 'clear') {
-            if (projectToUpdate.description !== undefined) updates.description = undefined;
+            updates.description = '';
         } else if (answers.description !== (projectToUpdate.description || '')) {
-            updates.description = answers.description || undefined; 
+            updates.description = answers.description;
         }
 
         if (answers.status !== projectToUpdate.status) {
@@ -194,54 +196,42 @@ export const updateProjectCommand = async (projectIdPrefix?: string) => {
 
         if (Object.keys(updates).length > 0) {
             const spinnerUpdate = ora(chalk.blue('Saving changes...')).start();
-            const updated = updateProject(projectToUpdate.id, updates);
-            if (updated) {
-                spinnerUpdate.succeed(chalk.green(`✅ Project "${updated.name}" updated successfully.`));
-                displayProjectDetails(updated, getAllTasks(updated.id));
+            const updatedProject = projectService.updateProject(projectToUpdate.id, updates);
+            if (updatedProject) {
+                spinnerUpdate.succeed(chalk.green(`✅ Project "${updatedProject.name}" updated successfully.`));
+                const tasks = deps.projectService.getTasksForProject(updatedProject.id);
+                displayService.displayProjectDetails(updatedProject, tasks);
             } else {
-                spinnerUpdate.fail(chalk.red('❗ Failed to update project. The project might not exist or an issue occurred.'));
+                spinnerUpdate.fail(chalk.red('❗ Failed to update project.'));
             }
         } else {
-            console.log(chalk.yellow('ℹ️ No changes were made to the project.'));
+            displayService.displayMessage('No changes were made to the project.', 'info');
         }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
         if (mainSpinner && mainSpinner.isSpinning) {
-            mainSpinner.fail(chalk.red('❗ Error during project update process.'));
+            mainSpinner.fail(chalk.red(`❗ Error during project update: ${message}`));
         } else {
-             console.error(chalk.red('❗ Error during project update process.'));
+            displayService.displayMessage(`❗ Error during project update: ${message}`, 'error');
         }
-        console.error(chalk.red(error.message || 'An unknown error occurred during project update.'));
     }
 };
 
-export const deleteProjectCommand = async (projectIdPrefix?: string) => {
-    await loadOra();
+export const deleteProjectCommand = async (deps: DeleteProjectCommandDeps) => {
+    const { projectService, displayService, taskService } = deps;
+    const ora = await loadOra();
     let mainSpinner: any;
     try {
-        let projectToDelete: Project | undefined;
         mainSpinner = ora(chalk.blue('Preparing project deletion...')).start();
-
-        if (projectIdPrefix) {
-            mainSpinner.text = chalk.blue(`Fetching project "${projectIdPrefix}" for deletion...`);
-            projectToDelete = getProjectById(projectIdPrefix);
-        } else {
-            mainSpinner.stop();
-            projectToDelete = await selectProject('❌ Select a project to delete:');
-            if(projectToDelete) mainSpinner.start(chalk.blue('Project selected. Proceeding with deletion...'));
-        }
+        const projectToDelete = await selectProjectInteractive('❌ Select a project to delete:', projectService, displayService);
 
         if (!projectToDelete) {
-            if (projectIdPrefix) {
-                mainSpinner.fail(chalk.red(`❗ Project with ID or prefix "${projectIdPrefix}" not found for deletion.`));
-            } else if (!mainSpinner.isSpinning) {
-            } else {
-                mainSpinner.info(chalk.yellow("Delete operation cancelled or no project selected."));
-            }
+            if(mainSpinner.isSpinning) mainSpinner.info(chalk.yellow("Delete operation cancelled or no project selected."));
             return;
         }
+        mainSpinner.stop();
 
-        mainSpinner.stop(); 
         console.log(chalk.yellowBright(`\n⚠️ Deleting Project: ${projectToDelete.name} (${projectToDelete.id.substring(0,8)})`));
         const { confirm } = await inquirer.prompt([
           { type: 'confirm', name: 'confirm', message: `Are you sure you want to PERMANENTLY delete project "${chalk.cyan(projectToDelete.name)}" and ALL its tasks? This action cannot be undone.`, default: false }
@@ -249,22 +239,22 @@ export const deleteProjectCommand = async (projectIdPrefix?: string) => {
 
         if (confirm) {
           const spinnerDelete = ora(chalk.blue(`Deleting project "${projectToDelete.name}"...`)).start();
-          const success = deleteProject(projectToDelete.id);
+          const success = projectService.deleteProject(projectToDelete.id);
           if (success) {
             spinnerDelete.succeed(chalk.green(`✅ Project "${projectToDelete.name}" and its tasks deleted successfully.`));
           } else {
-            spinnerDelete.fail(chalk.red('❗ Failed to delete project. It might have been already deleted or an issue occurred.'));
+            spinnerDelete.fail(chalk.red('❗ Failed to delete project.'));
           }
         } else {
-          console.log(chalk.yellow('ℹ️ Project deletion cancelled by user.'));
+          displayService.displayMessage('Project deletion cancelled by user.', 'info');
         }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
         if (mainSpinner && mainSpinner.isSpinning) {
-            mainSpinner.fail(chalk.red('❗ Error during project deletion process.'));
+            mainSpinner.fail(chalk.red(`❗ Error during project deletion: ${message}`));
         } else {
-            console.error(chalk.red('❗ Error during project deletion process.'));
+            displayService.displayMessage(`❗ Error during project deletion: ${message}`, 'error');
         }
-        console.error(chalk.red(error.message || 'An unknown error occurred during project deletion.'));
     }
 };

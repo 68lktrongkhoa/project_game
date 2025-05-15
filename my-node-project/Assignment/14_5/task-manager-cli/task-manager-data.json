@@ -1,0 +1,26 @@
+{
+  "projects": [
+    {
+      "id": "1985d8b6-a4f7-4541-83d3-d4159602031a",
+      "name": "123456789",
+      "description": "123456789",
+      "status": "Active",
+      "createdAt": "2025-05-15T04:33:48.973Z",
+      "updatedAt": "2025-05-15T04:33:48.973Z",
+      "tasks": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": "59e5e8f0-5d88-4cae-838c-c6787215f30e",
+      "projectId": "1985d8b6-a4f7-4541-83d3-d4159602031a",
+      "title": "r123456789",
+      "description": "ẻtyuiop",
+      "status": "Open",
+      "priority": "Medium",
+      "type": "Task",
+      "createdAt": "2025-05-15T06:17:25.283Z",
+      "updatedAt": "2025-05-15T06:17:25.283Z"
+    }
+  ]
+}

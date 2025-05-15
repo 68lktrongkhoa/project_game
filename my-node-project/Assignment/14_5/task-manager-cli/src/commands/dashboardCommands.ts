@@ -1,19 +1,35 @@
 import chalk from 'chalk';
-import { getAllProjects } from '../services/projectService';
-import { getAllTasks } from '../services/taskService';
-import { displayDashboard } from '../services/displayService';
-import { TaskStatus, Project, Task }
-from '../types'; 
-let ora: any;
-async function loadOra() { if (!ora) ora = (await import('ora')).default; }
+import { ProjectService } from '../services/projectService';
+import { TaskService } from '../services/taskService';
+import { DisplayService } from '../services/displayService';
 
-export const showDashboardCommand = async () => {
-    await loadOra();
+import { TaskStatus } from '../types/enums/task.enums';
+import { Project } from '../models/Project';
+import { Task } from '../models/Task';
+
+let oraInstance: any;
+async function loadOra() {
+    if (!oraInstance) {
+        const oraModule = await import('ora');
+        oraInstance = oraModule.default;
+    }
+    return oraInstance;
+}
+
+interface DashboardCommandDependencies {
+    projectService: ProjectService;
+    taskService: TaskService;
+    displayService: DisplayService;
+}
+
+export const showDashboardCommand = async (dependencies: DashboardCommandDependencies) => {
+    const { projectService, taskService, displayService } = dependencies;
+    const ora = await loadOra();
     const spinner = ora(chalk.blue('📊 Loading dashboard data...')).start();
 
     try {
-        const projects: Project[] = getAllProjects();
-        const tasks: Task[] = getAllTasks();
+        const projects: Project[] = projectService.getAllProjects();
+        const tasks: Task[] = taskService.getAllTasks();
 
         const projectStats = {
             totalProjects: projects.length,
@@ -25,15 +41,20 @@ export const showDashboardCommand = async () => {
         const recentTasks = [...tasks]
             .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
             .slice(0, 5);
-        spinner.succeed(chalk.green('📊 Dashboard data loaded successfully!'));
-        displayDashboard(projectStats, recentTasks, projects);
 
-    } catch (error: any) { 
-        if (spinner && spinner.isSpinning) { 
+        spinner.succeed(chalk.green('📊 Dashboard data loaded successfully!'));
+        displayService.displayDashboard(projectStats, recentTasks, projects);
+
+    } catch (error: unknown) {
+        if (spinner && spinner.isSpinning) {
             spinner.fail(chalk.red('❗ Failed to load dashboard data.'));
         } else {
             console.error(chalk.red('❗ Failed to load dashboard data.'));
         }
-        console.error(chalk.red(error.message || 'An unknown error occurred while loading dashboard.'));
+        if (error instanceof Error) {
+            console.error(chalk.red(error.message));
+        } else {
+            console.error(chalk.red('An unknown error occurred while loading dashboard.'));
+        }
     }
 };
