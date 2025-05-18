@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -6,12 +39,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteTaskCommand = exports.updateTaskCommand = exports.viewTaskCommand = exports.listTasksCommand = exports.addTaskCommand = void 0;
 const inquirer_1 = __importDefault(require("inquirer"));
 const chalk_1 = __importDefault(require("chalk"));
-const taskService_1 = require("../services/taskService");
-const projectService_1 = require("../services/projectService");
-const displayService_1 = require("../services/displayService");
-const types_1 = require("../types");
 const date_fns_1 = require("date-fns");
-const parseDeadlineInput = (input) => {
+const task_enums_1 = require("../types/enums/task.enums");
+let oraInstance;
+async function loadOra() {
+    if (!oraInstance) {
+        const oraModule = await Promise.resolve().then(() => __importStar(require('ora')));
+        oraInstance = oraModule.default;
+    }
+    return oraInstance;
+}
+const parseDeadlineInputInternal = (input) => {
     if (!input || input.trim().toLowerCase() === 'none' || input.trim() === '') {
         return undefined;
     }
@@ -23,272 +61,335 @@ const parseDeadlineInput = (input) => {
             return parsedDate.toISOString();
         }
     }
-    parsedDate = new Date(input);
-    if ((0, date_fns_1.isValid)(parsedDate)) {
-        return parsedDate.toISOString();
+    try {
+        parsedDate = new Date(input);
+        if ((0, date_fns_1.isValid)(parsedDate)) {
+            return parsedDate.toISOString();
+        }
+    }
+    catch (e) {
+        console.log("Lỗi input", e);
     }
     return 'invalid_date';
 };
-const addTaskCommand = async (projectIdPrefix) => {
-    const projects = (0, projectService_1.getAllProjects)();
+async function selectProjectForTaskInteractive(message, projectService, displayService) {
+    const projects = projectService.getAllProjects();
     if (projects.length === 0) {
-        console.log(chalk_1.default.red("No projects exist. Please create a project first using 'project create'."));
-        return;
+        displayService.displayMessage("No projects available. Please create a project first.", "info");
+        return undefined;
     }
-    let selectedProject;
-    if (projectIdPrefix) {
-        selectedProject = (0, projectService_1.getProjectById)(projectIdPrefix);
-        if (!selectedProject) {
-            console.log(chalk_1.default.red(`Project with ID or prefix "${projectIdPrefix}" not found. Cannot add task.`));
-            return;
-        }
-        console.log(chalk_1.default.blue(`Adding task to project: ${selectedProject.name} (${selectedProject.id.substring(0, 8)})`));
-    }
-    else {
-        const projectChoices = projects.map(p => ({ name: `${p.name} (${p.id.substring(0, 8)})`, value: p.id }));
-        const { projectIdFull } = await inquirer_1.default.prompt([
-            {
-                type: 'list',
-                name: 'projectIdFull',
-                message: 'Select project for the new task:',
-                choices: projectChoices,
-            },
-        ]);
-        selectedProject = projects.find(p => p.id === projectIdFull);
-    }
-    if (!selectedProject) {
-        console.log(chalk_1.default.red("Could not determine the project. Task creation cancelled."));
-        return;
-    }
-    const answers = await inquirer_1.default.prompt([
+    const { projectId } = await inquirer_1.default.prompt([
         {
-            type: 'input',
-            name: 'title',
-            message: 'Task title:',
-            validate: function (input) {
-                if (input.trim().length === 0) {
-                    return 'Task title cannot be empty.';
-                }
-                return true;
-            }
-        },
-        { type: 'input', name: 'description', message: 'Task description (optional):' },
-        { type: 'list', name: 'type', message: 'Task type:', choices: Object.values(types_1.TaskType), default: types_1.TaskType.Task },
-        { type: 'list', name: 'priority', message: 'Task priority:', choices: Object.values(types_1.TaskPriority), default: types_1.TaskPriority.Medium },
-        { type: 'input', name: 'assignee', message: 'Assignee (optional):' },
-        {
-            type: 'input',
-            name: 'deadline',
-            message: 'Deadline (YYYY-MM-DD or MM/DD/YYYY, optional, type "none" to skip):',
-            filter: (input) => input.trim().toLowerCase(),
-            validate: (input) => {
-                if (input === 'none' || input === '')
-                    return true;
-                const parsed = parseDeadlineInput(input);
-                if (parsed === 'invalid_date') {
-                    return 'Invalid date format. Use YYYY-MM-DD, MM/DD/YYYY, or type "none".';
-                }
-                return true;
-            }
+            type: 'list',
+            name: 'projectId',
+            message: message,
+            choices: projects.map(p => ({ name: `${p.name} (${p.id.substring(0, 8)})`, value: p.id })),
+            pageSize: 10,
         },
     ]);
-    const deadlineISO = parseDeadlineInput(answers.deadline);
-    const taskInput = {
-        projectId: selectedProject.id,
-        title: answers.title,
-        description: answers.description,
-        type: answers.type,
-        priority: answers.priority,
-        assignee: answers.assignee,
-        deadline: deadlineISO === 'invalid_date' ? undefined : deadlineISO,
-    };
-    const task = (0, taskService_1.createTask)(taskInput);
-    if (task) {
-        console.log(chalk_1.default.green(`Task "${task.title}" created with ID ${chalk_1.default.yellow(task.id.substring(0, 8))} in project "${selectedProject.name}".`));
+    return projectService.getProjectById(projectId);
+}
+async function selectTaskInteractive(message, taskService, projectService, displayService, filterByProjectId) {
+    const ora = await loadOra();
+    const spinner = ora(chalk_1.default.blue('Fetching task list...')).start();
+    const tasks = filterByProjectId ? taskService.getAllTasks(filterByProjectId) : taskService.getAllTasks();
+    spinner.stop();
+    if (tasks.length === 0) {
+        let projectContextMsg = "";
+        if (filterByProjectId) {
+            const project = projectService.getProjectById(filterByProjectId);
+            projectContextMsg = project ? `in project "${project.name}"` : `for project ID "${filterByProjectId}"`;
+        }
+        displayService.displayMessage(`No tasks available ${projectContextMsg}. Create one first!`, "info");
+        return undefined;
     }
-    else {
-        console.log(chalk_1.default.red('Failed to create task. This might indicate an issue with project resolution.'));
+    const { taskId } = await inquirer_1.default.prompt([
+        {
+            type: 'list',
+            name: 'taskId',
+            message: message,
+            choices: tasks.map(t => {
+                const proj = projectService.getProjectById(t.projectId);
+                const projName = proj ? ` (Project: ${chalk_1.default.cyan(proj.name)})` : ` (Project ID: ${t.projectId.substring(0, 8)})`;
+                return { name: `${t.title} (${t.id.substring(0, 8)})${projName}`, value: t.id };
+            }),
+            pageSize: 15,
+        },
+    ]);
+    return taskService.getTaskById(taskId);
+}
+const addTaskCommand = async (deps) => {
+    const { taskService, projectService, displayService } = deps;
+    const ora = await loadOra();
+    let spinner;
+    try {
+        console.log(chalk_1.default.bold.cyan('\n✨ Creating a New Task ✨'));
+        const initialSpinner = ora(chalk_1.default.blue('Preparing to add task...')).start();
+        initialSpinner.stop();
+        const selectedProject = await selectProjectForTaskInteractive('➕ Select project for the new task:', projectService, displayService);
+        if (!selectedProject) {
+            return;
+        }
+        displayService.displayMessage(`Adding task to project: ${selectedProject.name} (${selectedProject.id.substring(0, 8)})`, "info");
+        const answers = await inquirer_1.default.prompt([
+            {
+                type: 'input',
+                name: 'title',
+                message: 'Task title:',
+                validate: (input) => input.trim().length > 0 || 'Task title cannot be empty.',
+            },
+            { type: 'input', name: 'description', message: 'Task description (optional):' },
+            { type: 'list', name: 'type', message: 'Task type:', choices: Object.values(task_enums_1.TaskType), default: task_enums_1.TaskType.Task },
+            { type: 'list', name: 'priority', message: 'Task priority:', choices: Object.values(task_enums_1.TaskPriority), default: task_enums_1.TaskPriority.Medium },
+            { type: 'input', name: 'assignee', message: 'Assignee (optional, enter to skip):' },
+            {
+                type: 'input',
+                name: 'deadline',
+                message: 'Deadline (YYYY-MM-DD, MM/DD/YYYY, etc. Optional, type "none" or leave empty to skip):',
+                filter: (input) => input.trim().toLowerCase(),
+                validate: (input) => {
+                    if (input === 'none' || input === '')
+                        return true;
+                    const parsed = parseDeadlineInputInternal(input);
+                    return parsed !== 'invalid_date' || 'Invalid date format. Use YYYY-MM-DD, etc., or "none".';
+                }
+            },
+        ]);
+        const deadlineISO = parseDeadlineInputInternal(answers.deadline);
+        const taskInput = {
+            projectId: selectedProject.id,
+            title: answers.title,
+            description: answers.description || undefined,
+            type: answers.type,
+            priority: answers.priority,
+            assignee: answers.assignee || undefined,
+            deadline: deadlineISO === 'invalid_date' ? undefined : deadlineISO,
+        };
+        spinner = ora(chalk_1.default.blue('Saving task...')).start();
+        const task = taskService.createTask(taskInput);
+        if (task) {
+            spinner.succeed(chalk_1.default.green(`✅ Task "${task.title}" created successfully in project "${selectedProject.name}".`));
+            displayService.displayTaskDetails(task, selectedProject);
+        }
+        else {
+            spinner.fail(chalk_1.default.red('❗ Failed to create task. Project might be invalid or another issue occurred.'));
+        }
+    }
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        if (spinner && spinner.isSpinning) {
+            spinner.fail(chalk_1.default.red(`❗ Error during task creation: ${message}`));
+        }
+        else {
+            displayService.displayMessage(`❗ Error during task creation: ${message}`, 'error');
+        }
     }
 };
 exports.addTaskCommand = addTaskCommand;
-const listTasksCommand = async (projectIdPrefix) => {
-    let tasksToDisplay;
-    let currentProject;
-    const allProjects = (0, projectService_1.getAllProjects)();
-    if (projectIdPrefix) {
-        currentProject = (0, projectService_1.getProjectById)(projectIdPrefix);
-        if (!currentProject) {
-            console.log(chalk_1.default.red(`Project with ID or prefix "${projectIdPrefix}" not found.`));
-            return;
+const listTasksCommand = async (deps) => {
+    const { taskService, projectService, displayService, projectId } = deps;
+    const ora = await loadOra();
+    const spinner = ora(chalk_1.default.blue('Loading tasks...')).start();
+    try {
+        let tasksToDisplay;
+        let currentProject;
+        const allProjectsData = projectService.getAllProjects();
+        if (projectId) {
+            currentProject = projectService.getProjectById(projectId);
+            if (!currentProject) {
+                spinner.fail(chalk_1.default.red(`❗ Project with ID or prefix "${projectId}" not found.`));
+                return;
+            }
+            spinner.text = chalk_1.default.blue(`Loading tasks for project: ${currentProject.name}...`);
+            tasksToDisplay = taskService.getAllTasks(currentProject.id);
         }
-        tasksToDisplay = (0, taskService_1.getAllTasks)(currentProject.id);
-        console.log(chalk_1.default.blue(`\n--- Tasks for Project: ${chalk_1.default.cyan(currentProject.name)} ---`));
+        else {
+            tasksToDisplay = taskService.getAllTasks();
+        }
+        if (tasksToDisplay.length === 0) {
+            const contextMsg = currentProject ? `for project "${currentProject.name}"` : "across all projects";
+            spinner.info(chalk_1.default.yellow(`ℹ️ No tasks found ${contextMsg}.`));
+        }
+        else {
+            spinner.succeed(chalk_1.default.green("Tasks loaded!"));
+            if (currentProject) {
+                console.log(chalk_1.default.blue(`\n--- 📝 Tasks for Project: ${chalk_1.default.cyan(currentProject.name)} ---`));
+            }
+            displayService.displayTasks(tasksToDisplay, !projectId, allProjectsData);
+        }
     }
-    else {
-        tasksToDisplay = (0, taskService_1.getAllTasks)();
-        // console.log(chalk.blue("\n--- All Tasks ---")); 
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        spinner.fail(chalk_1.default.red(`❗ Failed to load tasks: ${message}`));
     }
-    (0, displayService_1.displayTasks)(tasksToDisplay, !projectIdPrefix, allProjects);
 };
 exports.listTasksCommand = listTasksCommand;
-const viewTaskCommand = async (taskIdPrefix) => {
-    let taskToViewId = taskIdPrefix;
-    if (!taskToViewId) {
-        const tasks = (0, taskService_1.getAllTasks)();
-        if (tasks.length === 0) {
-            console.log(chalk_1.default.yellow("No tasks available to view. Create one first!"));
-            return;
+const viewTaskCommand = async (deps) => {
+    const { taskService, projectService, displayService } = deps;
+    const ora = await loadOra();
+    let mainSpinner;
+    try {
+        mainSpinner = ora(chalk_1.default.blue('Processing task view...')).start();
+        mainSpinner.stop();
+        const taskToView = await selectTaskInteractive('👁️ Select a task to view:', taskService, projectService, displayService);
+        if (taskToView) {
+            mainSpinner.start(chalk_1.default.blue('Loading task details...'));
+            const project = projectService.getProjectById(taskToView.projectId);
+            mainSpinner.succeed(chalk_1.default.green('Task details loaded!'));
+            displayService.displayTaskDetails(taskToView, project);
         }
-        const { id } = await inquirer_1.default.prompt([{
-                type: 'list',
-                name: 'id',
-                message: 'Select a task to view:',
-                choices: tasks.map(t => ({ name: `${t.title} (${t.id.substring(0, 8)})`, value: t.id }))
-            }]);
-        taskToViewId = id;
+        else if (mainSpinner.isSpinning) {
+            mainSpinner.info(chalk_1.default.yellow("View operation cancelled or no task selected."));
+        }
     }
-    const task = (0, taskService_1.getTaskById)(taskToViewId);
-    if (task) {
-        const project = (0, projectService_1.getProjectById)(task.projectId);
-        (0, displayService_1.displayTaskDetails)(task, project);
-    }
-    else {
-        console.log(chalk_1.default.red(`Task with ID or prefix "${taskToViewId}" not found.`));
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        if (mainSpinner && mainSpinner.isSpinning) {
+            mainSpinner.fail(chalk_1.default.red(`❗ Error viewing task: ${message}`));
+        }
+        else {
+            displayService.displayMessage(`❗ Error viewing task: ${message}`, 'error');
+        }
     }
 };
 exports.viewTaskCommand = viewTaskCommand;
-const updateTaskCommand = async (taskIdPrefix) => {
-    let taskToUpdateId = taskIdPrefix;
-    if (!taskToUpdateId) {
-        const tasks = (0, taskService_1.getAllTasks)();
-        if (tasks.length === 0) {
-            console.log(chalk_1.default.yellow("No tasks available to update."));
+const updateTaskCommand = async (deps) => {
+    const { taskService, projectService, displayService } = deps;
+    const ora = await loadOra();
+    let mainSpinner;
+    try {
+        mainSpinner = ora(chalk_1.default.blue('Preparing task update...')).start();
+        mainSpinner.stop();
+        const taskToUpdate = await selectTaskInteractive('✏️ Select a task to update:', taskService, projectService, displayService);
+        if (!taskToUpdate) {
             return;
         }
-        const { id } = await inquirer_1.default.prompt([{
-                type: 'list',
-                name: 'id',
-                message: 'Select a task to update:',
-                choices: tasks.map(t => ({ name: `${t.title} (${t.id.substring(0, 8)})`, value: t.id }))
-            }]);
-        taskToUpdateId = id;
-    }
-    const task = (0, taskService_1.getTaskById)(taskToUpdateId);
-    if (!task) {
-        console.log(chalk_1.default.red(`Task with ID or prefix "${taskToUpdateId}" not found.`));
-        return;
-    }
-    const project = (0, projectService_1.getProjectById)(task.projectId);
-    console.log(chalk_1.default.blue(`\nUpdating task: ${task.title} (${task.id.substring(0, 8)})`));
-    if (project)
-        console.log(chalk_1.default.blue(`In project: ${project.name}`));
-    const answers = await inquirer_1.default.prompt([
-        { type: 'input', name: 'title', message: 'New task title (leave blank to keep current):', default: task.title },
-        { type: 'input', name: 'description', message: 'New task description (leave blank to keep current, "clear" to remove):', default: task.description || '' },
-        { type: 'list', name: 'status', message: 'New task status:', choices: Object.values(types_1.TaskStatus), default: task.status },
-        { type: 'list', name: 'priority', message: 'New task priority:', choices: Object.values(types_1.TaskPriority), default: task.priority },
-        { type: 'list', name: 'type', message: 'New task type:', choices: Object.values(types_1.TaskType), default: task.type },
-        { type: 'input', name: 'assignee', message: 'New assignee (leave blank to keep current, "clear" to remove):', default: task.assignee || '' },
-        {
-            type: 'input',
-            name: 'deadline',
-            message: 'New deadline (YYYY-MM-DD, "clear" to remove, blank to keep current):',
-            default: task.deadline ? (0, date_fns_1.format)((0, date_fns_1.parseISO)(task.deadline), 'yyyy-MM-dd') : '',
-            validate: (input) => {
-                if (input.toLowerCase() === 'clear' || input === '')
-                    return true;
-                const parsed = parseDeadlineInput(input);
-                if (parsed === 'invalid_date') {
-                    return 'Invalid date format. Use YYYY-MM-DD, MM/DD/YYYY, "clear", or leave blank.';
+        const project = projectService.getProjectById(taskToUpdate.projectId);
+        console.log(chalk_1.default.blue(`\n✏️ Updating task: ${taskToUpdate.title} (${taskToUpdate.id.substring(0, 8)})`));
+        if (project)
+            console.log(chalk_1.default.blue(`   In project: ${project.name}`));
+        const answers = await inquirer_1.default.prompt([
+            { type: 'input', name: 'title', message: `New task title (current: ${taskToUpdate.title}):`, default: taskToUpdate.title, validate: (input) => input.trim().length > 0 || 'Title cannot be empty.' },
+            { type: 'input', name: 'description', message: `New description (current: ${taskToUpdate.description || 'N/A'}, "clear" to remove):`, default: taskToUpdate.description || '' },
+            { type: 'list', name: 'status', message: 'New status:', choices: Object.values(task_enums_1.TaskStatus), default: taskToUpdate.status },
+            { type: 'list', name: 'priority', message: 'New priority:', choices: Object.values(task_enums_1.TaskPriority), default: taskToUpdate.priority },
+            { type: 'list', name: 'type', message: 'New type:', choices: Object.values(task_enums_1.TaskType), default: taskToUpdate.type },
+            { type: 'input', name: 'assignee', message: `New assignee (current: ${taskToUpdate.assignee || 'N/A'}, "clear" to remove):`, default: taskToUpdate.assignee || '' },
+            {
+                type: 'input',
+                name: 'deadline',
+                message: `New deadline (current: ${taskToUpdate.deadline ? (0, date_fns_1.format)(taskToUpdate.deadline, 'yyyy-MM-dd') : 'N/A'}, "clear" or empty to remove):`,
+                default: taskToUpdate.deadline ? (0, date_fns_1.format)(taskToUpdate.deadline, 'yyyy-MM-dd') : '',
+                filter: (input) => input.trim().toLowerCase(),
+                validate: (input) => {
+                    if (input === 'clear' || input === 'none' || input === '')
+                        return true;
+                    const parsed = parseDeadlineInputInternal(input);
+                    return parsed !== 'invalid_date' || 'Invalid date format.';
                 }
-                return true;
-            }
-        },
-    ]);
-    const updates = {};
-    if (answers.title && answers.title !== task.title)
-        updates.title = answers.title;
-    if (answers.description.toLowerCase() === 'clear') {
-        updates.description = undefined;
-    }
-    else if (answers.description !== (task.description || '')) {
-        updates.description = answers.description || undefined;
-    }
-    if (answers.status !== task.status)
-        updates.status = answers.status;
-    if (answers.priority !== task.priority)
-        updates.priority = answers.priority;
-    if (answers.type !== task.type)
-        updates.type = answers.type;
-    if (answers.assignee.toLowerCase() === 'clear') {
-        updates.assignee = undefined;
-    }
-    else if (answers.assignee !== (task.assignee || '')) {
-        updates.assignee = answers.assignee || undefined;
-    }
-    if (answers.deadline.toLowerCase() === 'clear') {
-        updates.deadline = undefined;
-    }
-    else if (answers.deadline) {
-        const newDeadlineISO = parseDeadlineInput(answers.deadline);
-        if (newDeadlineISO && newDeadlineISO !== 'invalid_date' && newDeadlineISO !== task.deadline) {
-            updates.deadline = newDeadlineISO;
+            },
+        ]);
+        const updates = {};
+        if (answers.title.trim() !== taskToUpdate.title)
+            updates.title = answers.title.trim();
+        if (answers.description.toLowerCase() === 'clear') {
+            updates.description = '';
         }
-    }
-    else if (answers.deadline === '' && task.deadline) {
-        // User left blank, but there was a deadline, so keep current
-        // No action needed for updates.deadline
-    }
-    if (Object.keys(updates).length > 0) {
-        const updated = (0, taskService_1.updateTask)(task.id, updates);
-        if (updated) {
-            console.log(chalk_1.default.green(`Task "${updated.title}" updated.`));
-            const updatedProject = (0, projectService_1.getProjectById)(updated.projectId);
-            (0, displayService_1.displayTaskDetails)(updated, updatedProject);
+        else if (answers.description !== (taskToUpdate.description || '')) {
+            updates.description = answers.description;
+        }
+        if (answers.status !== taskToUpdate.status)
+            updates.status = answers.status;
+        if (answers.priority !== taskToUpdate.priority)
+            updates.priority = answers.priority;
+        if (answers.type !== taskToUpdate.type)
+            updates.type = answers.type;
+        if (answers.assignee.toLowerCase() === 'clear') {
+            updates.assignee = undefined;
+        }
+        else if (answers.assignee !== (taskToUpdate.assignee || '')) {
+            updates.assignee = answers.assignee || undefined;
+        }
+        const newDeadlineInput = answers.deadline;
+        if (newDeadlineInput === 'clear' || newDeadlineInput === 'none' || newDeadlineInput === '') {
+            updates.deadline = undefined;
         }
         else {
-            console.log(chalk_1.default.red('Failed to update task.'));
+            const parsedDeadline = parseDeadlineInputInternal(newDeadlineInput);
+            if (parsedDeadline && parsedDeadline !== 'invalid_date') {
+                const currentDeadlineFormatted = taskToUpdate.deadline ? (0, date_fns_1.format)(taskToUpdate.deadline, 'yyyy-MM-dd') : '';
+                if (newDeadlineInput !== currentDeadlineFormatted) {
+                    updates.deadline = new Date(parsedDeadline);
+                }
+            }
+            else if (parsedDeadline === 'invalid_date') {
+                displayService.displayMessage("Invalid deadline format entered, deadline not updated.", "warning");
+            }
+        }
+        if (Object.keys(updates).length > 0) {
+            const spinnerUpdate = ora(chalk_1.default.blue('Saving task changes...')).start();
+            const updatedTask = taskService.updateTask(taskToUpdate.id, updates);
+            if (updatedTask) {
+                spinnerUpdate.succeed(chalk_1.default.green(`✅ Task "${updatedTask.title}" updated successfully.`));
+                const updatedProjectCtx = projectService.getProjectById(updatedTask.projectId);
+                displayService.displayTaskDetails(updatedTask, updatedProjectCtx);
+            }
+            else {
+                spinnerUpdate.fail(chalk_1.default.red('❗ Failed to update task.'));
+            }
+        }
+        else {
+            displayService.displayMessage('No changes were made to the task.', 'info');
         }
     }
-    else {
-        console.log(chalk_1.default.yellow('No changes made to the task.'));
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        if (mainSpinner && mainSpinner.isSpinning) {
+            mainSpinner.fail(chalk_1.default.red(`❗ Error during task update: ${message}`));
+        }
+        else {
+            displayService.displayMessage(`❗ Error during task update: ${message}`, 'error');
+        }
     }
 };
 exports.updateTaskCommand = updateTaskCommand;
-const deleteTaskCommand = async (taskIdPrefix) => {
-    let taskToDeleteId = taskIdPrefix;
-    if (!taskToDeleteId) {
-        const tasks = (0, taskService_1.getAllTasks)();
-        if (tasks.length === 0) {
-            console.log(chalk_1.default.yellow("No tasks available to delete."));
+const deleteTaskCommand = async (deps) => {
+    const { taskService, displayService } = deps;
+    const ora = await loadOra();
+    let mainSpinner;
+    try {
+        mainSpinner = ora(chalk_1.default.blue('Preparing task deletion...')).start();
+        mainSpinner.stop();
+        const taskToDelete = await selectTaskInteractive('❌ Select a task to delete:', deps.taskService, deps.projectService, deps.displayService);
+        if (!taskToDelete) {
             return;
         }
-        const { id } = await inquirer_1.default.prompt([{
-                type: 'list',
-                name: 'id',
-                message: 'Select a task to delete:',
-                choices: tasks.map(t => ({ name: `${t.title} (${t.id.substring(0, 8)})`, value: t.id }))
-            }]);
-        taskToDeleteId = id;
-    }
-    const task = (0, taskService_1.getTaskById)(taskToDeleteId);
-    if (!task) {
-        console.log(chalk_1.default.red(`Task with ID or prefix "${taskToDeleteId}" not found.`));
-        return;
-    }
-    const { confirm } = await inquirer_1.default.prompt([
-        { type: 'confirm', name: 'confirm', message: `Are you sure you want to delete task "${chalk_1.default.yellowBright(task.title)}"? This cannot be undone.`, default: false }
-    ]);
-    if (confirm) {
-        if ((0, taskService_1.deleteTask)(task.id)) {
-            console.log(chalk_1.default.green(`Task "${task.title}" deleted.`));
+        console.log(chalk_1.default.yellowBright(`\n⚠️ Deleting Task: ${taskToDelete.title} (${taskToDelete.id.substring(0, 8)})`));
+        const { confirm } = await inquirer_1.default.prompt([
+            { type: 'confirm', name: 'confirm', message: `Are you sure you want to PERMANENTLY delete task "${chalk_1.default.cyan(taskToDelete.title)}"? This action cannot be undone.`, default: false }
+        ]);
+        if (confirm) {
+            const spinnerDelete = ora(chalk_1.default.blue(`Deleting task "${taskToDelete.title}"...`)).start();
+            const success = taskService.deleteTask(taskToDelete.id);
+            if (success) {
+                spinnerDelete.succeed(chalk_1.default.green(`✅ Task "${taskToDelete.title}" deleted successfully.`));
+            }
+            else {
+                spinnerDelete.fail(chalk_1.default.red('❗ Failed to delete task.'));
+            }
         }
         else {
-            console.log(chalk_1.default.red('Failed to delete task.'));
+            displayService.displayMessage('Task deletion cancelled by user.', 'info');
         }
     }
-    else {
-        console.log(chalk_1.default.yellow('Task deletion cancelled.'));
+    catch (error) {
+        const message = error instanceof Error ? error.message : 'An unknown error occurred.';
+        if (mainSpinner && mainSpinner.isSpinning) {
+            mainSpinner.fail(chalk_1.default.red(`❗ Error during task deletion: ${message}`));
+        }
+        else {
+            displayService.displayMessage(`❗ Error during task deletion: ${message}`, 'error');
+        }
     }
 };
 exports.deleteTaskCommand = deleteTaskCommand;
