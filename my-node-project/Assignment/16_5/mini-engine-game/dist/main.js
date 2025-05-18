@@ -2,7 +2,7 @@ import { GameEngine } from './engine.js';
 import { ChickenShooterGame } from './game.js';
 const CANVAS_ID = 'gameCanvas';
 const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 600; 
+const CANVAS_HEIGHT = 600;
 window.onload = () => {
     const canvas = document.getElementById(CANVAS_ID);
     if (!canvas) {
