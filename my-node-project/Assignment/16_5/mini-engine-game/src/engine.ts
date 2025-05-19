@@ -1,12 +1,3 @@
-const GameStates = {
-    MENU: 'MENU',
-    PLAYING: 'PLAYING',
-    GAME_OVER: 'GAME_OVER',
-    PAUSED: 'PAUSED',
-};
-
-type GameState = typeof GameStates[keyof typeof GameStates];
-
 const DefaultButtonStyles = {
     TEXT_COLOR: 'white',
     BACKGROUND_COLOR: 'blue',
@@ -21,6 +12,14 @@ const SpriteDefaults = {
 const InputKeys = {
     PAUSE: 'p',
 };
+
+export const GameStates = {
+    MENU: 'MENU',
+    PLAYING: 'PLAYING',
+    GAME_OVER: 'GAME_OVER',
+    PAUSED: 'PAUSED',
+};
+export type GameState = typeof GameStates[keyof typeof GameStates];
 
 export interface IDrawable {
     draw(ctx: CanvasRenderingContext2D): void;

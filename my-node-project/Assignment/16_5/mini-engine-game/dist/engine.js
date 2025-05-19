@@ -1,9 +1,3 @@
-const GameStates = {
-    MENU: 'MENU',
-    PLAYING: 'PLAYING',
-    GAME_OVER: 'GAME_OVER',
-    PAUSED: 'PAUSED',
-};
 const DefaultButtonStyles = {
     TEXT_COLOR: 'white',
     BACKGROUND_COLOR: 'blue',
@@ -15,6 +9,12 @@ const SpriteDefaults = {
 };
 const InputKeys = {
     PAUSE: 'p',
+};
+export const GameStates = {
+    MENU: 'MENU',
+    PLAYING: 'PLAYING',
+    GAME_OVER: 'GAME_OVER',
+    PAUSED: 'PAUSED',
 };
 export class GameObject {
     constructor(x, y, width, height) {
