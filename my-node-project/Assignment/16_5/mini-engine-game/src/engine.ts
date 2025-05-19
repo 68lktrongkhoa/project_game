@@ -1,3 +1,27 @@
+const GameStates = {
+    MENU: 'MENU',
+    PLAYING: 'PLAYING',
+    GAME_OVER: 'GAME_OVER',
+    PAUSED: 'PAUSED',
+};
+
+type GameState = typeof GameStates[keyof typeof GameStates];
+
+const DefaultButtonStyles = {
+    TEXT_COLOR: 'white',
+    BACKGROUND_COLOR: 'blue',
+    HOVER_BACKGROUND_COLOR: 'darkblue',
+    FONT: '16px Arial',
+};
+
+const SpriteDefaults = {
+    FALLBACK_COLOR: 'gray',
+};
+
+const InputKeys = {
+    PAUSE: 'p',
+};
+
 export interface IDrawable {
     draw(ctx: CanvasRenderingContext2D): void;
 }
@@ -13,12 +37,12 @@ export interface IClickable {
 }
 
 export abstract class GameObject implements IDrawable, IUpdateable {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    public x: number;
+    public y: number;
+    public width: number;
+    public height: number;
     protected image?: HTMLImageElement;
-    public type: string = 'GameObject';
+    public type: string = 'GameObject'; // Or consider using this.constructor.name if appropriate
 
     constructor(x: number, y: number, width: number, height: number) {
         this.x = x;
@@ -30,7 +54,7 @@ export abstract class GameObject implements IDrawable, IUpdateable {
     abstract draw(ctx: CanvasRenderingContext2D): void;
     abstract update(deltaTime: number): void;
 
-    isCollidingWith(other: GameObject): boolean {
+    public isCollidingWith(other: GameObject): boolean {
         return (
             this.x < other.x + other.width &&
             this.x + this.width > other.x &&
@@ -48,22 +72,21 @@ export class Sprite extends GameObject {
         this.image.src = imageSrc;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if (this.image && this.image.complete && this.image.naturalHeight !== 0) { 
+    public draw(ctx: CanvasRenderingContext2D): void {
+        if (this.image && this.image.complete && this.image.naturalHeight !== 0) {
             ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-        } else if (this.image && !this.image.complete) {
-            ctx.fillStyle = 'gray';
+        } else if (this.image) {
+            ctx.fillStyle = SpriteDefaults.FALLBACK_COLOR;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }
 
-    update(deltaTime: number): void {
-        
+    public update(deltaTime: number): void {
     }
 }
 
 export class Button extends GameObject implements IClickable {
-    text: string;
+    public text: string;
     private _onClick: () => void;
     private textColor: string;
     private backgroundColor: string;
@@ -74,7 +97,9 @@ export class Button extends GameObject implements IClickable {
     constructor(
         x: number, y: number, width: number, height: number,
         text: string, onClickCallback: () => void,
-        textColor: string = 'white', backgroundColor: string = 'blue', hoverBackgroundColor: string = 'darkblue'
+        textColor: string = DefaultButtonStyles.TEXT_COLOR,
+        backgroundColor: string = DefaultButtonStyles.BACKGROUND_COLOR,
+        hoverBackgroundColor: string = DefaultButtonStyles.HOVER_BACKGROUND_COLOR
     ) {
         super(x, y, width, height);
         this.type = 'Button';
@@ -85,24 +110,23 @@ export class Button extends GameObject implements IClickable {
         this.hoverBackgroundColor = hoverBackgroundColor;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    public draw(ctx: CanvasRenderingContext2D): void {
         if (!this.isVisible) return;
 
         ctx.fillStyle = this.isHovering ? this.hoverBackgroundColor : this.backgroundColor;
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
         ctx.fillStyle = this.textColor;
-        ctx.font = "16px Arial";
+        ctx.font = DefaultButtonStyles.FONT;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
     }
 
-    update(deltaTime: number): void {
-        
+    public update(deltaTime: number): void {
     }
 
-    isHover(mouseX: number, mouseY: number): void {
+    public isHover(mouseX: number, mouseY: number): void {
         if (!this.isVisible) {
             this.isHovering = false;
             return;
@@ -115,7 +139,7 @@ export class Button extends GameObject implements IClickable {
         );
     }
 
-    isClicked(mouseX: number, mouseY: number): boolean {
+    public isClicked(mouseX: number, mouseY: number): boolean {
         if (!this.isVisible) return false;
         return (
             mouseX >= this.x &&
@@ -125,31 +149,38 @@ export class Button extends GameObject implements IClickable {
         );
     }
 
-    onClick(): void {
+    public onClick(): void {
         if (!this.isVisible) return;
         this._onClick();
     }
 }
 
+type InteractiveGameObject = GameObject & IClickable;
+type GameEngineObject = GameObject | InteractiveGameObject;
 
 export class GameEngine {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
-    private gameObjects: (GameObject | (GameObject & IClickable))[] = [];
+    private gameObjects: GameEngineObject[] = [];
     private lastTime: number = 0;
     private inputState: { [key: string]: boolean } = {};
-    public gameState: 'MENU' | 'PLAYING' | 'GAME_OVER' | 'PAUSED' = 'MENU';
-    public onStateChange: (newState: GameEngine['gameState']) => void = () => {};
 
+    public gameState: GameState = GameStates.MENU;
+    public onStateChange: (newState: GameState) => void = () => {};
 
     constructor(canvasId: string) {
-        this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+        const canvasElement = document.getElementById(canvasId);
+        if (!(canvasElement instanceof HTMLCanvasElement)) {
+            throw new Error(`Element with ID '${canvasId}' not found or is not a canvas.`);
+        }
+        this.canvas = canvasElement;
+
         const context = this.canvas.getContext('2d');
         if (!context) {
-            throw new Error("Could not get 2D rendering context");
+            throw new Error("Could not get 2D rendering context from canvas.");
         }
         this.ctx = context;
-        this.setupInput();
+        this.setupInputListeners();
         this.canvas.addEventListener('click', this.handleMouseClick.bind(this));
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
     }
@@ -158,37 +189,42 @@ export class GameEngine {
     public getCanvas(): HTMLCanvasElement { return this.canvas; }
     public getInputState(): { [key: string]: boolean } { return this.inputState; }
 
-
-    public setGameState(newState: GameEngine['gameState']): void {
+    public setGameState(newState: GameState): void {
         if (this.gameState === newState) return;
         this.gameState = newState;
         this.onStateChange(newState);
     }
 
-    private setupInput(): void {
+    private setupInputListeners(): void {
         window.addEventListener('keydown', (e) => {
-            this.inputState[e.key.toLowerCase()] = true;
-            if (e.key.toLowerCase() === 'p') {
-                if (this.gameState === 'PLAYING') {
-                    this.setGameState('PAUSED');
-                } else if (this.gameState === 'PAUSED') {
-                    this.setGameState('PLAYING');
+            const key = e.key.toLowerCase();
+            this.inputState[key] = true;
+
+            if (key === InputKeys.PAUSE) {
+                if (this.gameState === GameStates.PLAYING) {
+                    this.setGameState(GameStates.PAUSED);
+                } else if (this.gameState === GameStates.PAUSED) {
+                    this.setGameState(GameStates.PLAYING);
                 }
             }
         });
-        window.addEventListener('keyup', (e) => this.inputState[e.key.toLowerCase()] = false);
+        window.addEventListener('keyup', (e) => {
+            this.inputState[e.key.toLowerCase()] = false;
+        });
     }
 
     private handleMouseClick(event: MouseEvent): void {
         const rect = this.canvas.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
-
         for (let i = this.gameObjects.length - 1; i >= 0; i--) {
             const obj = this.gameObjects[i];
-            if ('isClicked' in obj && (obj as GameObject & IClickable).isClicked(mouseX, mouseY)) {
-                 (obj as GameObject & IClickable).onClick();
-                 break;
+            if ('isClicked' in obj && 'onClick' in obj) { 
+                const clickableObj = obj as InteractiveGameObject;
+                if (clickableObj.isClicked(mouseX, mouseY)) {
+                    clickableObj.onClick();
+                    break;
+                }
             }
         }
     }
@@ -199,26 +235,25 @@ export class GameEngine {
         const mouseY = event.clientY - rect.top;
 
         for (const obj of this.gameObjects) {
-            if ('isHover' in obj && typeof (obj as any).isHover === 'function') { 
-                (obj as any).isHover(mouseX, mouseY);
+            if ('isHover' in obj && typeof (obj as IClickable).isHover === 'function') {
+                (obj as IClickable).isHover!(mouseX, mouseY);
             }
         }
     }
 
-
-    addGameObject(obj: GameObject | (GameObject & IClickable)): void {
+    public addGameObject(obj: GameEngineObject): void {
         this.gameObjects.push(obj);
     }
 
-    removeGameObject(objToRemove: GameObject): void {
+    public removeGameObject(objToRemove: GameObject): void {
         this.gameObjects = this.gameObjects.filter(obj => obj !== objToRemove);
     }
 
-    clearGameObjects(): void {
+    public clearGameObjects(): void {
         this.gameObjects = [];
     }
 
-    getGameObjectsOfType<T extends GameObject>(typeConstructor: new (...args: any[]) => T): T[] {
+    public getGameObjectsOfType<T extends GameObject>(typeConstructor: new (...args: any[]) => T): T[] {
         return this.gameObjects.filter(obj => obj instanceof typeConstructor) as T[];
     }
 
@@ -233,12 +268,12 @@ export class GameEngine {
     }
 
     private update(deltaTime: number): void {
-        if (this.gameState === 'PLAYING') {
+        if (this.gameState === GameStates.PLAYING) {
             this.gameObjects.forEach(obj => obj.update(deltaTime));
         } else {
             this.gameObjects.forEach(obj => {
                 if (obj instanceof Button) {
-                    obj.update(deltaTime); 
+                    obj.update(deltaTime);
                 }
             });
         }
@@ -249,10 +284,10 @@ export class GameEngine {
         this.gameObjects.forEach(obj => obj.draw(this.ctx));
     }
 
-    start(): void {
+    public start(): void {
         this.lastTime = performance.now();
-        if (this.gameState === 'MENU') {
-             this.onStateChange('MENU');
+        if (this.gameState === GameStates.MENU) {
+             this.onStateChange(this.gameState);
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     }

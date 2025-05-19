@@ -35,7 +35,6 @@ interface DeleteTaskCommandDeps {
     displayService: DisplayService;
 }
 
-
 const parseDeadlineInputInternal = (input: string): string | undefined | 'invalid_date' => {
     if (!input || input.trim().toLowerCase() === 'none' || input.trim() === '') {
         return undefined;
