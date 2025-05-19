@@ -82,7 +82,7 @@ class Chicken extends Sprite {
         this.y += this.speed * deltaTime;
         if (this.y > this.engine.getCanvas().height) {
             this.engine.removeGameObject(this);
-            if (this.engine.gameState === 'PLAYING' && !this.engine.gameInstance.isBossFight) {
+            if (this.engine.gameState === 'PLAYING' && !this.engine.gameInstance.isBossFight) { // Cần cách truy cập isBossFight tốt hơn
                 this.engine.gameInstance.triggerGameOver("Chicken reached bottom");
             }
         }

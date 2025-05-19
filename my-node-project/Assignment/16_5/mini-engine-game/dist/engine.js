@@ -1,6 +1,24 @@
+const GameStates = {
+    MENU: 'MENU',
+    PLAYING: 'PLAYING',
+    GAME_OVER: 'GAME_OVER',
+    PAUSED: 'PAUSED',
+};
+const DefaultButtonStyles = {
+    TEXT_COLOR: 'white',
+    BACKGROUND_COLOR: 'blue',
+    HOVER_BACKGROUND_COLOR: 'darkblue',
+    FONT: '16px Arial',
+};
+const SpriteDefaults = {
+    FALLBACK_COLOR: 'gray',
+};
+const InputKeys = {
+    PAUSE: 'p',
+};
 export class GameObject {
     constructor(x, y, width, height) {
-        this.type = 'GameObject';
+        this.type = 'GameObject'; // Or consider using this.constructor.name if appropriate
         this.x = x;
         this.y = y;
         this.width = width;
@@ -24,8 +42,8 @@ export class Sprite extends GameObject {
         if (this.image && this.image.complete && this.image.naturalHeight !== 0) {
             ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
         }
-        else if (this.image && !this.image.complete) {
-            ctx.fillStyle = 'gray';
+        else if (this.image) {
+            ctx.fillStyle = SpriteDefaults.FALLBACK_COLOR;
             ctx.fillRect(this.x, this.y, this.width, this.height);
         }
     }
@@ -33,7 +51,7 @@ export class Sprite extends GameObject {
     }
 }
 export class Button extends GameObject {
-    constructor(x, y, width, height, text, onClickCallback, textColor = 'white', backgroundColor = 'blue', hoverBackgroundColor = 'darkblue') {
+    constructor(x, y, width, height, text, onClickCallback, textColor = DefaultButtonStyles.TEXT_COLOR, backgroundColor = DefaultButtonStyles.BACKGROUND_COLOR, hoverBackgroundColor = DefaultButtonStyles.HOVER_BACKGROUND_COLOR) {
         super(x, y, width, height);
         this.isHovering = false;
         this.isVisible = true;
@@ -50,7 +68,7 @@ export class Button extends GameObject {
         ctx.fillStyle = this.isHovering ? this.hoverBackgroundColor : this.backgroundColor;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = this.textColor;
-        ctx.font = "16px Arial";
+        ctx.font = DefaultButtonStyles.FONT;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(this.text, this.x + this.width / 2, this.y + this.height / 2);
@@ -86,15 +104,19 @@ export class GameEngine {
         this.gameObjects = [];
         this.lastTime = 0;
         this.inputState = {};
-        this.gameState = 'MENU';
+        this.gameState = GameStates.MENU;
         this.onStateChange = () => { };
-        this.canvas = document.getElementById(canvasId);
+        const canvasElement = document.getElementById(canvasId);
+        if (!(canvasElement instanceof HTMLCanvasElement)) {
+            throw new Error(`Element with ID '${canvasId}' not found or is not a canvas.`);
+        }
+        this.canvas = canvasElement;
         const context = this.canvas.getContext('2d');
         if (!context) {
-            throw new Error("Could not get 2D rendering context");
+            throw new Error("Could not get 2D rendering context from canvas.");
         }
         this.ctx = context;
-        this.setupInput();
+        this.setupInputListeners();
         this.canvas.addEventListener('click', this.handleMouseClick.bind(this));
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
     }
@@ -107,19 +129,22 @@ export class GameEngine {
         this.gameState = newState;
         this.onStateChange(newState);
     }
-    setupInput() {
+    setupInputListeners() {
         window.addEventListener('keydown', (e) => {
-            this.inputState[e.key.toLowerCase()] = true;
-            if (e.key.toLowerCase() === 'p') {
-                if (this.gameState === 'PLAYING') {
-                    this.setGameState('PAUSED');
+            const key = e.key.toLowerCase();
+            this.inputState[key] = true;
+            if (key === InputKeys.PAUSE) {
+                if (this.gameState === GameStates.PLAYING) {
+                    this.setGameState(GameStates.PAUSED);
                 }
-                else if (this.gameState === 'PAUSED') {
-                    this.setGameState('PLAYING');
+                else if (this.gameState === GameStates.PAUSED) {
+                    this.setGameState(GameStates.PLAYING);
                 }
             }
         });
-        window.addEventListener('keyup', (e) => this.inputState[e.key.toLowerCase()] = false);
+        window.addEventListener('keyup', (e) => {
+            this.inputState[e.key.toLowerCase()] = false;
+        });
     }
     handleMouseClick(event) {
         const rect = this.canvas.getBoundingClientRect();
@@ -127,9 +152,12 @@ export class GameEngine {
         const mouseY = event.clientY - rect.top;
         for (let i = this.gameObjects.length - 1; i >= 0; i--) {
             const obj = this.gameObjects[i];
-            if ('isClicked' in obj && obj.isClicked(mouseX, mouseY)) {
-                obj.onClick();
-                break;
+            if ('isClicked' in obj && 'onClick' in obj) {
+                const clickableObj = obj;
+                if (clickableObj.isClicked(mouseX, mouseY)) {
+                    clickableObj.onClick();
+                    break;
+                }
             }
         }
     }
@@ -163,7 +191,7 @@ export class GameEngine {
         requestAnimationFrame(this.gameLoop.bind(this));
     }
     update(deltaTime) {
-        if (this.gameState === 'PLAYING') {
+        if (this.gameState === GameStates.PLAYING) {
             this.gameObjects.forEach(obj => obj.update(deltaTime));
         }
         else {
@@ -180,8 +208,8 @@ export class GameEngine {
     }
     start() {
         this.lastTime = performance.now();
-        if (this.gameState === 'MENU') {
-            this.onStateChange('MENU');
+        if (this.gameState === GameStates.MENU) {
+            this.onStateChange(this.gameState);
         }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
