@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "ffab3a7e-5aae-41ba-87dc-4eb806a5f01a",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "function_icon_bluetooth": {
+      "ver": "1.0.4",
+      "uuid": "fda25979-a979-4fda-95b1-f8b2cef1f524",
+      "rawTextureUuid": "ffab3a7e-5aae-41ba-87dc-4eb806a5f01a",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 36,
+      "height": 58,
+      "rawWidth": 36,
+      "rawHeight": 58,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

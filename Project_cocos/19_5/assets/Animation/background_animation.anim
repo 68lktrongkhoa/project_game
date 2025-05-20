@@ -1,0 +1,57 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "background_animation",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 14.116666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            2.856,
+            0,
+            0
+          ]
+        },
+        {
+          "frame": 4.5,
+          "value": [
+            25.704,
+            0,
+            0
+          ]
+        },
+        {
+          "frame": 8.816666666666666,
+          "value": [
+            -16.549,
+            0,
+            0
+          ]
+        },
+        {
+          "frame": 11.8,
+          "value": [
+            5.712,
+            0,
+            0
+          ]
+        },
+        {
+          "frame": 14.116666666666667,
+          "value": [
+            2.287,
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

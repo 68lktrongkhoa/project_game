@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "d52c301a-958f-481a-b9f7-fe8b1827b56a",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "icon_equip_sword": {
+      "ver": "1.0.4",
+      "uuid": "380cbaa2-dcbd-428b-afaf-0b05409281f8",
+      "rawTextureUuid": "d52c301a-958f-481a-b9f7-fe8b1827b56a",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": -2.5,
+      "trimX": 17,
+      "trimY": 17,
+      "width": 94,
+      "height": 99,
+      "rawWidth": 128,
+      "rawHeight": 128,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

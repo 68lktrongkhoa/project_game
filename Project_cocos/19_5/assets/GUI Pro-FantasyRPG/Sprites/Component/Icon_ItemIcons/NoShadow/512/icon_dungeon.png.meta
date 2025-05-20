@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "c622c89d-af71-4f69-ac67-2eb246a3fe23",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "icon_dungeon": {
+      "ver": "1.0.4",
+      "uuid": "1ce8af0a-9c45-460b-82cd-8f871cd468b6",
+      "rawTextureUuid": "c622c89d-af71-4f69-ac67-2eb246a3fe23",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -0.5,
+      "offsetY": 0,
+      "trimX": 50,
+      "trimY": 61,
+      "width": 411,
+      "height": 390,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
