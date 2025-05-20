@@ -1,0 +1,41 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "buttonGuildShow",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.5,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 1,
+          "value": [
+            -212.48,
+            -450.448,
+            0
+          ]
+        },
+        {
+          "frame": 1.35,
+          "value": [
+            -212.48,
+            -231.818,
+            0
+          ]
+        },
+        {
+          "frame": 1.5,
+          "value": [
+            -212.48,
+            -284.421,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
