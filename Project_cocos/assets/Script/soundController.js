@@ -32,7 +32,6 @@ cc.Class({
     },
 
     start () {
-
     },
     
     playBGM(){
