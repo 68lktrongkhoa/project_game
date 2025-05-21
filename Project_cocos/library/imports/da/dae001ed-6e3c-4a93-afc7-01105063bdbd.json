@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_equip_shield",
+    "texture": "ba649f1f-af51-480f-ba5d-60052d2f2c68",
+    "atlas": "",
+    "rect": [
+      16,
+      17,
+      96,
+      99
+    ],
+    "offset": [
+      0,
+      -2.5
+    ],
+    "originalSize": [
+      128,
+      128
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

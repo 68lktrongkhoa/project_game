@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_equip_sword",
+    "texture": "db5dc350-8b0d-4560-afb2-84d868c01cf6",
+    "atlas": "",
+    "rect": [
+      17,
+      17,
+      94,
+      99
+    ],
+    "offset": [
+      0,
+      -2.5
+    ],
+    "originalSize": [
+      128,
+      128
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

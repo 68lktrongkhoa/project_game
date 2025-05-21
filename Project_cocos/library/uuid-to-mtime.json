@@ -420,44 +420,19 @@
     "relativePath": "model/primitives.fbx"
   },
   "29f52784-2fca-467b-92e7-8fd9ef8c57b7": {
-    "asset": 1747641938024,
+    "asset": 1747809082844,
     "meta": 1747641938022,
     "relativePath": "Scene"
   },
-  "4734c20c-0db8-4eb2-92ea-e692f4d70934": {
-    "asset": 1747641938020,
-    "meta": 1747641938018,
-    "relativePath": "Script"
-  },
-  "7b81d4e8-ec84-4716-968d-500ac1d78a54": {
-    "asset": 1747641938016,
-    "meta": 1747641938012,
-    "relativePath": "Texture"
-  },
-  "280c3aec-6492-4a9d-9f51-a9b00b570b4a": {
-    "asset": 1747641938021,
-    "meta": 1747641949972,
-    "relativePath": "Script/HelloWorld.js"
-  },
-  "a8027877-d8d6-4645-97a0-52d4a0123dba": {
-    "asset": 1747641938015,
-    "meta": 1747641949977,
-    "relativePath": "Texture/singleColor.png"
-  },
-  "6aa0aa6a-ebee-4155-a088-a687a6aadec4": {
-    "asset": 1747641938017,
-    "meta": 1747641949996,
-    "relativePath": "Texture/HelloWorld.png"
-  },
   "4dcb52fc-3917-4e42-8dbb-727af18f5cce": {
-    "asset": 1747796480522,
+    "asset": 1747801268796,
     "meta": 1747713273902,
     "relativePath": "Animation"
   },
   "197d7a79-88eb-43e2-be23-1a36ff21ecc9": {
     "asset": 1747714188290,
-    "meta": 1747796142490,
-    "relativePath": "Animation/animationBackground.anim"
+    "meta": 1747801268802,
+    "relativePath": "Animation/animationMainBackground.anim"
   },
   "e2410f2d-3775-4002-866c-dd2ad330be38": {
     "asset": 1747715839376,
@@ -465,43 +440,43 @@
     "relativePath": "Animation/animationButtonPlay.anim"
   },
   "a02d9447-1d2c-4bab-98c7-0af846208a39": {
-    "asset": 1747725998607,
-    "meta": 1747796291819,
+    "asset": 1747799312045,
+    "meta": 1747799312076,
     "relativePath": "Animation/animationFlappingLeft.anim"
   },
   "c42ba8fe-99df-4532-a380-61d2148c97ac": {
-    "asset": 1747726106627,
-    "meta": 1747796306023,
+    "asset": 1747799343738,
+    "meta": 1747799343764,
     "relativePath": "Animation/animationFlappingRight.anim"
   },
   "6e75474a-2540-4b5d-9d39-649c7c006d5e": {
-    "asset": 1747726397375,
-    "meta": 1747796215265,
+    "asset": 1747816856880,
+    "meta": 1747816856894,
     "relativePath": "Animation/animationButtonShop.anim"
   },
   "af2378db-a7b1-4b5b-a4db-02a47ee97301": {
-    "asset": 1747726519367,
-    "meta": 1747796181250,
+    "asset": 1747816868780,
+    "meta": 1747816868794,
     "relativePath": "Animation/animationButtonHeros.anim"
   },
   "542b090a-ed77-492e-87e7-1c695b04ea49": {
-    "asset": 1747794571258,
+    "asset": 1747801753786,
     "meta": 1747727311373,
     "relativePath": "GUI Pro-FantasyRPG"
   },
   "c5612042-84f8-4946-8c9d-e73937f03def": {
-    "asset": 1747732669837,
-    "meta": 1747796201132,
+    "asset": 1747816742057,
+    "meta": 1747816742080,
     "relativePath": "Animation/animationButtonInventory.anim"
   },
   "b8ac9571-2d81-4ae8-b240-e0450e09e558": {
-    "asset": 1747732838053,
-    "meta": 1747796167499,
+    "asset": 1747816766390,
+    "meta": 1747816766403,
     "relativePath": "Animation/animationButtonGuild.anim"
   },
   "2d4796b7-f90c-49a2-9973-95fb68e228df": {
-    "asset": 1747732990485,
-    "meta": 1747796232162,
+    "asset": 1747816798191,
+    "meta": 1747816798207,
     "relativePath": "Animation/animationButtonUpGrand.anim"
   },
   "7896313d-b08f-4eb8-b4d3-4b4b7a61b7ce": {
@@ -535,7 +510,7 @@
     "relativePath": "GUI Pro-FantasyRPG/assets/background/BackGround_Sample_03_Home_1920.png"
   },
   "8569c177-8eff-4e4a-87c0-ddd3bc0333df": {
-    "asset": 1747794520446,
+    "asset": 1747808784897,
     "meta": 1747734252657,
     "relativePath": "GUI Pro-FantasyRPG/assets/icons"
   },
@@ -558,11 +533,6 @@
     "asset": 1747734352819,
     "meta": 1747734353616,
     "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Sword_03.png"
-  },
-  "2d2f792f-a40c-49bb-a189-ed176a246e49": {
-    "asset": 1747798344366,
-    "meta": 1747798344383,
-    "relativePath": "Scene/helloworld.fire"
   },
   "a5ede527-e50d-4a24-a10d-079333ab683b": {
     "asset": 1747734382331,
@@ -753,5 +723,85 @@
     "asset": 1747794520441,
     "meta": 1747794520478,
     "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_01_Community.png"
+  },
+  "db5dc350-8b0d-4560-afb2-84d868c01cf6": {
+    "asset": 1747808784858,
+    "meta": 1747808784923,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_equip_sword.png"
+  },
+  "2d76b5bb-2236-438c-ad19-8ff3a6d64d3b": {
+    "asset": 1747811726458,
+    "meta": 1747811726470,
+    "relativePath": "Scene/Room.fire"
+  },
+  "ed63c8ea-aed9-4a1e-956d-b4244687bae4": {
+    "asset": 1747809191110,
+    "meta": 1747809173254,
+    "relativePath": "Script"
+  },
+  "55a7b6e7-53f2-4022-b6c0-f989c9077952": {
+    "asset": 1747811189705,
+    "meta": 1747811189707,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sound"
+  },
+  "70a589e4-7def-46cb-9f8d-d9de8b275870": {
+    "asset": 1747811222211,
+    "meta": 1747811222210,
+    "relativePath": "GUI Pro-FantasyRPG/assets/Sound"
+  },
+  "2e952d78-55e5-4298-b627-6abfae08564a": {
+    "asset": 1747811222195,
+    "meta": 1747811222233,
+    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/bgm.mp3"
+  },
+  "f6d0478a-06e4-4bdc-af26-b908d5409b66": {
+    "asset": 1747811222193,
+    "meta": 1747811222235,
+    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/click.mp3"
+  },
+  "81b60e2d-8289-4a1e-98f0-1bdef4204e98": {
+    "asset": 1747811222194,
+    "meta": 1747811222237,
+    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/coin_counting.mp3"
+  },
+  "6018ddc5-994b-4cda-bb80-ab3ef0bf49e5": {
+    "asset": 1747811511156,
+    "meta": 1747811521612,
+    "relativePath": "Script/soundController.js"
+  },
+  "c45eea54-02b5-4aaa-9f0d-81fb729f9c75": {
+    "asset": 1747812632447,
+    "meta": 1747812632480,
+    "relativePath": "Animation/animationSwordLeft.anim"
+  },
+  "f9a0987d-d360-46ac-83d3-c7e606f6f5f9": {
+    "asset": 1747812729138,
+    "meta": 1747812729183,
+    "relativePath": "Animation/animationSwordRight.anim"
+  },
+  "2d2f792f-a40c-49bb-a189-ed176a246e49": {
+    "asset": 1747817401872,
+    "meta": 1747817401922,
+    "relativePath": "Scene/Lobby.fire"
+  },
+  "44932295-f804-4874-9ce7-f125296e4176": {
+    "asset": 1747815957040,
+    "meta": 1747815957085,
+    "relativePath": "Animation/animationSw01.anim"
+  },
+  "b04091e3-2785-4820-9e62-bd204a7dcada": {
+    "asset": 1747816382485,
+    "meta": 1747816382504,
+    "relativePath": "Animation/animationSw02.anim"
+  },
+  "9c2343e0-7963-4a6f-b6c8-4138db67de25": {
+    "asset": 1747817176632,
+    "meta": 1747817176708,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Badge.png"
+  },
+  "ba649f1f-af51-480f-ba5d-60052d2f2c68": {
+    "asset": 1747817205007,
+    "meta": 1747817205777,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_equip_shield.png"
   }
 }
