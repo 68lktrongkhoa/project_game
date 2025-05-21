@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_gem_1_blue",
+    "texture": "27c5a33c-eace-4385-bff7-52a1731a4c63",
+    "atlas": "",
+    "rect": [
+      97,
+      53,
+      318,
+      425
+    ],
+    "offset": [
+      0,
+      -9.5
+    ],
+    "originalSize": [
+      512,
+      512
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

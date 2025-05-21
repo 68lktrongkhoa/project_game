@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Button_Rectangle_05_Deco_Single_Yellow",
+    "texture": "60c113f3-704e-4a94-9601-734c8144e172",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      140,
+      170
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      140,
+      170
+    ],
+    "capInsets": [
+      63,
+      38,
+      64,
+      50
+    ]
+  }
+}

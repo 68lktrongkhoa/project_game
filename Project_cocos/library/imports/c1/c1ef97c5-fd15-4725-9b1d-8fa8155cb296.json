@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_house_castle",
+    "texture": "fd963d8a-dbdf-4423-bd6e-d0dfed883dcc",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      114,
+      112
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      114,
+      112
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

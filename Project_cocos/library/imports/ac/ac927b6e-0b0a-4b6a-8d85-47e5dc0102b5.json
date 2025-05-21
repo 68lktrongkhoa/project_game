@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "IconSet_Menu_02_AdFree_Shadow",
+    "texture": "943ea8c3-07a9-4d48-b6b8-884930f97daa",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      181,
+      131
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      181,
+      131
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

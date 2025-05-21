@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Slider_LevelProfile_SliderTop_Fill_SingleDemo",
+    "texture": "2e0845ac-de58-4b5a-bb99-124afa0a16c2",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      323,
+      39
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      323,
+      39
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

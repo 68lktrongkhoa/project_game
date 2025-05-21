@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_equip_helmet_1",
+    "texture": "f7b940c6-92a7-4470-881d-59a178fee1db",
+    "atlas": "",
+    "rect": [
+      79,
+      69,
+      356,
+      395
+    ],
+    "offset": [
+      1,
+      -10.5
+    ],
+    "originalSize": [
+      512,
+      512
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

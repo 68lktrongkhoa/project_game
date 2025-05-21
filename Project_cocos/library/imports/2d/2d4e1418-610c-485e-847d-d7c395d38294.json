@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Slider_Wave_02_Icon3",
+    "texture": "c5a945f2-86c3-44a3-a4f0-839387123cab",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      56,
+      41
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      56,
+      41
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

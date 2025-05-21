@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Slider_Level_Slider_Border",
+    "texture": "cd97ec73-9f6a-4e6f-acab-d472367abbbb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      48,
+      48
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      48,
+      48
+    ],
+    "capInsets": [
+      19,
+      0,
+      19,
+      0
+    ]
+  }
+}

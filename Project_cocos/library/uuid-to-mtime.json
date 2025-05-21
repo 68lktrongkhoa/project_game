@@ -1,0 +1,757 @@
+{
+  "9836134e-b892-4283-b6b2-78b5acf3ed45": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "effects"
+  },
+  "430eccbf-bf2c-4e6e-8c0c-884bbb487f32": {
+    "asset": 1568707779000,
+    "meta": 1747641945985,
+    "relativePath": "effects/__builtin-editor-gizmo-line.effect"
+  },
+  "6c5cf6e1-b044-4eac-9431-835644d57381": {
+    "asset": 1568707779000,
+    "meta": 1747641946022,
+    "relativePath": "effects/__builtin-editor-gizmo-unlit.effect"
+  },
+  "115286d1-2e10-49ee-aab4-341583f607e8": {
+    "asset": 1568707779000,
+    "meta": 1747641946091,
+    "relativePath": "effects/__builtin-editor-gizmo.effect"
+  },
+  "abc2cb62-7852-4525-a90d-d474487b88f2": {
+    "asset": 1568707779000,
+    "meta": 1747641946093,
+    "relativePath": "effects/builtin-phong.effect"
+  },
+  "f8e6b000-5643-4b86-9080-aa680ce1f599": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "image"
+  },
+  "71561142-4c83-4933-afca-cb7a17f67053": {
+    "asset": 1568707779000,
+    "meta": 1747641946197,
+    "relativePath": "image/default_btn_disabled.png"
+  },
+  "e851e89b-faa2-4484-bea6-5c01dd9f06e2": {
+    "asset": 1568707779000,
+    "meta": 1747641946199,
+    "relativePath": "image/default_btn_normal.png"
+  },
+  "b43ff3c2-02bb-4874-81f7-f2dea6970f18": {
+    "asset": 1568707779000,
+    "meta": 1747641946212,
+    "relativePath": "image/default_btn_pressed.png"
+  },
+  "edd215b9-2796-4a05-aaf5-81f96c9281ce": {
+    "asset": 1568707779000,
+    "meta": 1747641946214,
+    "relativePath": "image/default_editbox_bg.png"
+  },
+  "d81ec8ad-247c-4e62-aa3c-d35c4193c7af": {
+    "asset": 1568707779000,
+    "meta": 1747641946225,
+    "relativePath": "image/default_panel.png"
+  },
+  "99170b0b-d210-46f1-b213-7d9e3f23098a": {
+    "asset": 1568707779000,
+    "meta": 1747641946228,
+    "relativePath": "image/default_progressbar_bg.png"
+  },
+  "cfef78f1-c8df-49b7-8ed0-4c953ace2621": {
+    "asset": 1568707779000,
+    "meta": 1747641946240,
+    "relativePath": "image/default_progressbar.png"
+  },
+  "567dcd80-8bf4-4535-8a5a-313f1caf078a": {
+    "asset": 1568707779000,
+    "meta": 1747641946244,
+    "relativePath": "image/default_radio_button_off.png"
+  },
+  "9d60001f-b5f4-4726-a629-2659e3ded0b8": {
+    "asset": 1568707779000,
+    "meta": 1747641946255,
+    "relativePath": "image/default_radio_button_on.png"
+  },
+  "4bab67cb-18e6-4099-b840-355f0473f890": {
+    "asset": 1568707779000,
+    "meta": 1747641946258,
+    "relativePath": "image/default_scrollbar_bg.png"
+  },
+  "d6d3ca85-4681-47c1-b5dd-d036a9d39ea2": {
+    "asset": 1568707779000,
+    "meta": 1747641946271,
+    "relativePath": "image/default_scrollbar_vertical.png"
+  },
+  "617323dd-11f4-4dd3-8eec-0caf6b3b45b9": {
+    "asset": 1568707779000,
+    "meta": 1747641946273,
+    "relativePath": "image/default_scrollbar_vertical_bg.png"
+  },
+  "0275e94c-56a7-410f-bd1a-fc7483f7d14a": {
+    "asset": 1568707779000,
+    "meta": 1747641946285,
+    "relativePath": "image/default_sprite_splash.png"
+  },
+  "0291c134-b3da-4098-b7b5-e397edbe947f": {
+    "asset": 1568707779000,
+    "meta": 1747641946288,
+    "relativePath": "image/default_scrollbar.png"
+  },
+  "73a0903d-d80e-4e3c-aa67-f999543c08f5": {
+    "asset": 1568707779000,
+    "meta": 1747641946303,
+    "relativePath": "image/default_toggle_checkmark.png"
+  },
+  "6e056173-d285-473c-b206-40a7fff5386e": {
+    "asset": 1568707779000,
+    "meta": 1747641946305,
+    "relativePath": "image/default_sprite.png"
+  },
+  "c25b9d50-c8fc-4d27-beeb-6e7c1f2e5c0f": {
+    "asset": 1568707779000,
+    "meta": 1747641946316,
+    "relativePath": "image/default_toggle_disabled.png"
+  },
+  "d29077ba-1627-4a72-9579-7b56a235340c": {
+    "asset": 1568707779000,
+    "meta": 1747641946318,
+    "relativePath": "image/default_toggle_normal.png"
+  },
+  "5c3eedba-6c41-4c0c-9ba7-d91f813cbd1c": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "materials"
+  },
+  "c4480a0a-6ac5-443f-8b40-361a14257fc8": {
+    "asset": 1568707779000,
+    "meta": 1747641946322,
+    "relativePath": "materials/builtin-phong.mtl"
+  },
+  "fc09f9bd-2cce-4605-b630-8145ef809ed6": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "misc"
+  },
+  "2be36297-9abb-4fee-8049-9ed5e271da8a": {
+    "asset": 1568707779000,
+    "meta": 1747641946329,
+    "relativePath": "misc/default_video.mp4"
+  },
+  "db019bf7-f71c-4111-98cf-918ea180cb48": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "model"
+  },
+  "b181c1e4-0a72-4a91-bfb0-ae6f36ca60bd": {
+    "asset": 1568707779000,
+    "meta": 1747641946333,
+    "relativePath": "image/default_toggle_pressed.png"
+  },
+  "e39e96e6-6f6e-413f-bcf1-ac7679bb648a": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "model/prefab"
+  },
+  "a87cc147-01b2-43f8-8e42-a7ca90b0c757": {
+    "asset": 1568707779000,
+    "meta": 1747641946337,
+    "relativePath": "model/prefab/box.prefab"
+  },
+  "fe1417b6-fe6b-46a4-ae7c-9fd331f33a2a": {
+    "asset": 1568707779000,
+    "meta": 1747641946340,
+    "relativePath": "model/prefab/capsule.prefab"
+  },
+  "b5fc2cf2-7942-483d-be1f-bbeadc4714ad": {
+    "asset": 1568707779000,
+    "meta": 1747641946343,
+    "relativePath": "model/prefab/cone.prefab"
+  },
+  "1c5e4038-953a-44c2-b620-0bbfc6170477": {
+    "asset": 1568707779000,
+    "meta": 1747641946345,
+    "relativePath": "model/prefab/cylinder.prefab"
+  },
+  "3f376125-a699-40ca-ad05-04d662eaa1f2": {
+    "asset": 1568707779000,
+    "meta": 1747641946347,
+    "relativePath": "model/prefab/plane.prefab"
+  },
+  "6c9ef10d-b479-420b-bfe6-39cdda6a8ae0": {
+    "asset": 1568707779000,
+    "meta": 1747641946349,
+    "relativePath": "model/prefab/quad.prefab"
+  },
+  "2d9a4b85-b0ab-4c46-84c5-18f393ab2058": {
+    "asset": 1568707779000,
+    "meta": 1747641946367,
+    "relativePath": "model/prefab/sphere.prefab"
+  },
+  "de510076-056b-484f-b94c-83bef217d0e1": {
+    "asset": 1568707779000,
+    "meta": 1747641946383,
+    "relativePath": "model/prefab/torus.prefab"
+  },
+  "f6e6dd15-71d1-4ffe-ace7-24fd39942c05": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "obsolete"
+  },
+  "8a96b965-2dc0-4e03-aa90-3b79cb93b5b4": {
+    "asset": 1568707779000,
+    "meta": 1747641946402,
+    "relativePath": "obsolete/atom.png"
+  },
+  "f743d2b6-b7ea-4c14-a55b-547ed4d0a045": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "particle"
+  },
+  "b8223619-7e38-47c4-841f-9160c232495a": {
+    "asset": 1568707779000,
+    "meta": 1747641946718,
+    "relativePath": "obsolete/atom.plist"
+  },
+  "d0a82d39-bede-46c4-b698-c81ff0dedfff": {
+    "asset": 1568707779000,
+    "meta": 1747641946421,
+    "relativePath": "particle/atom.png"
+  },
+  "b2687ac4-099e-403c-a192-ff477686f4f5": {
+    "asset": 1568707779000,
+    "meta": 1747641946719,
+    "relativePath": "particle/atom.plist"
+  },
+  "ae6c6c98-11e4-452f-8758-75f5c6a56e83": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "prefab"
+  },
+  "972b9a4d-47ee-4c74-b5c3-61d8a69bc29f": {
+    "asset": 1568707779000,
+    "meta": 1747641946427,
+    "relativePath": "prefab/button.prefab"
+  },
+  "897ef7a1-4860-4f64-968d-f5924b18668a": {
+    "asset": 1568707779000,
+    "meta": 1747641946432,
+    "relativePath": "prefab/camera.prefab"
+  },
+  "2c937608-2562-40ea-b264-7395df6f0cea": {
+    "asset": 1568707779000,
+    "meta": 1747641946435,
+    "relativePath": "prefab/canvas.prefab"
+  },
+  "61aeb05b-3b32-452b-8eed-2b76deeed554": {
+    "asset": 1568707779000,
+    "meta": 1747641946439,
+    "relativePath": "prefab/editbox.prefab"
+  },
+  "27756ebb-3d33-44b0-9b96-e858fadd4dd4": {
+    "asset": 1568707779000,
+    "meta": 1747641946443,
+    "relativePath": "prefab/label.prefab"
+  },
+  "785a442c-3ceb-45be-a46e-7317f625f3b9": {
+    "asset": 1568707779000,
+    "meta": 1747641946447,
+    "relativePath": "prefab/layout.prefab"
+  },
+  "ddb99b39-7004-47cd-9705-751905c43c46": {
+    "asset": 1568707779000,
+    "meta": 1747641946450,
+    "relativePath": "prefab/light.prefab"
+  },
+  "ca8401fe-ad6e-41a8-bd46-8e3e4e9945be": {
+    "asset": 1568707779000,
+    "meta": 1747641946466,
+    "relativePath": "prefab/pageview.prefab"
+  },
+  "cd33edea-55f5-46c2-958d-357a01384a36": {
+    "asset": 1568707779000,
+    "meta": 1747641946469,
+    "relativePath": "prefab/particlesystem.prefab"
+  },
+  "5965ffac-69da-4b55-bcde-9225d0613c28": {
+    "asset": 1568707779000,
+    "meta": 1747641946471,
+    "relativePath": "prefab/progressBar.prefab"
+  },
+  "4a37dd57-78cd-4cec-aad4-f11a73d12b63": {
+    "asset": 1568707779000,
+    "meta": 1747641946473,
+    "relativePath": "prefab/richtext.prefab"
+  },
+  "32044bd2-481f-4cf1-a656-e2b2fb1594eb": {
+    "asset": 1568707779000,
+    "meta": 1747641946476,
+    "relativePath": "prefab/scrollview.prefab"
+  },
+  "0004d1cf-a0ad-47d8-ab17-34d3db9d35a3": {
+    "asset": 1568707779000,
+    "meta": 1747641946479,
+    "relativePath": "prefab/slider.prefab"
+  },
+  "1f55e3be-b89b-4b79-88de-47fd31018044": {
+    "asset": 1568707779000,
+    "meta": 1747641946483,
+    "relativePath": "prefab/sprite_splash.prefab"
+  },
+  "96083d03-c332-4a3f-9386-d03e2d19e8ee": {
+    "asset": 1568707779000,
+    "meta": 1747641946486,
+    "relativePath": "prefab/sprite.prefab"
+  },
+  "7de03a80-4457-438d-95a7-3e7cdffd6086": {
+    "asset": 1568707779000,
+    "meta": 1747641946490,
+    "relativePath": "prefab/tiledmap.prefab"
+  },
+  "0e42ba95-1fa1-46aa-b2cf-143cd1bcee2c": {
+    "asset": 1568707779000,
+    "meta": 1747641946495,
+    "relativePath": "prefab/tiledtile.prefab"
+  },
+  "0d784963-d024-4ea6-a7db-03be0ad63010": {
+    "asset": 1568707779000,
+    "meta": 1747641946499,
+    "relativePath": "prefab/toggle.prefab"
+  },
+  "bf0a434c-84dd-4a8e-a08a-7a36f180cc75": {
+    "asset": 1568707779000,
+    "meta": 1747641946502,
+    "relativePath": "prefab/toggleContainer.prefab"
+  },
+  "d1b8be49-b0a0-435c-83b7-552bed4bbe35": {
+    "asset": 1568707779000,
+    "meta": 1747641946510,
+    "relativePath": "prefab/toggleGroup.prefab"
+  },
+  "232d2782-c4bd-4bb4-9e01-909f03d6d3b9": {
+    "asset": 1568707779000,
+    "meta": 1747641946514,
+    "relativePath": "prefab/videoplayer.prefab"
+  },
+  "8c5001fd-07ee-4a4b-a8a0-63e15195e94d": {
+    "asset": 1568707779000,
+    "meta": 1747641946517,
+    "relativePath": "prefab/webview.prefab"
+  },
+  "d8afc78c-4eac-4a9f-83dd-67bc70344d33": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "resources"
+  },
+  "294c1663-4adf-4a1e-a795-53808011a38a": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "resources/effects"
+  },
+  "144c3297-af63-49e8-b8ef-1cfa29b3be28": {
+    "asset": 1568707779000,
+    "meta": 1747641946526,
+    "relativePath": "resources/effects/builtin-2d-gray-sprite.effect"
+  },
+  "0e93aeaa-0b53-4e40-b8e0-6268b4e07bd7": {
+    "asset": 1568707779000,
+    "meta": 1747641946536,
+    "relativePath": "resources/effects/builtin-2d-spine.effect"
+  },
+  "2874f8dd-416c-4440-81b7-555975426e93": {
+    "asset": 1568707779000,
+    "meta": 1747641946545,
+    "relativePath": "resources/effects/builtin-2d-sprite.effect"
+  },
+  "c0040c95-c57f-49cd-9cbc-12316b73d0d4": {
+    "asset": 1568707779000,
+    "meta": 1747641946557,
+    "relativePath": "resources/effects/builtin-clear-stencil.effect"
+  },
+  "79eafaef-b7ef-45d9-9c3f-591dc836fc7a": {
+    "asset": 1568707779000,
+    "meta": 1747641946592,
+    "relativePath": "resources/effects/builtin-unlit-transparent.effect"
+  },
+  "6d91e591-4ce0-465c-809f-610ec95019c6": {
+    "asset": 1568707779000,
+    "meta": 1747641946617,
+    "relativePath": "resources/effects/builtin-unlit.effect"
+  },
+  "bbee2217-c261-49bd-a8ce-708d6bcc3500": {
+    "asset": 1568707779000,
+    "meta": 1568707779000,
+    "relativePath": "resources/materials"
+  },
+  "6f801092-0c37-4f30-89ef-c8d960825b36": {
+    "asset": 1568707779000,
+    "meta": 1747641946643,
+    "relativePath": "resources/materials/builtin-2d-base.mtl"
+  },
+  "3a7bb79f-32fd-422e-ada2-96f518fed422": {
+    "asset": 1568707779000,
+    "meta": 1747641946648,
+    "relativePath": "resources/materials/builtin-2d-gray-sprite.mtl"
+  },
+  "7afd064b-113f-480e-b793-8817d19f63c3": {
+    "asset": 1568707779000,
+    "meta": 1747641946651,
+    "relativePath": "resources/materials/builtin-2d-spine.mtl"
+  },
+  "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432": {
+    "asset": 1568707779000,
+    "meta": 1747641946666,
+    "relativePath": "resources/materials/builtin-2d-sprite.mtl"
+  },
+  "cf7e0bb8-a81c-44a9-ad79-d28d43991032": {
+    "asset": 1568707779000,
+    "meta": 1747641946680,
+    "relativePath": "resources/materials/builtin-clear-stencil.mtl"
+  },
+  "2a296057-247c-4a1c-bbeb-0548b6c98650": {
+    "asset": 1568707779000,
+    "meta": 1747641946684,
+    "relativePath": "resources/materials/builtin-unlit.mtl"
+  },
+  "954fec8b-cd16-4bb9-a3b7-7719660e7558": {
+    "asset": 1568707779000,
+    "meta": 1747641949810,
+    "relativePath": "model/primitives.fbx"
+  },
+  "29f52784-2fca-467b-92e7-8fd9ef8c57b7": {
+    "asset": 1747641938024,
+    "meta": 1747641938022,
+    "relativePath": "Scene"
+  },
+  "4734c20c-0db8-4eb2-92ea-e692f4d70934": {
+    "asset": 1747641938020,
+    "meta": 1747641938018,
+    "relativePath": "Script"
+  },
+  "7b81d4e8-ec84-4716-968d-500ac1d78a54": {
+    "asset": 1747641938016,
+    "meta": 1747641938012,
+    "relativePath": "Texture"
+  },
+  "280c3aec-6492-4a9d-9f51-a9b00b570b4a": {
+    "asset": 1747641938021,
+    "meta": 1747641949972,
+    "relativePath": "Script/HelloWorld.js"
+  },
+  "a8027877-d8d6-4645-97a0-52d4a0123dba": {
+    "asset": 1747641938015,
+    "meta": 1747641949977,
+    "relativePath": "Texture/singleColor.png"
+  },
+  "6aa0aa6a-ebee-4155-a088-a687a6aadec4": {
+    "asset": 1747641938017,
+    "meta": 1747641949996,
+    "relativePath": "Texture/HelloWorld.png"
+  },
+  "4dcb52fc-3917-4e42-8dbb-727af18f5cce": {
+    "asset": 1747733679281,
+    "meta": 1747713273902,
+    "relativePath": "Animation"
+  },
+  "197d7a79-88eb-43e2-be23-1a36ff21ecc9": {
+    "asset": 1747714188290,
+    "meta": 1747714188310,
+    "relativePath": "Animation/background_animation.anim"
+  },
+  "e2410f2d-3775-4002-866c-dd2ad330be38": {
+    "asset": 1747715839376,
+    "meta": 1747715839418,
+    "relativePath": "Animation/animation_button_play.anim"
+  },
+  "a02d9447-1d2c-4bab-98c7-0af846208a39": {
+    "asset": 1747725998607,
+    "meta": 1747725998651,
+    "relativePath": "Animation/flapping effect01.anim"
+  },
+  "c42ba8fe-99df-4532-a380-61d2148c97ac": {
+    "asset": 1747726106627,
+    "meta": 1747726106672,
+    "relativePath": "Animation/flapping02.anim"
+  },
+  "6e75474a-2540-4b5d-9d39-649c7c006d5e": {
+    "asset": 1747726397375,
+    "meta": 1747726397420,
+    "relativePath": "Animation/buttonShopShow.anim"
+  },
+  "af2378db-a7b1-4b5b-a4db-02a47ee97301": {
+    "asset": 1747726519367,
+    "meta": 1747726519411,
+    "relativePath": "Animation/buttonHerosShow.anim"
+  },
+  "542b090a-ed77-492e-87e7-1c695b04ea49": {
+    "asset": 1747794571258,
+    "meta": 1747727311373,
+    "relativePath": "GUI Pro-FantasyRPG"
+  },
+  "c5612042-84f8-4946-8c9d-e73937f03def": {
+    "asset": 1747732669837,
+    "meta": 1747732669884,
+    "relativePath": "Animation/buttonInventoryShow.anim"
+  },
+  "b8ac9571-2d81-4ae8-b240-e0450e09e558": {
+    "asset": 1747732838053,
+    "meta": 1747732838091,
+    "relativePath": "Animation/buttonGuildShow.anim"
+  },
+  "2d4796b7-f90c-49a2-9973-95fb68e228df": {
+    "asset": 1747732990485,
+    "meta": 1747732990504,
+    "relativePath": "Animation/buttonUpGrandShow.anim"
+  },
+  "7896313d-b08f-4eb8-b4d3-4b4b7a61b7ce": {
+    "asset": 1747733393441,
+    "meta": 1747733393486,
+    "relativePath": "Animation/notificationAnimation.anim"
+  },
+  "286d3afc-7188-4021-a400-b3622e1fb782": {
+    "asset": 1747733548540,
+    "meta": 1747733548587,
+    "relativePath": "Animation/notificationAnimation02.anim"
+  },
+  "073be76c-a773-4854-88d0-68b03a862b8b": {
+    "asset": 1747733762957,
+    "meta": 1747733763000,
+    "relativePath": "Animation/animationZoom.anim"
+  },
+  "73d29221-d6cf-4b91-8437-531ce8a71ef6": {
+    "asset": 1747735593635,
+    "meta": 1747734116747,
+    "relativePath": "GUI Pro-FantasyRPG/assets"
+  },
+  "39590f1a-c9da-4004-95f9-93c23b3215b8": {
+    "asset": 1747734249102,
+    "meta": 1747734141507,
+    "relativePath": "GUI Pro-FantasyRPG/assets/background"
+  },
+  "b465c928-e6af-43f0-a8da-5955d809cbe3": {
+    "asset": 1747734159337,
+    "meta": 1747734159453,
+    "relativePath": "GUI Pro-FantasyRPG/assets/background/BackGround_Sample_03_Home_1920.png"
+  },
+  "8569c177-8eff-4e4a-87c0-ddd3bc0333df": {
+    "asset": 1747794520446,
+    "meta": 1747734252657,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons"
+  },
+  "1824a7b3-68c9-408e-82f8-3ed4a1e13b1c": {
+    "asset": 1747734276009,
+    "meta": 1747734276051,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Gear_l.png"
+  },
+  "85c2abd3-58d2-4887-8701-52c2744ec630": {
+    "asset": 1747734900808,
+    "meta": 1747734302549,
+    "relativePath": "GUI Pro-FantasyRPG/assets/button"
+  },
+  "60c113f3-704e-4a94-9601-734c8144e172": {
+    "asset": 1747734320530,
+    "meta": 1747735744276,
+    "relativePath": "GUI Pro-FantasyRPG/assets/button/Button_Rectangle_05_Deco_Single_Yellow.png"
+  },
+  "a82c6b25-542d-4476-b8c5-df2eaaa6e630": {
+    "asset": 1747734352819,
+    "meta": 1747734353616,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Sword_03.png"
+  },
+  "2d2f792f-a40c-49bb-a189-ed176a246e49": {
+    "asset": 1747794670526,
+    "meta": 1747794670535,
+    "relativePath": "Scene/helloworld.fire"
+  },
+  "a5ede527-e50d-4a24-a10d-079333ab683b": {
+    "asset": 1747734382331,
+    "meta": 1747734383101,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_BossDungeon.png"
+  },
+  "74cffb2c-a140-44ab-b9dd-137b4eb8decf": {
+    "asset": 1747735368593,
+    "meta": 1747734426804,
+    "relativePath": "GUI Pro-FantasyRPG/assets/frame"
+  },
+  "97d9872c-ca65-42e2-8163-8549c350479e": {
+    "asset": 1747734431924,
+    "meta": 1747734508575,
+    "relativePath": "GUI Pro-FantasyRPG/assets/frame/BasicFrame_Hexagon_68.png"
+  },
+  "9716bdc1-c7a6-4b84-989a-9e7fffb9e02b": {
+    "asset": 1747734473516,
+    "meta": 1747734474312,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_coins.png"
+  },
+  "925ff15b-7b3a-45c5-a806-7fb996ee3b09": {
+    "asset": 1747734546569,
+    "meta": 1747734546609,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Add_l.png"
+  },
+  "27c5a33c-eace-4385-bff7-52a1731a4c63": {
+    "asset": 1747734573226,
+    "meta": 1747734574031,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_gem_1_blue.png"
+  },
+  "9ad687e2-dd7e-477e-a30c-557a3756df88": {
+    "asset": 1747734642087,
+    "meta": 1747734643055,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_lightning_purple.png"
+  },
+  "943ea8c3-07a9-4d48-b6b8-884930f97daa": {
+    "asset": 1747734682875,
+    "meta": 1747734683680,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_02_AdFree_Shadow.png"
+  },
+  "37adf529-d4be-4c52-81e2-4714c04b5666": {
+    "asset": 1747734705162,
+    "meta": 1747734705956,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_02_Gems_Shadow.png"
+  },
+  "43fb0e94-7be0-4ae2-8a3b-3a9e24e7dbc9": {
+    "asset": 1747734736430,
+    "meta": 1747734737128,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_02_Piggy_Shadow.png"
+  },
+  "ebc13318-97ae-4f84-afba-862a23b9eeaa": {
+    "asset": 1747734761054,
+    "meta": 1747734761820,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Gift.png"
+  },
+  "3c4d91c8-9c80-4bc8-b24a-3af5af502b0c": {
+    "asset": 1747734802873,
+    "meta": 1747734803654,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_gift_0_purple.png"
+  },
+  "62439b05-37bc-42fa-82fe-6abd2fe0e9fb": {
+    "asset": 1747734827388,
+    "meta": 1747734828169,
+    "relativePath": "GUI Pro-FantasyRPG/assets/frame/SlotFrame_Circle_White_Bg.png"
+  },
+  "fd963d8a-dbdf-4423-bd6e-d0dfed883dcc": {
+    "asset": 1747734851308,
+    "meta": 1747734851981,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_house_castle.png"
+  },
+  "2f268fae-b987-48d1-b04a-52782998a29c": {
+    "asset": 1747734878330,
+    "meta": 1747734879123,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_anvil.png"
+  },
+  "d2f73076-d6df-4351-b927-350306d9ea08": {
+    "asset": 1747734900236,
+    "meta": 1747734901030,
+    "relativePath": "GUI Pro-FantasyRPG/assets/button/Button_Rectangle_01_Convex_Darkgray.Png"
+  },
+  "b33d9923-75e0-4238-8555-080676169bd7": {
+    "asset": 1747734930112,
+    "meta": 1747734930818,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_flag_sword.png"
+  },
+  "c4d51d56-2de4-4df1-afeb-140732849196": {
+    "asset": 1747734978410,
+    "meta": 1747734979210,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_bag.png"
+  },
+  "f7b940c6-92a7-4470-881d-59a178fee1db": {
+    "asset": 1747735002424,
+    "meta": 1747735003310,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_equip_helmet_1.png"
+  },
+  "a1e0b0d7-6280-42d2-8fe4-5d61f1785295": {
+    "asset": 1747735048744,
+    "meta": 1747735049540,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_house.png"
+  },
+  "357c5215-003b-4fcf-a938-a24a48744f8a": {
+    "asset": 1747735104294,
+    "meta": 1747735105070,
+    "relativePath": "GUI Pro-FantasyRPG/assets/frame/BasicFrame_Hexagon_33.png"
+  },
+  "89aaa9f2-4cb5-4f92-86ef-e24c1d75cec1": {
+    "asset": 1747735138068,
+    "meta": 1747735138863,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_calendar.png"
+  },
+  "9ef700f3-a086-43fc-bff2-53c093ec316a": {
+    "asset": 1747735189342,
+    "meta": 1747735190126,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_chest.png"
+  },
+  "21477ae0-c0c9-45b1-94ce-bdb8f2cc154b": {
+    "asset": 1747735238240,
+    "meta": 1747735239030,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_scroll_letter_0.png"
+  },
+  "ea493f61-8aec-487c-8b41-1668c73a7bd3": {
+    "asset": 1747735310779,
+    "meta": 1747735311565,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_ranking.png"
+  },
+  "3047a694-fa03-4e24-a8dc-d54fdc9af39d": {
+    "asset": 1747735350227,
+    "meta": 1747735350991,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_dungeon.png"
+  },
+  "95287a51-c87e-4bea-8c27-7c46277a84bc": {
+    "asset": 1747735368035,
+    "meta": 1747735419707,
+    "relativePath": "GUI Pro-FantasyRPG/assets/frame/BorderFrame_Square01_Bg.png"
+  },
+  "433ff28b-e5f9-4dd6-b55e-025f87e6317a": {
+    "asset": 1747735446803,
+    "meta": 1747735446854,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/WingBadge_Side_Whig_Left.png"
+  },
+  "a850e278-f909-4672-bd86-83e58b9e2df0": {
+    "asset": 1747735462709,
+    "meta": 1747735463548,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/WingBadge_Side_Whig_Right.png"
+  },
+  "c5a945f2-86c3-44a3-a4f0-839387123cab": {
+    "asset": 1747735491649,
+    "meta": 1747735492464,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Slider_Wave_02_Icon3.png"
+  },
+  "e518db5a-1073-4d94-9515-1dc77e066c63": {
+    "asset": 1747735522901,
+    "meta": 1747735523607,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/Slider_LevelProfile_Badge_SingleDemo.png"
+  },
+  "d682e775-1710-4789-9356-03427bc4e880": {
+    "asset": 1747735555164,
+    "meta": 1747735551751,
+    "relativePath": "GUI Pro-FantasyRPG/assets/line"
+  },
+  "4b2a5bed-2407-407f-852d-003ad03f8563": {
+    "asset": 1747735555159,
+    "meta": 1747735555202,
+    "relativePath": "GUI Pro-FantasyRPG/assets/line/LineFrame_01.png"
+  },
+  "4422017d-f134-46bb-9693-0adbf690dd2c": {
+    "asset": 1747735695316,
+    "meta": 1747735589652,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sliver"
+  },
+  "cd97ec73-9f6a-4e6f-acab-d472367abbbb": {
+    "asset": 1747735595372,
+    "meta": 1747735618925,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sliver/Slider_Level_Slider_Border.png"
+  },
+  "2e0845ac-de58-4b5a-bb99-124afa0a16c2": {
+    "asset": 1747735695307,
+    "meta": 1747735695355,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sliver/Slider_LevelProfile_SliderTop_Fill_SingleDemo.png"
+  },
+  "d09c9c8e-df35-4651-9f29-f1221afa6c43": {
+    "asset": 1747794385091,
+    "meta": 1747794385139,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_01_Friend.png"
+  },
+  "b0b21598-a3fd-4395-b763-24859886f802": {
+    "asset": 1747794520441,
+    "meta": 1747794520478,
+    "relativePath": "GUI Pro-FantasyRPG/assets/icons/IconSet_Menu_01_Community.png"
+  }
+}

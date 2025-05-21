@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "IconSet_Menu_02_Piggy_Shadow",
+    "texture": "43fb0e94-7be0-4ae2-8a3b-3a9e24e7dbc9",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      144,
+      108
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      144,
+      108
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

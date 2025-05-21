@@ -1,0 +1,41 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "buttonHerosShow",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.1666666666666667,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0.5,
+          "value": [
+            -524.157,
+            -429.215,
+            0
+          ]
+        },
+        {
+          "frame": 1,
+          "value": [
+            -524.157,
+            -240.983,
+            0
+          ]
+        },
+        {
+          "frame": 1.1666666666666667,
+          "value": [
+            -524.157,
+            -284.449,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

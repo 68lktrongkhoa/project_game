@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_lightning_purple",
+    "texture": "9ad687e2-dd7e-477e-a30c-557a3756df88",
+    "atlas": "",
+    "rect": [
+      112,
+      55,
+      288,
+      421
+    ],
+    "offset": [
+      0,
+      -9.5
+    ],
+    "originalSize": [
+      512,
+      512
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Slider_LevelProfile_Badge_SingleDemo",
+    "texture": "e518db5a-1073-4d94-9515-1dc77e066c63",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      84,
+      81
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      84,
+      81
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

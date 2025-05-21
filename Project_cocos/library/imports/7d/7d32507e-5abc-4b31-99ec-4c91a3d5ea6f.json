@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_dungeon",
+    "texture": "3047a694-fa03-4e24-a8dc-d54fdc9af39d",
+    "atlas": "",
+    "rect": [
+      6,
+      7,
+      52,
+      52
+    ],
+    "offset": [
+      0,
+      -1
+    ],
+    "originalSize": [
+      64,
+      64
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

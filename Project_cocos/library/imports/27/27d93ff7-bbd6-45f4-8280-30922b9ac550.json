@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "WingBadge_Side_Whig_Right",
+    "texture": "a850e278-f909-4672-bd86-83e58b9e2df0",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      247,
+      313
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      247,
+      313
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

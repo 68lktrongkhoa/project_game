@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "icon_scroll_letter_0",
+    "texture": "21477ae0-c0c9-45b1-94ce-bdb8f2cc154b",
+    "atlas": "",
+    "rect": [
+      8,
+      14,
+      112,
+      100
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      128,
+      128
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
