@@ -29,6 +29,7 @@ cc.Class({
 
     onLoad () {
         this.playBGM();
+        
     },
 
     start () {

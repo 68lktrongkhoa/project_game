@@ -729,45 +729,10 @@
     "meta": 1747808784923,
     "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_equip_sword.png"
   },
-  "2d76b5bb-2236-438c-ad19-8ff3a6d64d3b": {
-    "asset": 1747811726458,
-    "meta": 1747811726470,
-    "relativePath": "Scene/Room.fire"
-  },
   "ed63c8ea-aed9-4a1e-956d-b4244687bae4": {
     "asset": 1747809191110,
     "meta": 1747809173254,
     "relativePath": "Script"
-  },
-  "55a7b6e7-53f2-4022-b6c0-f989c9077952": {
-    "asset": 1747811189705,
-    "meta": 1747811189707,
-    "relativePath": "GUI Pro-FantasyRPG/assets/sound"
-  },
-  "70a589e4-7def-46cb-9f8d-d9de8b275870": {
-    "asset": 1747811222211,
-    "meta": 1747811222210,
-    "relativePath": "GUI Pro-FantasyRPG/assets/Sound"
-  },
-  "2e952d78-55e5-4298-b627-6abfae08564a": {
-    "asset": 1747811222195,
-    "meta": 1747811222233,
-    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/bgm.mp3"
-  },
-  "f6d0478a-06e4-4bdc-af26-b908d5409b66": {
-    "asset": 1747811222193,
-    "meta": 1747811222235,
-    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/click.mp3"
-  },
-  "81b60e2d-8289-4a1e-98f0-1bdef4204e98": {
-    "asset": 1747811222194,
-    "meta": 1747811222237,
-    "relativePath": "GUI Pro-FantasyRPG/assets/Sound/coin_counting.mp3"
-  },
-  "6018ddc5-994b-4cda-bb80-ab3ef0bf49e5": {
-    "asset": 1747811511156,
-    "meta": 1747811521612,
-    "relativePath": "Script/soundController.js"
   },
   "c45eea54-02b5-4aaa-9f0d-81fb729f9c75": {
     "asset": 1747812632447,
@@ -803,5 +768,35 @@
     "asset": 1747817205007,
     "meta": 1747817205777,
     "relativePath": "GUI Pro-FantasyRPG/assets/icons/icon_equip_shield.png"
+  },
+  "70a589e4-7def-46cb-9f8d-d9de8b275870": {
+    "asset": 1747826225905,
+    "meta": 1747826225902,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sound"
+  },
+  "2d76b5bb-2236-438c-ad19-8ff3a6d64d3b": {
+    "asset": 1747826225906,
+    "meta": 1747826286604,
+    "relativePath": "Scene/Room.fire"
+  },
+  "f6d0478a-06e4-4bdc-af26-b908d5409b66": {
+    "asset": 1747826225904,
+    "meta": 1747826286613,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sound/click.mp3"
+  },
+  "2e952d78-55e5-4298-b627-6abfae08564a": {
+    "asset": 1747826225904,
+    "meta": 1747826286615,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sound/bgm.mp3"
+  },
+  "81b60e2d-8289-4a1e-98f0-1bdef4204e98": {
+    "asset": 1747826225905,
+    "meta": 1747826286621,
+    "relativePath": "GUI Pro-FantasyRPG/assets/sound/coin_counting.mp3"
+  },
+  "6018ddc5-994b-4cda-bb80-ab3ef0bf49e5": {
+    "asset": 1747826396957,
+    "meta": 1747826505075,
+    "relativePath": "Script/soundController.js"
   }
 }
