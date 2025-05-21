@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Image_Glow_Oval_01",
+    "texture": "66b6c568-f2aa-4a3e-a735-4525279fd19e",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      381,
+      307
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      381,
+      307
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Image_Gradient_Left",
+    "texture": "89b35260-ca45-41c1-a335-3bf33891b93b",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      278,
+      4
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      278,
+      4
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Roulette_FocusLine",
+    "texture": "d3140ed2-d212-4f53-9e91-d55048fb9c51",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      325,
+      311
+    ],
+    "offset": [
+      0,
+      0.5
+    ],
+    "originalSize": [
+      325,
+      312
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Roulette_BgDeco",
+    "texture": "519df637-2240-40db-a11c-46ebf5e38b2d",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      487,
+      919
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      487,
+      919
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Joystick_Action_m_6sell_Fill_2",
+    "texture": "1d25abf2-52b7-469f-8e9d-daa16dd7d1e9",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      13,
+      68
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      13,
+      68
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

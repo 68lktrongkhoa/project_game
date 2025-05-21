@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Joystick_Action_l_White_InnerBg_Gradient",
+    "texture": "1ffd13df-30b8-4c55-9df3-210c5330b3eb",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      162,
+      160
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      162,
+      160
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

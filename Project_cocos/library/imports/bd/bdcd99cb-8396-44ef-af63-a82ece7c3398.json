@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "SwordBadge_Sword",
+    "texture": "464a6058-9bae-46ec-b58a-a790ccf8a478",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      81,
+      196
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      81,
+      196
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

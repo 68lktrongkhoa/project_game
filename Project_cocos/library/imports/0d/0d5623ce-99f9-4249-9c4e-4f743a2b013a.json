@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Roulette_Button_Bg",
+    "texture": "24b17fbc-4e02-4984-a105-eddbd78726a0",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      294,
+      294
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      294,
+      294
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

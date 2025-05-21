@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "ShopItem_Gem_1",
+    "texture": "565ba71a-6c3e-4da3-9251-0fe32fd68ffc",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      362,
+      329
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      362,
+      329
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

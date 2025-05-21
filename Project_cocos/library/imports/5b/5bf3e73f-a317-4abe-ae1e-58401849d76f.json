@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Roulette_FocusBg",
+    "texture": "69f0b569-c0bd-4f69-af2b-561a9fe93af6",
+    "atlas": "",
+    "rect": [
+      4,
+      29,
+      315,
+      279
+    ],
+    "offset": [
+      -1,
+      -12.5
+    ],
+    "originalSize": [
+      325,
+      312
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

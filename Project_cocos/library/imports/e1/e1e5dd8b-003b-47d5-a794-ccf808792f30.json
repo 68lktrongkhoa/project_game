@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Joystick_Action_m_InnerBg_DecoLine",
+    "texture": "82aea05a-9e74-4713-9cf1-be5f0e3adfe0",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      108,
+      110
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      108,
+      110
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

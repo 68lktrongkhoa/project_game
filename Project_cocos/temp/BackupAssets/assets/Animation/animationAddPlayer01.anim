@@ -1,0 +1,41 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "animationAddPlayer01",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 4,
+  "sample": 60,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            334.505,
+            140.276,
+            0
+          ]
+        },
+        {
+          "frame": 2,
+          "value": [
+            334.505,
+            161.176,
+            0
+          ]
+        },
+        {
+          "frame": 4,
+          "value": [
+            334.505,
+            141.506,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

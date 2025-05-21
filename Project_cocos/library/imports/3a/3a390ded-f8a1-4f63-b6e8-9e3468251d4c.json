@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Image_Tv_Effect",
+    "texture": "842036e2-856d-4527-8039-81474c69e06e",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      181,
+      120
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      181,
+      120
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

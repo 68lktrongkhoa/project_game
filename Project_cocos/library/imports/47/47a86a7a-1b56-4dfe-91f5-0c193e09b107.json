@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Background_BattlePass_Right",
+    "texture": "3d0650e0-2c32-4cf3-990f-ca6c44d4c7a8",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      4,
+      6
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      4,
+      6
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

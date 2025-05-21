@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "WingBadge_Center_Badge_Deco",
+    "texture": "d5bd98c2-ccb5-48b6-93fe-d03187fcdb57",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      75,
+      65
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      75,
+      65
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

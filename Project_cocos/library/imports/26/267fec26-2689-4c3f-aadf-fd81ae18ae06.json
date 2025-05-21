@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "Background_BattlePass_Right_Gradient_Bottom",
+    "texture": "5d94398a-8573-4c83-bb88-c414c16f289c",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      4,
+      305
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      4,
+      305
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

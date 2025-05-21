@@ -45,7 +45,7 @@
                 ],
                 "height": 751.984375,
                 "type": "panel",
-                "width": 889
+                "width": 1120.984375
               },
               {
                 "active": 1,
@@ -56,12 +56,12 @@
                 ],
                 "height": 306,
                 "type": "panel",
-                "width": 889
+                "width": 1120.984375
               }
             ],
             "height": 1060,
             "type": "dock-v",
-            "width": 889
+            "width": 1120.984375
           },
           {
             "active": 0,
@@ -71,7 +71,7 @@
             ],
             "height": 1060,
             "type": "panel",
-            "width": 536
+            "width": 304
           }
         ],
         "type": "dock-h"
@@ -85,32 +85,6 @@
         "inspector",
         "cocos-services",
         "scene"
-      ]
-    },
-    "window-1747812796135": {
-      "main": false,
-      "url": "unpack://static/window.html",
-      "windowType": "dockable",
-      "x": 0,
-      "y": 0,
-      "width": 1792,
-      "height": 1120,
-      "layout": {
-        "children": [
-          {
-            "active": 0,
-            "children": [
-              "project-settings"
-            ],
-            "height": 1120,
-            "type": "panel",
-            "width": 1792
-          }
-        ],
-        "type": "dock-v"
-      },
-      "panels": [
-        "project-settings"
       ]
     }
   },

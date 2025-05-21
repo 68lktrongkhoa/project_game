@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "WingBadge_Bottom_Flag_Right",
+    "texture": "2ba96b53-1044-4a5c-ac66-b529eb554e5f",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      35,
+      176
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      35,
+      176
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}
