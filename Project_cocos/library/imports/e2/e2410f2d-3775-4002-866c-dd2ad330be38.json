@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "animation_button_play",
+  "_name": "animationButtonPlay",
   "_objFlags": 0,
   "_native": "",
   "_duration": 2,

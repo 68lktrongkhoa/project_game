@@ -456,33 +456,33 @@
   },
   "197d7a79-88eb-43e2-be23-1a36ff21ecc9": {
     "asset": 1747714188290,
-    "meta": 1747714188310,
-    "relativePath": "Animation/background_animation.anim"
+    "meta": 1747796142490,
+    "relativePath": "Animation/animationBackground.anim"
   },
   "e2410f2d-3775-4002-866c-dd2ad330be38": {
     "asset": 1747715839376,
-    "meta": 1747715839418,
-    "relativePath": "Animation/animation_button_play.anim"
+    "meta": 1747796084951,
+    "relativePath": "Animation/animationButtonPlay.anim"
   },
   "a02d9447-1d2c-4bab-98c7-0af846208a39": {
     "asset": 1747725998607,
-    "meta": 1747725998651,
-    "relativePath": "Animation/flapping effect01.anim"
+    "meta": 1747796291819,
+    "relativePath": "Animation/animationFlappingLeft.anim"
   },
   "c42ba8fe-99df-4532-a380-61d2148c97ac": {
     "asset": 1747726106627,
-    "meta": 1747726106672,
-    "relativePath": "Animation/flapping02.anim"
+    "meta": 1747796306023,
+    "relativePath": "Animation/animationFlappingRight.anim"
   },
   "6e75474a-2540-4b5d-9d39-649c7c006d5e": {
     "asset": 1747726397375,
-    "meta": 1747726397420,
-    "relativePath": "Animation/buttonShopShow.anim"
+    "meta": 1747796215265,
+    "relativePath": "Animation/animationButtonShop.anim"
   },
   "af2378db-a7b1-4b5b-a4db-02a47ee97301": {
     "asset": 1747726519367,
-    "meta": 1747726519411,
-    "relativePath": "Animation/buttonHerosShow.anim"
+    "meta": 1747796181250,
+    "relativePath": "Animation/animationButtonHeros.anim"
   },
   "542b090a-ed77-492e-87e7-1c695b04ea49": {
     "asset": 1747794571258,
@@ -491,28 +491,28 @@
   },
   "c5612042-84f8-4946-8c9d-e73937f03def": {
     "asset": 1747732669837,
-    "meta": 1747732669884,
-    "relativePath": "Animation/buttonInventoryShow.anim"
+    "meta": 1747796201132,
+    "relativePath": "Animation/animationButtonInventory.anim"
   },
   "b8ac9571-2d81-4ae8-b240-e0450e09e558": {
     "asset": 1747732838053,
-    "meta": 1747732838091,
-    "relativePath": "Animation/buttonGuildShow.anim"
+    "meta": 1747796167499,
+    "relativePath": "Animation/animationButtonGuild.anim"
   },
   "2d4796b7-f90c-49a2-9973-95fb68e228df": {
     "asset": 1747732990485,
-    "meta": 1747732990504,
-    "relativePath": "Animation/buttonUpGrandShow.anim"
+    "meta": 1747796232162,
+    "relativePath": "Animation/animationButtonUpGrand.anim"
   },
   "7896313d-b08f-4eb8-b4d3-4b4b7a61b7ce": {
     "asset": 1747733393441,
-    "meta": 1747733393486,
-    "relativePath": "Animation/notificationAnimation.anim"
+    "meta": 1747796323304,
+    "relativePath": "Animation/animationNotification.anim"
   },
   "286d3afc-7188-4021-a400-b3622e1fb782": {
     "asset": 1747733548540,
-    "meta": 1747733548587,
-    "relativePath": "Animation/notificationAnimation02.anim"
+    "meta": 1747796480538,
+    "relativePath": "Animation/animationNotification02.anim"
   },
   "073be76c-a773-4854-88d0-68b03a862b8b": {
     "asset": 1747733762957,
@@ -560,8 +560,8 @@
     "relativePath": "GUI Pro-FantasyRPG/assets/icons/Icon_Sword_03.png"
   },
   "2d2f792f-a40c-49bb-a189-ed176a246e49": {
-    "asset": 1747794670526,
-    "meta": 1747794670535,
+    "asset": 1747796916583,
+    "meta": 1747796916613,
     "relativePath": "Scene/helloworld.fire"
   },
   "a5ede527-e50d-4a24-a10d-079333ab683b": {

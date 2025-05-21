@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "flapping02",
+  "_name": "animationFlappingRight",
   "_objFlags": 0,
   "_native": "",
   "_duration": 2,

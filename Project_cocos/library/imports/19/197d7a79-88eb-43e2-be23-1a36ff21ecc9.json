@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "background_animation",
+  "_name": "animationBackground",
   "_objFlags": 0,
   "_native": "",
   "_duration": 14.116666666666667,

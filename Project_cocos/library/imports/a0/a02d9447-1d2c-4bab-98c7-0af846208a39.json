@@ -1,6 +1,6 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "flapping effect01",
+  "_name": "animationFlappingLeft",
   "_objFlags": 0,
   "_native": "",
   "_duration": 2,
